@@ -95,4 +95,10 @@ $colors: "blue", "red", "yellow", "green", "white", "black", "purple", "indigo",
     --color-selection: #b7cbe4;
     --color-text: #4e4e4e;
     --color-text-heading: #212121;
+
+    --color-brand-white: #f5f7fa;
+    --color-brand-black: #1a1a1a;
+
+    --color-brand-alice-blue: var(--color-brand-white);
+    --color-brand-nero: var(--color-brand-black);
 }
