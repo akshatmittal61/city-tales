@@ -1,11 +1,26 @@
 name: Lint Commit Messages
-on: [pull_request, push]
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
 
 jobs:
     commitlint:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Install Commitlint
+              uses: wagoid/commitlint-github-action@v2
               with:
-                  fetch-depth: 0
-            - uses: wagoid/commitlint-github-action@v4
+                  config_file: .commitlint.config.js
+            - name: Run Commitlint
+              uses: wagoid/commitlint-github-action@v2
+              with:
+                  config_file: .commitlint.config.js
+                  edit: ${{ github.event_name == 'pull_request' }}
+                  fail_on_error: true
+                  verbose: true
