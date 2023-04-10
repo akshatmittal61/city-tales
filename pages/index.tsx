@@ -1,3 +1,5 @@
+import React from "react";
+
 const HomePage: React.FC = () => {
 	return (
 		<div>
@@ -7,4 +9,4 @@ const HomePage: React.FC = () => {
 	);
 };
 
-export default HomePage;
+export default HomePage
