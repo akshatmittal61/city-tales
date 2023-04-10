@@ -11,12 +11,16 @@ jobs:
     commitlint:
         runs-on: ubuntu-latest
         steps:
+            - name: Configure Git
+              run: |
+                  git config --global user.name "GitHub Actions"
+                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
             - name: Checkout
               uses: actions/checkout@v2
             - name: Install Commitlint
               uses: wagoid/commitlint-github-action@v2
               with:
-                  config_file: .commitlint.config.js
+                  config_file: commitlint.config.js
             - name: Run Commitlint
               uses: wagoid/commitlint-github-action@v2
               with:
