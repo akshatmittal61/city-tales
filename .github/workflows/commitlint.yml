@@ -16,15 +16,17 @@ jobs:
                   git config --global user.name "GitHub Actions"
                   git config --global user.email "github-actions[bot]@users.noreply.github.com"
             - name: Checkout
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  fetch-depth: 0
             - name: Install Commitlint
-              uses: wagoid/commitlint-github-action@v2
+              uses: wagoid/commitlint-github-action@v5
               with:
-                  config_file: commitlint.config.js
+                  configFile: commitlint.config.js
             - name: Run Commitlint
-              uses: wagoid/commitlint-github-action@v2
+              uses: wagoid/commitlint-github-action@v5
               with:
-                  config_file: .commitlint.config.js
+                  configFile: commitlint.config.js
                   edit: ${{ github.event_name == 'pull_request' }}
-                  fail_on_error: true
-                  verbose: true
+                  failOnErrors: true
