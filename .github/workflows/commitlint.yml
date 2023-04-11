@@ -15,15 +15,18 @@ jobs:
               run: |
                   git config --global user.name "GitHub Actions"
                   git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
             - name: Checkout
               uses: actions/checkout@v3
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
                   fetch-depth: 0
+
             - name: Install Commitlint
               uses: wagoid/commitlint-github-action@v5
               with:
                   configFile: commitlint.config.js
+
             - name: Run Commitlint
               uses: wagoid/commitlint-github-action@v5
               with:
