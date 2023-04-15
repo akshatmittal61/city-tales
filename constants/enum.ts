@@ -12,6 +12,7 @@ const OTP_TYPES = {
 const RESPONSE_MESSAGES = {
 	SUCCESS: "Success",
 	FAILED: "Failed",
+	SERVER_ERROR: "Internal Server Error",
 };
 
 const BLOG: any = {
