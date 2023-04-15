@@ -9,4 +9,9 @@ const OTP_TYPES = {
 	RESET_PASSWORD: "reset_password",
 };
 
-export { USER_ROLES, OTP_TYPES };
+const RESPONSE_MESSAGES = {
+	SUCCESS: "Success",
+	FAILED: "Failed",
+};
+
+export { USER_ROLES, OTP_TYPES, RESPONSE_MESSAGES };
