@@ -14,4 +14,16 @@ const RESPONSE_MESSAGES = {
 	FAILED: "Failed",
 };
 
-export { USER_ROLES, OTP_TYPES, RESPONSE_MESSAGES };
+const BLOG: any = {
+	TYPE: {
+		STORY: "story",
+		WALK: "walk",
+	},
+	STATUS: {
+		DRAFT: "draft",
+		PUBLISHED: "published",
+		ARCHIVED: "archived",
+	},
+};
+
+export { USER_ROLES, OTP_TYPES, RESPONSE_MESSAGES, BLOG };
