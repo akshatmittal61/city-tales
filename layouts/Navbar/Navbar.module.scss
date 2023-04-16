@@ -1,0 +1,36 @@
+@import "@/styles/config/mixins";
+
+.navbar {
+	width: 100%;
+	height: var(--nav-height);
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 45px;
+	background-color: var(--color-brand-black);
+	padding: 0 5%;
+	font-size: 14px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 150;
+
+	&-links {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		list-style: none;
+		gap: 45px;
+	}
+
+	&-link {
+		color: var(--color-brand-white);
+		text-decoration: none;
+		transition: all var(--transition-time) 0.1s;
+		@include typography(btn, md);
+
+		&::after {
+			background-color: var(--color-brand-white);
+		}
+	}
+}
