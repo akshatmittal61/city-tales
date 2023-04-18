@@ -119,6 +119,11 @@
 			font-weight: 600;
 			font-size: 16px;
 			line-height: 120%;
+		} @else if $size ==sm {
+			font-family: var(--font-noto-sans);
+			font-weight: 500;
+			font-size: 14px;
+			line-height: 120%;
 		} @else if $size ==lg {
 			font-family: var(--font-noto-sans);
 			font-weight: 500;

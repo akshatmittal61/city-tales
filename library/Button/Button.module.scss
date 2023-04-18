@@ -1,0 +1,116 @@
+@import "@/styles/config/mixins";
+
+.btn {
+	all: unset;
+	box-sizing: border-box;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 500px;
+	border: 1px solid transparent;
+	white-space: nowrap;
+	flex: 0 0 auto;
+	cursor: pointer;
+	user-select: none;
+	transition: all 0.2s ease-in-out;
+
+	&--filled {
+		background-color: var(--color-brand-black);
+		color: var(--color-brand-white);
+		border-color: var(--color-brand-black);
+	}
+
+	&--outlined {
+		background-color: var(--color-brand-white);
+		color: var(--color-brand-black);
+		border-color: var(--color-brand-black);
+	}
+
+	&--medium {
+		padding: 12px 18px;
+		min-width: 100px;
+		@include typography(btn, md);
+	}
+
+	&--small {
+		padding: 8px 12px;
+		min-width: 80px;
+		@include typography(btn, sm);
+	}
+
+	&--large {
+		padding: 18px 24px;
+		min-width: 120px;
+		@include typography(btn, lg);
+	}
+
+	&--disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+
+	&--loading {
+		cursor: not-allowed;
+	}
+
+	&__icon {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+
+		&--left {
+			margin-right: 8px;
+		}
+
+		&--right {
+			margin-left: 8px;
+		}
+	}
+
+	&__loader {
+		width: 16px;
+		height: 16px;
+		border-radius: 500px;
+		border: 3px solid transparent;
+		animation: spin 1s linear infinite;
+	}
+
+	&--small &__loader {
+		width: 17px;
+		height: 17px;
+	}
+
+	&--medium &__loader {
+		width: 19px;
+		height: 19px;
+	}
+
+	&--large &__loader {
+		width: 23px;
+		height: 23px;
+	}
+
+	&--filled &__loader {
+		border-color: var(--color-brand-white);
+		border-top-color: var(--color-brand-black);
+	}
+
+	&--outlined &__loader {
+		border-color: var(--color-brand-black);
+		border-top-color: var(--color-brand-white);
+	}
+
+	&:hover {
+		box-shadow: var(--shadow-elevation-2dp);
+	}
+
+	&:active {
+		box-shadow: var(--shadow-elevation-1dp);
+	}
+}
+
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+	}
+}
