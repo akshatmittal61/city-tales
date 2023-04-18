@@ -12,6 +12,7 @@
 :root::before,
 :root::after {
 	--transition-time: 0.3s;
+	--nav-height: 74px;
 }
 
 html {
@@ -24,7 +25,31 @@ body {
 		"Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
 		"Helvetica Neue", sans-serif;
 	overflow-x: hidden;
+	width: 100%;
 	min-height: 100vh;
+	scrollbar-gutter: stable;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+	position: relative;
+
+	&::after {
+		content: "";
+		position: absolute;
+		top: 100%;
+		left: 0;
+		width: 0;
+		height: 1px;
+		border-radius: 500px;
+		background-color: transparent;
+		transition: all var(--transition-time);
+	}
+
+	&:hover::after {
+		width: 100%;
+	}
 }
 
 .dispn {

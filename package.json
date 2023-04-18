@@ -8,6 +8,7 @@
 		"start": "next start",
 		"lint": "next lint",
 		"format": "prettier --write .",
+		"format:check": "prettier --check .",
 		"prepare": "husky install",
 		"test": "jest",
 		"test:watch": "jest --watch",
@@ -23,6 +24,7 @@
 		"next": "13.3.0",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
+		"react-icons": "^4.8.0",
 		"typescript": "5.0.4"
 	},
 	"devDependencies": {
