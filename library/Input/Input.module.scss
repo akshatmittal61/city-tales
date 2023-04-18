@@ -1,0 +1,22 @@
+@import "@/styles/config/mixins";
+
+.input {
+	all: unset;
+	box-sizing: border-box;
+	@include typography(body, md);
+	color: var(--color-brand-black);
+	border: 1px solid transparent;
+	border-bottom-color: #4b4b4b;
+	transition: all 0.2s ease-in-out;
+	flex: 0 0 auto;
+
+	&--error {
+		color: var(--color-brand-error);
+		border-bottom-color: var(--color-brand-error);
+	}
+
+	&--disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+}
