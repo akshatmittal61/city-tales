@@ -18,11 +18,11 @@ const connectDB = async () => {
 		.then((db) => {
 			console.log("Connected to MongoDB");
 			connection.isConnected = db.connections[0].readyState === 1;
-			return db;
+			return Promise.resolve(db);
 		})
 		.catch((err) => {
 			console.log("Error connecting to MongoDB", err);
-			return err;
+			return Promise.reject(err);
 		});
 };
 
