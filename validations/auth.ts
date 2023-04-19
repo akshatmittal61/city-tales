@@ -45,7 +45,8 @@ export const registerValidator = async (values: RegisterValues) => {
 	if (!values.password) {
 		errors.password = "Password is required";
 	} else if (!regex.password.test(values.password)) {
-		errors.password = "Invalid password";
+		errors.password =
+			"Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number and one special character";
 	}
 
 	if (!values.confirmPassword) {
