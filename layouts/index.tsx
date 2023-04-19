@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Seo from "./Seo";
 import { frontendBaseUrl } from "@/constants/variables";
+import { useRouter } from "next/router";
 
 const Layout: React.FC<any> = ({ children }) => {
+	const router = useRouter();
+	const [showNav, setShowNav] = useState(false);
+	const [showFooter, setShowFooter] = useState(false);
+
+	useEffect(() => {
+		if (router.pathname === "/login" || router.pathname === "/signup") {
+			setShowNav(false);
+			setShowFooter(false);
+		} else {
+			setShowNav(true);
+			setShowFooter(true);
+		}
+	}, [router.pathname]);
+
 	return (
 		<>
 			<Seo
@@ -49,9 +64,9 @@ const Layout: React.FC<any> = ({ children }) => {
 					siteName: "City Tales",
 				}}
 			/>
-			<Navbar />
+			{showNav ? <Navbar /> : null}
 			{children}
-			<Footer />
+			{showFooter ? <Footer /> : null}
 		</>
 	);
 };
