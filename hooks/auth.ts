@@ -19,9 +19,15 @@ const useAuth = () => {
 						setLoading(false);
 					} else {
 						const fetchedUser = await fetchAuthenticatedUser();
-						setUser(fetchedUser);
-						setLoggedIn(true);
-						setLoading(false);
+						if (fetchedUser.user) {
+							setUser(fetchedUser.user);
+							setLoggedIn(true);
+							setLoading(false);
+						} else {
+							setUser(null);
+							setLoggedIn(false);
+							setLoading(false);
+						}
 					}
 				} else {
 					setUser(null);
