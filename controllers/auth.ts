@@ -5,6 +5,7 @@ import User from "@/models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { jwtSecret } from "@/config";
+import { ApiRequest, ApiResponse } from "@/interfaces/api";
 
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
 	try {
@@ -78,6 +79,18 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
+const getAuthenicatedUser = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const user = await User.findById(req.user.id).select("-password");
+		return res.status(200).json({ user });
+	} catch (error) {
+		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
 /* const logout = async (req: NextApiRequest, res: NextApiResponse) => {};
 
 const forgotPassword = async (req: NextApiRequest, res: NextApiResponse) => {};
@@ -91,6 +104,7 @@ const updatePassword = async (req: NextApiRequest, res: NextApiResponse) => {}; 
 export {
 	register,
 	login,
+	getAuthenicatedUser,
 	/* logout,
 	forgotPassword,
 	resetPassword,

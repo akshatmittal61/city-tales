@@ -1,5 +1,5 @@
 import styles from "@/styles/Auth.module.scss";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { stylesConfig } from "@/utils/functions";
 import { rumiDarwaza } from "@/assets/images";
 import Avatar from "@/components/Avatar/Avatar";
@@ -10,13 +10,16 @@ import Link from "next/link";
 import regex from "@/constants/regex";
 import { loginValidator } from "@/validations/auth";
 import { LoginValues } from "@/interfaces/auth";
-import { loginUser } from "@/utils/api/auth";
+import { fetchAuthenticatedUser, loginUser } from "@/utils/api/auth";
 import { useRouter } from "next/router";
+import GlobalContext from "@/context/GlobalContext";
 
 const classNames = stylesConfig(styles);
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
+	const { setUser } = useContext(GlobalContext);
+
 	const [inputCred, setInputCred] = useState<LoginValues>({
 		email: "",
 		password: "",
@@ -35,6 +38,9 @@ const SignInPage: React.FC = () => {
 			});
 			const login = await loginUser(inputCred);
 			localStorage.setItem("token", login.token);
+			const verifiedUser: any = await fetchAuthenticatedUser();
+			setUser(verifiedUser.user);
+			console.log(verifiedUser);
 			router.push("/");
 		} catch (error: any) {
 			console.error(error);
