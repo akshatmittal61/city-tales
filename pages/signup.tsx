@@ -10,10 +10,13 @@ import Link from "next/link";
 import regex from "@/constants/regex";
 import { registerValidator } from "@/validations/auth";
 import { RegisterValues } from "@/interfaces/auth";
+import { registerUser } from "@/utils/api/auth";
+import { useRouter } from "next/router";
 
 const classNames = stylesConfig(styles);
 
 const SignInPage: React.FC = () => {
+	const router = useRouter();
 	const [inputCred, setInputCred] = useState<RegisterValues>({
 		name: "",
 		email: "",
@@ -32,7 +35,8 @@ const SignInPage: React.FC = () => {
 			await registerValidator(inputCred).catch((err) => {
 				throw err.map((err: any) => err.message).join(", ");
 			});
-			alert("Registration successful");
+			await registerUser(inputCred);
+			router.push("/login");
 		} catch (error: any) {
 			console.error(error);
 			alert(error.toString());
