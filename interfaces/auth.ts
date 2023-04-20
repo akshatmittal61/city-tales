@@ -7,5 +7,5 @@ export interface RegisterValues {
 	name: string;
 	email: string;
 	password: string;
-	confirmPassword: string;
+	confirmPassword?: string;
 }

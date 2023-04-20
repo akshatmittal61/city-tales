@@ -111,6 +111,7 @@ const SignInPage: React.FC = () => {
 						value={inputCred.confirmPassword}
 						onChange={handleInputChange}
 						error={
+							typeof inputCred.confirmPassword === "string" &&
 							inputCred.confirmPassword.length > 0 &&
 							inputCred.confirmPassword !== inputCred.password
 						}

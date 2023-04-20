@@ -34,8 +34,6 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
 		};
 		jwt.sign(payload, jwtSecret, { expiresIn: "1d" }, (err, token) => {
 			if (err) throw err;
-			// set cookie in the frontend instead of here in the backend to avoid CORS issues and send the token in the response with set-cookie header and status code 200
-			res.setHeader("Set-Cookie", `token=${token}; path=/; httpOnly`);
 			return res.status(200).json({ token });
 		});
 		return res.status(200).json({ message: RESPONSE_MESSAGES.SUCCESS });
@@ -70,8 +68,6 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
 		};
 		jwt.sign(payload, jwtSecret, { expiresIn: "1d" }, (err, token) => {
 			if (err) throw err;
-			// set cookie in the frontend instead of here in the backend to avoid CORS issues and send the token in the response with set-cookie header and status code 200
-			res.setHeader("Set-Cookie", `token=${token}; path=/; httpOnly`);
 			return res.status(200).json({ token });
 		});
 	} catch (error) {

@@ -10,10 +10,13 @@ import Link from "next/link";
 import regex from "@/constants/regex";
 import { loginValidator } from "@/validations/auth";
 import { LoginValues } from "@/interfaces/auth";
+import { loginUser } from "@/utils/api/auth";
+import { useRouter } from "next/router";
 
 const classNames = stylesConfig(styles);
 
 const SignInPage: React.FC = () => {
+	const router = useRouter();
 	const [inputCred, setInputCred] = useState<LoginValues>({
 		email: "",
 		password: "",
@@ -30,10 +33,12 @@ const SignInPage: React.FC = () => {
 			await loginValidator(inputCred).catch((err) => {
 				throw err.map((err: any) => err.message).join(", ");
 			});
-			alert("Login successful");
+			const login = await loginUser(inputCred);
+			localStorage.setItem("token", login.token);
+			router.push("/");
 		} catch (error: any) {
 			console.error(error);
-			alert(error.toString());
+			alert(error.message);
 		}
 	};
 
