@@ -1,5 +1,5 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { getAllBlogs } from "@/controllers/blogs";
+import { login } from "@/controllers/auth";
 import connectDB from "@/db";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -9,10 +9,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 		const { method } = req;
 
 		switch (method) {
-			case "GET":
-				return getAllBlogs(req, res);
+			case "POST":
+				return login(req, res);
 			default:
-				res.setHeader("Allow", ["GET", "POST"]);
+				res.setHeader("Allow", ["POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);
 		}
 	} catch (error: any) {
