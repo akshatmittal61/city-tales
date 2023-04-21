@@ -15,3 +15,8 @@
 		background: transparent;
 	}
 }
+
+::selection {
+	background: var(--color-brand-black);
+	color: var(--color-brand-white);
+}
