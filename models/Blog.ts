@@ -80,6 +80,15 @@ const BlogSchema = new mongoose.Schema(
 			],
 			default: [],
 		},
+		slots: {
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Slot",
+				},
+			],
+			default: [],
+		},
 	},
 	{
 		timestamps: true,
