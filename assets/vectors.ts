@@ -1,3 +1,5 @@
 import favicon from "@/public/vectors/favicon.svg";
 
-export { favicon };
+import illustration1 from "@/public/vectors/illustration-1.svg";
+
+export { favicon, illustration1 };
