@@ -27,4 +27,11 @@ const BLOG: any = {
 	},
 };
 
-export { USER_ROLES, OTP_TYPES, RESPONSE_MESSAGES, BLOG };
+const SLOT: any = {
+	STATUS: {
+		AVAILABLE: "available",
+		BOOKED: "booked",
+	},
+};
+
+export { USER_ROLES, OTP_TYPES, RESPONSE_MESSAGES, BLOG, SLOT };
