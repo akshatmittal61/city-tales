@@ -2,10 +2,10 @@
 
 .home-walks {
 	width: 100vw;
-	height: 800px;
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
+	gap: 64px;
 	flex-flow: column;
 	overflow: hidden;
 	padding: 64px 5%;
@@ -27,13 +27,14 @@
 	&-body {
 		width: 100%;
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 		align-items: center;
+		flex-wrap: wrap;
 		gap: 24px;
 	}
 
 	&-walk {
-		width: 100%;
+		width: calc(50% - 12px);
 		height: 450px;
 		display: flex;
 		justify-content: space-between;

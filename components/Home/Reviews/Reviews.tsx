@@ -3,12 +3,13 @@ import styles from "./Reviews.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import Button from "@/library/Button";
 import { IoIosArrowForward } from "react-icons/io";
-import { sampleReviews } from "@/constants/landing";
 import Review from "./Review";
 
 const classes = stylesConfig(styles);
 
-const HomeReviewsSection: React.FC = () => {
+const HomeReviewsSection: React.FC<{
+	reviews: any[];
+}> = ({ reviews }) => {
 	return (
 		<section className={classes("home-reviews")}>
 			<div className={classes("home-reviews-header")}>
@@ -17,7 +18,7 @@ const HomeReviewsSection: React.FC = () => {
 				</h1>
 			</div>
 			<div className={classes("home-reviews-body")}>
-				{sampleReviews.map((review, index) => (
+				{reviews.map((review: any, index: number) => (
 					<Review key={index} {...review} />
 				))}
 			</div>

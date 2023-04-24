@@ -3,18 +3,19 @@ import styles from "./Hero.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import Image from "next/image";
 import { illustration1 } from "@/assets/vectors";
-import { carouselItems } from "@/constants/landing";
 import Link from "next/link";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const classes = stylesConfig(styles);
 
-const HomeHeroSection: React.FC = () => {
+const HomeHeroSection: React.FC<{
+	highlights: any[];
+}> = ({ highlights }) => {
 	const [currAccordianItem, setCurrAccordianItem] = useState(0);
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCurrAccordianItem((prev) => {
-				if (prev === carouselItems.length - 1) {
+				if (prev === highlights.length - 1) {
 					return 0;
 				} else {
 					return prev + 1;
@@ -22,7 +23,7 @@ const HomeHeroSection: React.FC = () => {
 			});
 		}, 5000);
 		return () => clearInterval(interval);
-	}, []);
+	}, [highlights.length]);
 
 	return (
 		<section className={classes("home-hero")}>
@@ -30,26 +31,26 @@ const HomeHeroSection: React.FC = () => {
 				<div
 					className={classes("home-hero__accordian__item")}
 					style={{
-						backgroundImage: `url(${carouselItems[currAccordianItem].image})`,
+						backgroundImage: `url(${highlights[currAccordianItem].image})`,
 					}}
 				>
 					<Link
 						className={classes("home-hero__accordian__content")}
-						href={carouselItems[currAccordianItem].link}
+						href={highlights[currAccordianItem].link}
 					>
 						<h1
 							className={classes(
 								"home-hero__accordian__content__title"
 							)}
 						>
-							{carouselItems[currAccordianItem].title}
+							{highlights[currAccordianItem].title}
 						</h1>
 						<p
 							className={classes(
 								"home-hero__accordian__content__description"
 							)}
 						>
-							{carouselItems[currAccordianItem].description}
+							{highlights[currAccordianItem].description}
 						</p>
 					</Link>
 				</div>
@@ -60,7 +61,7 @@ const HomeHeroSection: React.FC = () => {
 					)}
 					onClick={() => {
 						setCurrAccordianItem((prev) =>
-							prev === 0 ? carouselItems.length - 1 : prev - 1
+							prev === 0 ? highlights.length - 1 : prev - 1
 						);
 					}}
 				>
@@ -73,14 +74,14 @@ const HomeHeroSection: React.FC = () => {
 					)}
 					onClick={() => {
 						setCurrAccordianItem((prev) =>
-							prev === carouselItems.length - 1 ? 0 : prev + 1
+							prev === highlights.length - 1 ? 0 : prev + 1
 						);
 					}}
 				>
 					<IoIosArrowForward />
 				</button>
 				<div className={classes("home-hero__accordian__dots")}>
-					{carouselItems.map((item, index) => (
+					{highlights.map((item: any, index: number) => (
 						<button
 							key={index}
 							className={classes(

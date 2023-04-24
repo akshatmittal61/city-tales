@@ -20,7 +20,7 @@ export interface ReviewItem {
 	user: string;
 	content: string;
 	rating: number;
-	date: Date;
+	date: Date | string;
 	image: string;
 	title: string;
 }

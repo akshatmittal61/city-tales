@@ -1,5 +1,9 @@
 import { wallpapers } from "@/assets/images";
-import { ExplorationItem, ReviewItem } from "@/components/Home/types";
+import {
+	ExplorationItem,
+	ReviewItem,
+	WalkProps,
+} from "@/components/Home/types";
 
 export const samplePlaces = [
 	"New York",
@@ -11,7 +15,7 @@ export const samplePlaces = [
 	"Washington",
 ];
 
-export const carouselItems: {
+export const sampleHighlights: {
 	image: string;
 	title: string;
 	link: string;
@@ -24,13 +28,76 @@ export const carouselItems: {
 		"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
 }));
 
-export const sampleExplorationItem: ExplorationItem = {
-	image: wallpapers[4].src,
-	title: "Sample Title",
-	description:
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
-	link: "/",
-};
+export const sampleExplorations: ExplorationItem[] = [
+	{
+		image: wallpapers[0].src,
+		title: "Sample Title",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
+		link: "/",
+	},
+	{
+		image: wallpapers[1].src,
+		title: "Sample Title",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
+		link: "/",
+	},
+	{
+		image: wallpapers[2].src,
+		title: "Sample Title",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
+		link: "/",
+	},
+	{
+		image: wallpapers[3].src,
+		title: "Sample Title",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
+		link: "/",
+	},
+	{
+		image: wallpapers[4].src,
+		title: "Sample Title",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
+		link: "/",
+	},
+	{
+		image: wallpapers[5].src,
+		title: "Sample Title",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
+		link: "/",
+	},
+	{
+		image: wallpapers[6].src,
+		title: "Sample Title",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
+		link: "/",
+	},
+];
+
+export const sampleWalks: WalkProps[] = [
+	{
+		title: "Tour in the stars",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris.",
+		image: wallpapers[1].src,
+		link: "/",
+		slotsLeft: 10,
+	},
+	{
+		title: "A Walk among the flowers",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris.",
+		image: wallpapers[2].src,
+		link: "/",
+		slotsLeft: 15,
+	},
+];
 
 export const sampleReviews: ReviewItem[] = [
 	{
