@@ -32,13 +32,13 @@ jobs:
                   node-version: "14"
 
             - name: Install Dependencies
-              run: npm install
+              run: yarn
 
             - name: Check Code Style
-              run: npm run lint
+              run: yarn lint
 
             - name: Check Code Formatting
-              run: npm run format
+              run: yarn format
 
     test:
         runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
                   node-version: "14"
 
             - name: Install Dependencies
-              run: npm install
+              run: yarn
 
             - name: Run Tests
-              run: npm run test
+              run: yarn test
