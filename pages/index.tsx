@@ -3,6 +3,7 @@ import {
 	ExplorationSection,
 	HeroSection,
 	WalksSection,
+	ReviewsSection,
 } from "@/components/Home";
 
 const HomePage: React.FC = () => {
@@ -11,6 +12,7 @@ const HomePage: React.FC = () => {
 			<HeroSection />
 			<ExplorationSection />
 			<WalksSection />
+			<ReviewsSection />
 		</main>
 	);
 };

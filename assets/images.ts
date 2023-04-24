@@ -1,4 +1,5 @@
 import rumiDarwaza from "@/public/images/rumi-darwaza.png";
+import textureBg from "@/public/images/texture-bg.jpeg";
 
 import wallpaper1 from "@/public/images/1.jpg";
 import wallpaper2 from "@/public/images/2.jpg";
@@ -18,4 +19,4 @@ export const wallpapers = [
 	wallpaper7,
 ];
 
-export { rumiDarwaza };
+export { rumiDarwaza, textureBg };
