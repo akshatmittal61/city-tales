@@ -7,3 +7,11 @@ export interface ExplorationItem {
 	link: string;
 	style?: React.CSSProperties;
 }
+
+export interface WalkProps {
+	title: string;
+	description: string;
+	image: string;
+	link: string;
+	slotsLeft?: number;
+}
