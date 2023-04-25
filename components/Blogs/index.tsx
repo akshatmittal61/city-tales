@@ -1,3 +1,3 @@
-import { default as Blog } from "./Blog";
+import { default as BlogCard } from "./BlogCard";
 
-export { Blog };
+export { BlogCard };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Blog } from "@/components/Blogs";
+import { BlogCard as Blog } from "@/components/Blogs";
 import { sampleBlogs } from "@/constants/blogs";
 import Filters from "@/library/Filter/Filters";
 import styles from "@/styles/Stories.module.scss";
