@@ -1,0 +1,33 @@
+@import "@/styles/config/mixins";
+
+.blogs {
+	width: 100%;
+	min-height: 100vh;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-flow: column;
+	padding: var(--nav-height) 5%;
+
+	&-head {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		padding: 24px 0;
+
+		&-title {
+			@include typography(heading, h2);
+			text-decoration: underline;
+		}
+	}
+
+	&-body {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		flex-wrap: wrap;
+		gap: 24px;
+	}
+}
