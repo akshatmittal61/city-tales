@@ -1,0 +1,142 @@
+@import "@/styles/config/mixins";
+
+.home-exploration {
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-flow: column;
+	gap: 64px;
+	padding: 64px 10%;
+	position: relative;
+
+	&-header {
+		position: absolute;
+		left: 10%;
+		text-decoration: underline;
+		@include typography(heading, h2);
+	}
+
+	&-blocks {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 32px;
+	}
+
+	&-cards {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		flex-wrap: nowrap;
+		gap: 32px;
+		overflow: auto;
+	}
+
+	&-block {
+		width: 100%;
+		height: 650px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		&__image {
+			width: 50%;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		&__content {
+			width: 45%;
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			flex-flow: column;
+			gap: 24px;
+
+			&--header {
+				width: 100%;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				gap: 12px;
+
+				img {
+					width: 32px;
+					height: 32px;
+				}
+
+				a {
+					text-decoration: none;
+					color: #000;
+					@include typography(heading, h3);
+				}
+			}
+
+			&--text {
+				@include typography(body, lg);
+			}
+		}
+	}
+
+	&-card {
+		width: 500px;
+		min-height: 350px;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 16px;
+		flex: 0 0 auto;
+
+		&__image {
+			width: 100%;
+			height: 250px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		&__content {
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			align-items: flex-start;
+			flex-flow: column;
+			gap: 8px;
+
+			&--header {
+				width: 100%;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				text-decoration: none;
+				color: #000;
+				@include typography(heading, h5);
+			}
+
+			&--description {
+				@include typography(body, md);
+			}
+		}
+	}
+}
