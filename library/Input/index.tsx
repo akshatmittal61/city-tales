@@ -6,11 +6,13 @@ const classNames = stylesConfig(styles);
 
 interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	error?: boolean;
+	errorMessage?: string;
 	className?: string;
 }
 
 export const Input: React.FC<IInputProps> = ({
 	error,
+	errorMessage,
 	className,
 	...props
 }) => {
@@ -24,8 +26,12 @@ export const Input: React.FC<IInputProps> = ({
 				) + ` ${className}`
 			}
 			onInvalid={(e) => {
-				e.currentTarget.setCustomValidity("Please enter a valid name");
+				e.currentTarget.setCustomValidity(errorMessage + "");
 			}}
+			onInput={(e) => {
+				e.currentTarget.setCustomValidity("");
+			}}
+			title={error ? errorMessage : ""}
 			{...props}
 		/>
 	);
