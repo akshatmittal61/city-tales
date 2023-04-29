@@ -8,7 +8,7 @@ import Image from "next/image";
 import { bookmark, nipLight } from "@/assets/vectors";
 import { useRouter } from "next/router";
 
-const classes = stylesConfig(styles);
+const classes = stylesConfig(styles, "blogs-blog");
 
 const Blog: React.FC<BlogProps> = ({
 	id,
@@ -20,20 +20,18 @@ const Blog: React.FC<BlogProps> = ({
 	const router = useRouter();
 
 	return (
-		<div className={classes("blogs-blog")}>
+		<div className={classes("")}>
 			<div
-				className={classes("blogs-blog__image")}
+				className={classes("__image")}
 				style={{
 					backgroundImage: `url(${
 						coverImage ? coverImage : "/images/rumi-darwaza.png"
 					})`,
 				}}
 			></div>
-			<div className={classes("blogs-blog__content")}>
-				<h3 className={classes("blogs-blog__content--title")}>
-					{title}
-				</h3>
-				<p className={classes("blogs-blog__content--excerpt")}>
+			<div className={classes("__content")}>
+				<h3 className={classes("__content--title")}>{title}</h3>
+				<p className={classes("__content--excerpt")}>
 					{excerpt
 						? excerpt.length > 150
 							? excerpt.slice(0, 150) + "..."
@@ -41,7 +39,7 @@ const Blog: React.FC<BlogProps> = ({
 						: content.slice(0, 150)}
 				</p>
 				<Button
-					className={classes("blogs-blog__content--button")}
+					className={classes("__content--button")}
 					variant="outlined"
 					icon={<IoIosArrowForward />}
 					iconPosition="right"
@@ -60,14 +58,14 @@ const Blog: React.FC<BlogProps> = ({
 				alt="bookmark"
 				width={64}
 				height={84}
-				className={classes("blogs-blog__bookmark")}
+				className={classes("__bookmark")}
 			/>
 			<Image
 				src={nipLight}
 				alt="nip"
 				width={52}
 				height={52}
-				className={classes("blogs-blog__nip")}
+				className={classes("__nip")}
 			/>
 		</div>
 	);

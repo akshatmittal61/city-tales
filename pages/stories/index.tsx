@@ -5,7 +5,7 @@ import Filters from "@/library/Filter/Filters";
 import styles from "@/styles/Stories.module.scss";
 import { convertToSlug, stylesConfig } from "@/utils/functions";
 
-const classes = stylesConfig(styles);
+const classes = stylesConfig(styles, "blogs");
 
 const BlogsPage: React.FC<{ blogs: any[] }> = ({ blogs }) => {
 	const [filters, setFilters] = useState<any>([]);
@@ -24,11 +24,9 @@ const BlogsPage: React.FC<{ blogs: any[] }> = ({ blogs }) => {
 	}, [blogs]);
 
 	return (
-		<main className={classes("blogs")}>
-			<div className={classes("blogs-head")}>
-				<h1 className={classes("blogs-head-title")}>
-					Read the Stories
-				</h1>
+		<main className={classes("")}>
+			<div className={classes("-head")}>
+				<h1 className={classes("-head-title")}>Read the Stories</h1>
 			</div>
 			<Filters
 				filters={filters}
@@ -37,7 +35,7 @@ const BlogsPage: React.FC<{ blogs: any[] }> = ({ blogs }) => {
 				}}
 				showSelected
 			/>
-			<div className={classes("blogs-body")}>
+			<div className={classes("-body")}>
 				{blogs.map((blog, index) =>
 					filters.some((filter: any) => filter.selected) ? (
 						filters
