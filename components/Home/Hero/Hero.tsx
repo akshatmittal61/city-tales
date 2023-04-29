@@ -6,7 +6,7 @@ import { illustration1 } from "@/assets/vectors";
 import Link from "next/link";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-const classes = stylesConfig(styles);
+const classes = stylesConfig(styles, "home-hero");
 
 const HomeHeroSection: React.FC<{
 	highlights: any[];
@@ -26,28 +26,24 @@ const HomeHeroSection: React.FC<{
 	}, [highlights.length]);
 
 	return (
-		<section className={classes("home-hero")}>
-			<div className={classes("home-hero__accordian")}>
+		<section className={classes("")}>
+			<div className={classes("__accordian")}>
 				<div
-					className={classes("home-hero__accordian__item")}
+					className={classes("__accordian__item")}
 					style={{
 						backgroundImage: `url(${highlights[currAccordianItem].image})`,
 					}}
 				>
 					<Link
-						className={classes("home-hero__accordian__content")}
+						className={classes("__accordian__content")}
 						href={highlights[currAccordianItem].link}
 					>
-						<h1
-							className={classes(
-								"home-hero__accordian__content__title"
-							)}
-						>
+						<h1 className={classes("__accordian__content__title")}>
 							{highlights[currAccordianItem].title}
 						</h1>
 						<p
 							className={classes(
-								"home-hero__accordian__content__description"
+								"__accordian__content__description"
 							)}
 						>
 							{highlights[currAccordianItem].description}
@@ -56,8 +52,8 @@ const HomeHeroSection: React.FC<{
 				</div>
 				<button
 					className={classes(
-						"home-hero__accordian__arrow",
-						"home-hero__accordian__arrow--left"
+						"__accordian__arrow",
+						"__accordian__arrow--left"
 					)}
 					onClick={() => {
 						setCurrAccordianItem((prev) =>
@@ -69,8 +65,8 @@ const HomeHeroSection: React.FC<{
 				</button>
 				<button
 					className={classes(
-						"home-hero__accordian__arrow",
-						"home-hero__accordian__arrow--right"
+						"__accordian__arrow",
+						"__accordian__arrow--right"
 					)}
 					onClick={() => {
 						setCurrAccordianItem((prev) =>
@@ -80,14 +76,14 @@ const HomeHeroSection: React.FC<{
 				>
 					<IoIosArrowForward />
 				</button>
-				<div className={classes("home-hero__accordian__dots")}>
+				<div className={classes("__accordian__dots")}>
 					{highlights.map((item: any, index: number) => (
 						<button
 							key={index}
 							className={classes(
-								"home-hero__accordian__dots__dot",
+								"__accordian__dots__dot",
 								index === currAccordianItem
-									? "home-hero__accordian__dots__dot--active"
+									? "__accordian__dots__dot--active"
 									: ""
 							)}
 							onClick={() => setCurrAccordianItem(index)}

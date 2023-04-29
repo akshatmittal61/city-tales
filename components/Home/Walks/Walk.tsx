@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import styles from "./Walks.module.scss";
 import { stylesConfig } from "@/utils/functions";
 
-const classes = stylesConfig(styles);
+const classes = stylesConfig(styles, "home-walks-walk");
 
 const Walk: React.FC<WalkProps> = ({
 	title,
@@ -18,15 +18,13 @@ const Walk: React.FC<WalkProps> = ({
 }) => {
 	const router = useRouter();
 	return (
-		<div className={classes("home-walks-walk")}>
-			<div className={classes("home-walks-walk__content")}>
-				<h1 className={classes("home-walks-walk__content--title")}>
-					{title}
-				</h1>
-				<p className={classes("home-walks-walk__content--description")}>
+		<div className={classes("")}>
+			<div className={classes("__content")}>
+				<h1 className={classes("__content--title")}>{title}</h1>
+				<p className={classes("__content--description")}>
 					{description}
 				</p>
-				<div className={classes("home-walks-walk__content--actions")}>
+				<div className={classes("__content--actions")}>
 					<Button
 						variant="outlined"
 						icon={<IoIosArrowForward />}
@@ -36,16 +34,12 @@ const Walk: React.FC<WalkProps> = ({
 					>
 						Book Now
 					</Button>
-					<span
-						className={classes(
-							"home-walks-walk__content--actions__slots"
-						)}
-					>
+					<span className={classes("__content--actions__slots")}>
 						{slotsLeft} slots left
 					</span>
 				</div>
 			</div>
-			<div className={classes("home-walks-walk__image")}>
+			<div className={classes("__image")}>
 				<Image src={image} alt={title} width={1920} height={1080} />
 			</div>
 		</div>
