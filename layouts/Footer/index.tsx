@@ -6,12 +6,12 @@ import { favicon } from "@/assets/vectors";
 import socials from "@/constants/socials";
 
 const Footer: React.FC = () => {
-	const classNames = stylesConfig(styles);
+	const classNames = stylesConfig(styles, "footer");
 	return (
-		<footer className={classNames("footer")}>
-			<div className={classNames("footer-container")}>
-				<div className={classNames("footer-logo")}>
-					<div className={classNames("footer-logo-icon")}>
+		<footer className={classNames("")}>
+			<div className={classNames("-container")}>
+				<div className={classNames("-logo")}>
+					<div className={classNames("-logo-icon")}>
 						<Image
 							src={favicon}
 							alt="Favicon"
@@ -19,11 +19,9 @@ const Footer: React.FC = () => {
 							height={48}
 						/>
 					</div>
-					<span className={classNames("footer-logo-text")}>
-						City Tales
-					</span>
+					<span className={classNames("-logo-text")}>City Tales</span>
 				</div>
-				<div className={classNames("footer-socials")}>
+				<div className={classNames("-socials")}>
 					{socials.map((social, index) => (
 						<a
 							href={social.url}

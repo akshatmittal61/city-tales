@@ -13,7 +13,7 @@ import { RegisterValues } from "@/interfaces/auth";
 import { registerUser } from "@/utils/api/auth";
 import { useRouter } from "next/router";
 
-const classNames = stylesConfig(styles);
+const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
@@ -44,32 +44,32 @@ const SignInPage: React.FC = () => {
 	};
 
 	return (
-		<main className={classNames("auth")}>
+		<main className={classNames("")}>
 			<section
-				className={classNames("auth-graphic")}
+				className={classNames("-graphic")}
 				style={{
 					backgroundImage: `url(${rumiDarwaza.src})`,
 				}}
 			>
-				<div className={classNames("auth-graphic__text")}>
+				<div className={classNames("-graphic__text")}>
 					Content for City tales comes here Atleast 3 lines. Content
 					for City tales comes here
 				</div>
 			</section>
-			<section className={classNames("auth-content")}>
-				<div className={classNames("auth-content-head")}>
-					<h1 className={classNames("auth-content-head__icon")}>
+			<section className={classNames("-content")}>
+				<div className={classNames("-content-head")}>
+					<h1 className={classNames("-content-head__icon")}>
 						<Avatar src={favicon.src} alt="Avatar" />
 					</h1>
-					<h1 className={classNames("auth-content-head__title")}>
+					<h1 className={classNames("-content-head__title")}>
 						Create an Account
 					</h1>
-					<h3 className={classNames("auth-content-head__subtitle")}>
+					<h3 className={classNames("-content-head__subtitle")}>
 						Let&apos;s get you started
 					</h3>
 				</div>
 				<form
-					className={classNames("auth-content-form")}
+					className={classNames("-content-form")}
 					onSubmit={handleSubmit}
 				>
 					<Input
@@ -125,8 +125,8 @@ const SignInPage: React.FC = () => {
 						Create Account
 					</Button>
 				</form>
-				<div className={classNames("auth-content-footer")}>
-					<p className={classNames("auth-content-footer__text")}>
+				<div className={classNames("-content-footer")}>
+					<p className={classNames("-content-footer__text")}>
 						Already have an account?{" "}
 						<Link href="/login">Login</Link>
 					</p>

@@ -3,17 +3,17 @@ import styles from "./Walks.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import Walk from "./Walk";
 
-const classes = stylesConfig(styles);
+const classes = stylesConfig(styles, "home-walks");
 
 const HomeWalksSection: React.FC<{
 	walks: any[];
 }> = ({ walks }) => {
 	return (
-		<section className={classes("home-walks")}>
-			<div className={classes("home-walks-header")}>
-				<h1 className={classes("home-walks-header__title")}>Walks</h1>
+		<section className={classes("")}>
+			<div className={classes("-header")}>
+				<h1 className={classes("-header__title")}>Walks</h1>
 			</div>
-			<div className={classes("home-walks-body")}>
+			<div className={classes("-body")}>
 				{walks.map((walk: any, index: number) => (
 					<Walk {...walk} key={index} />
 				))}
