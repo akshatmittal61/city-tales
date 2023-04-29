@@ -39,7 +39,12 @@ const Navbar: React.FC = () => {
 			}}
 		>
 			<div className={classNames("navbar-left")}>
-				<h1 className={classNames("navbar-title")}>City Tales</h1>
+				<h1
+					className={classNames("navbar-title")}
+					onClick={() => router.push("/")}
+				>
+					City Tales
+				</h1>
 			</div>
 			<div className={classNames("navbar-right")}>
 				<ul className={classNames("navbar-links")}>

@@ -30,6 +30,7 @@
 	&-title {
 		@include typography(heading, h4);
 		color: #fff;
+		cursor: pointer;
 	}
 
 	&-links {
