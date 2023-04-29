@@ -7,7 +7,7 @@ import Button from "@/library/Button";
 import { useRouter } from "next/router";
 import { IoIosArrowForward } from "react-icons/io";
 
-const classes = stylesConfig(styles);
+const classes = stylesConfig(styles, "home-exploration");
 
 const HomeExplorationSection: React.FC<{
 	explorations: any[];
@@ -15,9 +15,9 @@ const HomeExplorationSection: React.FC<{
 	const router = useRouter();
 
 	return (
-		<section className={classes("home-exploration")}>
-			<h1 className={classes("home-exploration-header")}>Explorations</h1>
-			<div className={classes("home-exploration-blocks")}>
+		<section className={classes("")}>
+			<h1 className={classes("-header")}>Explorations</h1>
+			<div className={classes("-blocks")}>
 				{explorations.length > 0 ? (
 					<ExplorationBlock
 						{...explorations[0]}
@@ -30,7 +30,7 @@ const HomeExplorationSection: React.FC<{
 					<ExplorationBlock {...explorations[1]} />
 				) : null}
 			</div>
-			<div className={classes("home-exploration-cards")}>
+			<div className={classes("-cards")}>
 				{explorations.length > 2
 					? explorations
 							.slice(2)
