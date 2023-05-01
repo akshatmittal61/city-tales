@@ -8,8 +8,9 @@ import wallpaper4 from "@/public/images/4.jpg";
 import wallpaper5 from "@/public/images/5.jpg";
 import wallpaper6 from "@/public/images/6.jpg";
 import wallpaper7 from "@/public/images/7.jpg";
+import { shuffle } from "lodash";
 
-export const wallpapers = [
+export const staticWallpapers = [
 	wallpaper1,
 	wallpaper2,
 	wallpaper3,
@@ -17,6 +18,30 @@ export const wallpapers = [
 	wallpaper5,
 	wallpaper6,
 	wallpaper7,
-];
+].map((wallpaper) => wallpaper.src);
+
+const wallpaperKeywords = shuffle([
+	"space",
+	"taylorswift",
+	"universe",
+	"dark-academia",
+	"illustration,minimalist",
+	"history",
+	"minimalist",
+	"bonfire",
+	"nature",
+	"aesthetic",
+	"art",
+	"sky",
+]);
+
+export const wallpapers = wallpaperKeywords
+	.map(
+		(keyword) =>
+			`https://source.unsplash.com/1920x1080/?${keyword}&sig=${Math.floor(
+				Math.random() * 1000
+			)}`
+	)
+	.slice(0, 7);
 
 export { rumiDarwaza, textureBg };

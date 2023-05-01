@@ -1,6 +1,6 @@
 @import "@/styles/config/mixins";
 
-.home-reviews {
+.reviews {
 	width: 100vw;
 	height: 700px;
 	display: flex;
@@ -86,6 +86,7 @@
 				color: #4b4b4b;
 			}
 		}
+
 		&__nip {
 			position: absolute;
 			bottom: 0;
