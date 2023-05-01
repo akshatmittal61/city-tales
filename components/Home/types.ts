@@ -15,12 +15,3 @@ export interface WalkProps {
 	link: string;
 	slotsLeft?: number;
 }
-
-export interface ReviewItem {
-	user: string;
-	content: string;
-	rating: number;
-	date: Date | string;
-	image: string;
-	title: string;
-}

@@ -1,9 +1,5 @@
 import { wallpapers } from "@/assets/images";
-import {
-	ExplorationItem,
-	ReviewItem,
-	WalkProps,
-} from "@/components/Home/types";
+import { ExplorationItem, WalkProps } from "@/components/Home/types";
 
 export const samplePlaces = [
 	"New York",
@@ -97,51 +93,20 @@ export const sampleWalks: WalkProps[] = [
 		link: "/",
 		slotsLeft: 15,
 	},
-];
-
-export const sampleReviews: ReviewItem[] = [
 	{
-		user: {
-			name: "John Doe",
-		}.name,
-		rating: 4,
-		content:
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-		date: new Date("2020-01-01"),
-		title: "The London Eye",
-		image: wallpapers[0].src,
-	},
-	{
-		user: {
-			name: "Kimberly Smith",
-		}.name,
-		rating: 4,
-		content:
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-		date: new Date("2020-02-01"),
-		title: "Big Ben",
-		image: wallpapers[1].src,
-	},
-	{
-		user: {
-			name: "Nick Jones",
-		}.name,
-		rating: 4,
-		content:
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-		date: new Date("2020-03-01"),
-		title: "The Shard",
-		image: wallpapers[2].src,
-	},
-	{
-		user: {
-			name: "Rebecca Williams",
-		}.name,
-		rating: 4,
-		content:
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-		date: new Date("2020-04-01"),
-		title: "Piccadilly Circus",
+		title: "Land of the giants",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris.",
 		image: wallpapers[3].src,
+		link: "/",
+		slotsLeft: 5,
+	},
+	{
+		title: "Magical forest",
+		description:
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris.",
+		image: wallpapers[4].src,
+		link: "/",
+		slotsLeft: 20,
 	},
 ];
