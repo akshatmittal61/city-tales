@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "./Reviews.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import { textureBg } from "@/assets/images";
-import { nip } from "@/assets/vectors";
+import { nipDark as nip } from "@/assets/vectors";
 
 const classes = stylesConfig(styles, "home-reviews-review");
 

@@ -37,14 +37,16 @@ export const Button: React.FC<IButtonProps> = ({
 }) => {
 	return (
 		<button
-			className={classNames(
-				"btn",
-				BUTON_SIZES[size],
-				BUTTON_VARIANTS[variant],
+			className={[
+				classNames(
+					"btn",
+					BUTON_SIZES[size],
+					BUTTON_VARIANTS[variant],
+					{ "btn--loading": loading },
+					{ "btn--disabled": props.disabled }
+				),
 				className,
-				{ "btn--loading": loading },
-				{ "btn--disabled": props.disabled }
-			)}
+			].join(" ")}
 			disabled={props.disabled || loading}
 			{...props}
 		>
