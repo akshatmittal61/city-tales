@@ -1,7 +1,7 @@
 @import "@/styles/config/mixins";
 
 .blogs-blog {
-	width: calc(33% - 12px);
+	width: calc(100% - 24px);
 	height: 450px;
 	display: flex;
 	justify-content: center;
@@ -11,6 +11,7 @@
 	overflow: hidden;
 	border: 1px solid rgba(75, 75, 75, 0.3);
 	position: relative;
+	margin: 12px 0;
 
 	&__image {
 		width: 100%;
