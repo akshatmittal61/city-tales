@@ -29,7 +29,20 @@
 		justify-content: center;
 		align-items: flex-start;
 		flex-wrap: wrap;
-		gap: 24px;
+		gap: 48px;
 		padding: 24px 0;
+	}
+
+	&-group {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 16px;
+
+		&-title {
+			@include typography(heading, h4);
+		}
 	}
 }

@@ -6,14 +6,19 @@ import { stylesConfig } from "@/utils/functions";
 import { textureBg } from "@/assets/images";
 import { nipDark as nip } from "@/assets/vectors";
 
-const classes = stylesConfig(styles, "home-reviews-review");
+const classes = stylesConfig(styles, "reviews-review");
 
-const Review: React.FC<ReviewItem> = ({ user, content, walk }) => {
+interface ReviewProps extends ReviewItem {
+	style?: React.CSSProperties;
+}
+
+const Review: React.FC<ReviewProps> = ({ user, content, walk, style }) => {
 	return (
 		<div
 			className={classes("")}
 			style={{
 				backgroundImage: `url(${textureBg.src})`,
+				...style,
 			}}
 		>
 			<div className={classes("__body")}>
