@@ -24,6 +24,7 @@ const SignInPage: React.FC = () => {
 		email: "",
 		password: "",
 	});
+	const [loading, setLoading] = useState(false);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -32,6 +33,7 @@ const SignInPage: React.FC = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setLoading(true);
 		try {
 			await loginValidator(inputCred).catch((err) => {
 				throw err.map((err: any) => err.message).join(", ");
@@ -45,6 +47,8 @@ const SignInPage: React.FC = () => {
 		} catch (error: any) {
 			console.error(error);
 			alert(error.message);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -96,7 +100,7 @@ const SignInPage: React.FC = () => {
 						value={inputCred.password}
 						onChange={handleInputChange}
 					/>
-					<Button type="submit" variant="outlined">
+					<Button type="submit" variant="outlined" loading={loading}>
 						Login
 					</Button>
 				</form>

@@ -3,7 +3,7 @@ import { sampleReviews } from "@/constants/reviews";
 import { ReviewItem } from "@/interfaces/Review";
 import Responsive from "@/layouts/Responsive";
 import styles from "@/styles/Reviews.module.scss";
-import { stylesConfig } from "@/utils/functions";
+import { randomId, stylesConfig } from "@/utils/functions";
 import React, { useEffect, useState } from "react";
 
 const classes = stylesConfig(styles, "reviews");
@@ -46,6 +46,8 @@ const ReviewsPage: React.FC<{ reviews: any[] }> = ({ reviews: allReviews }) => {
 											review.walk.title,
 											review.user,
 											review.date,
+											randomId(),
+											Date.now(),
 										].join("-")}
 									>
 										<Review
