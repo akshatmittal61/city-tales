@@ -20,6 +20,31 @@ const getAllReviews = async (req: ApiRequest, res: ApiResponse) => {
 	}
 };
 
+const getReviewByWalkId = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const foundWalk = await Walk.findById(id);
+		if (!foundWalk)
+			return res.status(404).json({ message: "Walk not found" });
+		const reviews: any = await Review.find({ walk: id })
+			.populate("user")
+			.populate("walk")
+			.sort({ createdAt: -1 });
+		if (!reviews)
+			return res.status(404).json({ message: "Reviews not found" });
+		return res
+			.status(200)
+			.json({ data: reviews, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Reviews not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
 const addReview = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		let { user, walk, rating, content } = req.body;
@@ -48,4 +73,4 @@ const addReview = async (req: ApiRequest, res: ApiResponse) => {
 	}
 };
 
-export { getAllReviews, addReview };
+export { getAllReviews, addReview, getReviewByWalkId };
