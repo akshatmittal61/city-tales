@@ -17,7 +17,7 @@ export const sampleHighlights: {
 	link: string;
 	description?: string;
 }[] = wallpapers.map((wallpaper, index) => ({
-	image: wallpaper.src,
+	image: wallpaper,
 	title: `Top 10 Places to Visit in ${samplePlaces[index]}`,
 	link: "#",
 	description:
@@ -26,49 +26,49 @@ export const sampleHighlights: {
 
 export const sampleExplorations: ExplorationItem[] = [
 	{
-		image: wallpapers[0].src,
+		image: wallpapers[0],
 		title: "Sample Title",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
 		link: "/",
 	},
 	{
-		image: wallpapers[1].src,
+		image: wallpapers[1],
 		title: "Sample Title",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
 		link: "/",
 	},
 	{
-		image: wallpapers[2].src,
+		image: wallpapers[2],
 		title: "Sample Title",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
 		link: "/",
 	},
 	{
-		image: wallpapers[3].src,
+		image: wallpapers[3],
 		title: "Sample Title",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
 		link: "/",
 	},
 	{
-		image: wallpapers[4].src,
+		image: wallpapers[4],
 		title: "Sample Title",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
 		link: "/",
 	},
 	{
-		image: wallpapers[5].src,
+		image: wallpapers[5],
 		title: "Sample Title",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
 		link: "/",
 	},
 	{
-		image: wallpapers[6].src,
+		image: wallpapers[6],
 		title: "Sample Title",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris. Sed euismod, nisl vitae ultricies lacinia, nisl nisl aliquam massa, eget aliquam nisl nunc vel mauris.",
@@ -81,7 +81,7 @@ export const sampleWalks: WalkProps[] = [
 		title: "Tour in the stars",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris.",
-		image: wallpapers[1].src,
+		image: wallpapers[1],
 		link: "/",
 		slotsLeft: 10,
 	},
@@ -89,7 +89,7 @@ export const sampleWalks: WalkProps[] = [
 		title: "A Walk among the flowers",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris.",
-		image: wallpapers[2].src,
+		image: wallpapers[2],
 		link: "/",
 		slotsLeft: 15,
 	},
@@ -97,7 +97,7 @@ export const sampleWalks: WalkProps[] = [
 		title: "Land of the giants",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris.",
-		image: wallpapers[3].src,
+		image: wallpapers[3],
 		link: "/",
 		slotsLeft: 5,
 	},
@@ -105,7 +105,7 @@ export const sampleWalks: WalkProps[] = [
 		title: "Magical forest",
 		description:
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris. Sed euismod, nunc ut aliquam ultricies, nunc nisl aliquam mauris, eget aliquam nunc nisl sit amet mauris.",
-		image: wallpapers[4].src,
+		image: wallpapers[4],
 		link: "/",
 		slotsLeft: 20,
 	},
