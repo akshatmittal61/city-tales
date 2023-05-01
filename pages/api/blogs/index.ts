@@ -1,9 +1,10 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { getAllBlogs } from "@/controllers/blogs";
+import { addBlog, getAllBlogs } from "@/controllers/blogs";
 import connectDB from "@/db";
-import { NextApiRequest, NextApiResponse } from "next";
+import { ApiRequest, ApiResponse } from "@/interfaces/api";
+import { isAdmin } from "@/middleware/roles";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		await connectDB();
 		const { method } = req;
@@ -11,6 +12,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 		switch (method) {
 			case "GET":
 				return getAllBlogs(req, res);
+			case "POST":
+				return isAdmin(addBlog)(req, res);
 			default:
 				res.setHeader("Allow", ["GET", "POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);

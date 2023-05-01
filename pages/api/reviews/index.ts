@@ -1,5 +1,5 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { getAllReviews } from "@/controllers/reviews";
+import { addReview, getAllReviews } from "@/controllers/reviews";
 import connectDB from "@/db";
 import { ApiRequest, ApiResponse } from "@/interfaces/api";
 
@@ -11,6 +11,8 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 		switch (method) {
 			case "GET":
 				return getAllReviews(req, res);
+			case "POST":
+				return addReview(req, res);
 			default:
 				res.setHeader("Allow", ["GET", "POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);
