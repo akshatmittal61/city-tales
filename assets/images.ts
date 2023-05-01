@@ -35,8 +35,6 @@ const wallpaperKeywords = shuffle([
 	"sky",
 ]);
 
-console.log(wallpaperKeywords);
-
 export const wallpapers = wallpaperKeywords
 	.map(
 		(keyword) =>
