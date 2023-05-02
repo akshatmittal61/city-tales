@@ -33,12 +33,24 @@
 		align-items: center;
 		padding: 24px 0;
 
+		@include responsive(phone) {
+			flex-flow: column;
+			align-items: flex-start;
+			gap: 24px;
+		}
+
 		h1 {
 			max-width: 60%;
 			text-overflow: ellipsis;
 			overflow: hidden;
 			white-space: nowrap;
 			@include typography(heading, h2);
+
+			@include responsive(phone) {
+				max-width: 100%;
+				@include typography(heading, h3);
+				white-space: normal;
+			}
 		}
 
 		&__actions {

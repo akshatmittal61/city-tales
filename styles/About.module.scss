@@ -13,6 +13,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: flex-start;
+		position: relative;
 
 		&-graphic,
 		&-content {
@@ -22,6 +23,20 @@
 			justify-content: center;
 			align-items: flex-start;
 			padding: 0 5%;
+
+			@include responsive(phone) {
+				position: absolute;
+				left: 50%;
+				top: 0;
+				transform: translateX(-50%);
+				width: 100%;
+			}
+		}
+
+		&__graphic {
+			@include responsive(phone) {
+				z-index: -1;
+			}
 		}
 
 		&-graphic__frame {
@@ -38,6 +53,10 @@
 			align-items: center;
 			padding: 50px;
 			overflow: hidden;
+
+			@include responsive(phone) {
+				opacity: 0.5;
+			}
 
 			img {
 				object-fit: cover;
