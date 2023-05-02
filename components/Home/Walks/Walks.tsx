@@ -14,7 +14,7 @@ const HomeWalksSection: React.FC<{
 				<h1 className={classes("-header__title")}>Walks</h1>
 			</div>
 			<div className={classes("-body")}>
-				{walks.map((walk: any, index: number) => (
+				{walks.slice(0, 2).map((walk: any, index: number) => (
 					<Walk {...walk} key={index} />
 				))}
 			</div>
