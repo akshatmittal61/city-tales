@@ -19,12 +19,7 @@ const HomeExplorationSection: React.FC<{
 			<h1 className={classes("-header")}>Explorations</h1>
 			<div className={classes("-blocks")}>
 				{explorations.length > 0 ? (
-					<ExplorationBlock
-						{...explorations[0]}
-						style={{
-							flexDirection: "row-reverse",
-						}}
-					/>
+					<ExplorationBlock {...explorations[0]} />
 				) : null}
 				{explorations.length > 1 ? (
 					<ExplorationBlock {...explorations[1]} />

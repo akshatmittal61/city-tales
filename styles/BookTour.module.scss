@@ -8,6 +8,11 @@
 	align-items: flex-start;
 	padding-top: var(--nav-height);
 
+	@include responsive(phone) {
+		height: auto;
+		flex-flow: column;
+	}
+
 	&-details,
 	&-reviews {
 		&-header {
@@ -35,6 +40,11 @@
 		width: 55%;
 		padding: 36px 10%;
 
+		@include responsive(phone) {
+			width: 100%;
+			padding: 36px 5%;
+		}
+
 		&-header {
 			color: var(--color-brand-black);
 			flex-flow: column;
@@ -50,6 +60,9 @@
 			flex-flow: column;
 			gap: 40px;
 			margin: 50px 0;
+			@include responsive(phone) {
+				width: 100%;
+			}
 
 			& > * {
 				width: 100%;
@@ -73,6 +86,12 @@
 		overflow-y: auto;
 		padding: 36px 32px;
 		gap: 36px;
+
+		@include responsive(phone) {
+			width: 100%;
+			height: 80vh;
+			padding: 36px 5%;
+		}
 
 		&-body {
 			width: 100%;

@@ -28,6 +28,10 @@
 			align-items: flex-end;
 			transition: all 0.5s ease-in-out;
 			padding: 120px 100px;
+
+			@include responsive(phone) {
+				padding: 80px 40px;
+			}
 		}
 
 		&__content {
@@ -39,6 +43,12 @@
 			text-align: right;
 			gap: 12px;
 			max-width: 60vw;
+
+			@include responsive(phone) {
+				max-width: unset;
+				align-items: flex-start;
+				text-align: left;
+			}
 
 			&__title {
 				@include typography(heading, h3);

@@ -9,6 +9,7 @@ import wallpaper5 from "@/public/images/5.jpg";
 import wallpaper6 from "@/public/images/6.jpg";
 import wallpaper7 from "@/public/images/7.jpg";
 import { shuffle } from "lodash";
+import { getRandomElement } from "@/utils/functions";
 
 export const staticWallpapers = [
 	wallpaper1,
@@ -43,5 +44,7 @@ export const wallpapers = wallpaperKeywords
 			)}`
 	)
 	.slice(0, 7);
+
+export const aboutPoster = getRandomElement(wallpapers);
 
 export { rumiDarwaza, textureBg };

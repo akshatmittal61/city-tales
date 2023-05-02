@@ -59,7 +59,11 @@ const SignInPage: React.FC = () => {
 			<section className={classNames("-content")}>
 				<div className={classNames("-content-head")}>
 					<h1 className={classNames("-content-head__icon")}>
-						<Avatar src={favicon.src} alt="Avatar" />
+						<Avatar
+							src={favicon.src}
+							alt="Avatar"
+							onClick={() => router.push("/")}
+						/>
 					</h1>
 					<h1 className={classNames("-content-head__title")}>
 						Create an Account
