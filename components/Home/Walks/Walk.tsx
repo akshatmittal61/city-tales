@@ -1,5 +1,5 @@
 import React from "react";
-import { WalkProps } from "../types";
+import { WalkItem } from "../types";
 import Image from "next/image";
 import Button from "@/library/Button";
 import { IoIosArrowForward } from "react-icons/io";
@@ -9,16 +9,21 @@ import { stylesConfig } from "@/utils/functions";
 
 const classes = stylesConfig(styles, "home-walks-walk");
 
+interface WalkProps extends WalkItem {
+	style?: React.CSSProperties;
+}
+
 const Walk: React.FC<WalkProps> = ({
+	id,
 	title,
 	description,
 	image,
-	link,
 	slotsLeft,
+	style,
 }) => {
 	const router = useRouter();
 	return (
-		<div className={classes("")}>
+		<div className={classes("")} style={style}>
 			<div className={classes("__content")}>
 				<h1 className={classes("__content--title")}>{title}</h1>
 				<p className={classes("__content--description")}>
@@ -29,7 +34,7 @@ const Walk: React.FC<WalkProps> = ({
 						variant="outlined"
 						icon={<IoIosArrowForward />}
 						iconPosition="right"
-						onClick={() => router.push(link)}
+						onClick={() => router.push(`/walks/${id}/book-a-tour`)}
 						size="small"
 					>
 						Book Now
