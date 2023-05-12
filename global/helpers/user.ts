@@ -1,5 +1,10 @@
 import { LoginValues, RegisterValues } from "@/types/auth";
-import { fetchAuthenticatedUser, login, register } from "@/utils/api/auth";
+import {
+	fetchAuthenticatedUser,
+	login,
+	patchUserDetails,
+	register,
+} from "@/utils/api/auth";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const registerUser = createAsyncThunk(
@@ -33,6 +38,25 @@ export const getAuthenticatedUser = createAsyncThunk(
 	async (_, { rejectWithValue }) => {
 		try {
 			const response = await fetchAuthenticatedUser();
+			return Promise.resolve(response);
+		} catch (error) {
+			console.error("Error: ", error);
+			return rejectWithValue(error);
+		}
+	}
+);
+
+export const updateUserDetails = createAsyncThunk(
+	"user/updateUserDetails",
+	async (
+		user: {
+			name?: string;
+			phone?: string;
+		},
+		{ rejectWithValue }
+	) => {
+		try {
+			const response = await patchUserDetails(user);
 			return Promise.resolve(response);
 		} catch (error) {
 			console.error("Error: ", error);

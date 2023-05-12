@@ -30,3 +30,16 @@ export const fetchAuthenticatedUser = async () => {
 		return Promise.reject(error.response.data);
 	}
 };
+
+export const patchUserDetails = async (user: {
+	name?: string;
+	phone?: string;
+}) => {
+	try {
+		const response = await http.patch("/auth/update", user);
+		return Promise.resolve(response.data);
+	} catch (error: any) {
+		console.error(error);
+		return Promise.reject(error.response.data);
+	}
+};

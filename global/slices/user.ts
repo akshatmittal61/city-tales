@@ -1,6 +1,11 @@
 import { UserSlice } from "@/types/store";
 import { createSlice } from "@reduxjs/toolkit";
-import { getAuthenticatedUser, loginUser, logoutUser } from "../helpers/user";
+import {
+	getAuthenticatedUser,
+	loginUser,
+	logoutUser,
+	updateUserDetails,
+} from "../helpers/user";
 
 const initialState: UserSlice = {
 	user: null,
@@ -19,6 +24,7 @@ export const userSlice = createSlice({
 		},
 		logout: (state) => {
 			state.user = null;
+			state.token = null;
 		},
 	},
 	extraReducers(builder) {
@@ -32,8 +38,12 @@ export const userSlice = createSlice({
 			builder.addCase(getAuthenticatedUser.rejected, (state) => {
 				state.user = null;
 			}),
+			builder.addCase(updateUserDetails.fulfilled, (state, action) => {
+				state.user = action.payload.user;
+			}),
 			builder.addCase(logoutUser.fulfilled, (state) => {
 				state.user = null;
+				state.token = null;
 			});
 	},
 });

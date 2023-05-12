@@ -1,9 +1,9 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
 import { login } from "@/controllers/auth";
 import connectDB from "@/db";
-import { NextApiRequest, NextApiResponse } from "next";
+import { ApiRequest, ApiResponse } from "@/types/api";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		await connectDB();
 		const { method } = req;
