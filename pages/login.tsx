@@ -9,7 +9,7 @@ import Button from "@/library/Button";
 import Link from "next/link";
 import regex from "@/constants/regex";
 import { loginValidator } from "@/validations/auth";
-import { LoginValues } from "@/interfaces/auth";
+import { LoginValues } from "@/types/auth";
 import { fetchAuthenticatedUser, loginUser } from "@/utils/api/auth";
 import { useRouter } from "next/router";
 import GlobalContext from "@/context/GlobalContext";
@@ -42,8 +42,11 @@ const SignInPage: React.FC = () => {
 			localStorage.setItem("token", login.token);
 			const verifiedUser: any = await fetchAuthenticatedUser();
 			setUser(verifiedUser.user);
-			console.log(verifiedUser);
-			router.push("/");
+			if (router.query.redirect) {
+				router.push(router.query.redirect as string);
+			} else {
+				router.push("/");
+			}
 		} catch (error: any) {
 			console.error(error);
 			alert(error.message);

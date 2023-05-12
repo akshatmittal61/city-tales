@@ -9,7 +9,7 @@ import Button from "@/library/Button";
 import Link from "next/link";
 import regex from "@/constants/regex";
 import { registerValidator } from "@/validations/auth";
-import { RegisterValues } from "@/interfaces/auth";
+import { RegisterValues } from "@/types/auth";
 import { registerUser } from "@/utils/api/auth";
 import { useRouter } from "next/router";
 

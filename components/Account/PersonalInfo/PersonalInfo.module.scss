@@ -1,0 +1,33 @@
+@import "@/styles/config/mixins";
+
+.my-account-personal-info {
+	width: 70%;
+	height: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-flow: column;
+	gap: 40px;
+	padding: 60px;
+
+	&-header {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		@include typography(heading, h3);
+	}
+
+	&-form {
+		width: 60%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 40px;
+
+		& > * {
+			width: 100%;
+		}
+	}
+}

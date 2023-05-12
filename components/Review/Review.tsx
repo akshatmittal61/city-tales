@@ -1,5 +1,5 @@
 import React from "react";
-import { ReviewItem } from "@/interfaces/Review";
+import { ReviewItem } from "@/types/Review";
 import Image from "next/image";
 import styles from "./Reviews.module.scss";
 import { stylesConfig } from "@/utils/functions";

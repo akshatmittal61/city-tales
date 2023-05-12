@@ -1,7 +1,7 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
 import Review from "@/models/Review";
 import Walk from "@/models/Walk";
-import { ApiRequest, ApiResponse } from "@/interfaces/api";
+import { ApiRequest, ApiResponse } from "@/types/api";
 
 const getAllReviews = async (req: ApiRequest, res: ApiResponse) => {
 	try {

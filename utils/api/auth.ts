@@ -1,4 +1,4 @@
-import { LoginValues, RegisterValues } from "@/interfaces/auth";
+import { LoginValues, RegisterValues } from "@/types/auth";
 import { http } from "../http";
 
 const registerUser = async (user: RegisterValues) => {

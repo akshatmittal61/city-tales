@@ -1,0 +1,60 @@
+@import "@/styles/config/mixins";
+
+.my-account-side-pane {
+	width: 30%;
+	height: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-flow: column;
+	padding: 5% 0% 10% 40px;
+	color: var(--color-brand-black);
+	border-right: 1px solid rgba(75, 75, 75, 0.1);
+	gap: 50px;
+
+	&-header {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		@include typography(heading, h2);
+		text-decoration: underline;
+	}
+
+	&-list {
+		width: 100%;
+		list-style: none;
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 16px;
+
+		&__item {
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 12px;
+			cursor: pointer;
+
+			&--icon {
+				width: 24px;
+				height: 24px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 24px;
+			}
+
+			&--label {
+				@include typography(body, lg);
+				color: var(--color-brand-secondary);
+			}
+
+			&--active &--label {
+				color: #000;
+			}
+		}
+	}
+}

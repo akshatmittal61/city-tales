@@ -78,7 +78,17 @@ const Navbar: React.FC = () => {
 					))}
 				</ul>
 				{authState.loggedIn ? (
-					<div className={classNames("-avatar")}>
+					<div
+						className={classNames("-avatar")}
+						onClick={() =>
+							router.push({
+								pathname: "/account",
+								query: {
+									tab: "personal-info",
+								},
+							})
+						}
+					>
 						<Avatar src="/vectors/favicon.svg" alt="Avatar" />
 						<span className={classNames("-avatar-details")}>
 							{authState.user?.name}

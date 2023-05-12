@@ -1,6 +1,6 @@
 import Review from "@/components/Review/Review";
 import { sampleReviews } from "@/constants/reviews";
-import { ReviewItem } from "@/interfaces/Review";
+import { ReviewItem } from "@/types/Review";
 import Responsive from "@/layouts/Responsive";
 import styles from "@/styles/Reviews.module.scss";
 import { randomId, stylesConfig } from "@/utils/functions";

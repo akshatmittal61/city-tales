@@ -1,6 +1,6 @@
 import React from "react";
 import { sampleBlogs } from "@/constants/blogs";
-import { Blog } from "@/interfaces/Blog";
+import { Blog } from "@/types/Blog";
 import styles from "@/styles/Blog.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import Button from "@/library/Button";
