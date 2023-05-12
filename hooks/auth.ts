@@ -1,9 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import GlobalContext from "@/context/GlobalContext";
-import { fetchAuthenticatedUser } from "@/utils/api/auth";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { userSelector } from "@/global/slices/user";
+import { getAuthenticatedUser } from "@/global/helpers/user";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const useAuth = () => {
-	const { user: ContextUser } = useContext(GlobalContext);
+	const ContextUser = useSelector(userSelector);
+	const dispatch = useDispatch<any>();
 	const [user, setUser] = useState<any>(ContextUser);
 	const [loggedIn, setLoggedIn] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
@@ -17,7 +20,7 @@ const useAuth = () => {
 						setUser(ContextUser);
 						setLoggedIn(true);
 						setLoading(false);
-					} /* else {
+					} else {
 						await dispatch(getAuthenticatedUser())
 							.then(unwrapResult)
 							.then((fetchedUser: any) => {
@@ -37,7 +40,7 @@ const useAuth = () => {
 								setLoggedIn(false);
 								setLoading(false);
 							});
-					} */
+					}
 				} else {
 					setUser(null);
 					setLoggedIn(false);
@@ -52,7 +55,7 @@ const useAuth = () => {
 				setLoading(false);
 			}
 		})();
-	}, [ContextUser]);
+	}, [ContextUser, dispatch]);
 
 	return {
 		user,
