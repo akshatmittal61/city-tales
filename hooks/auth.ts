@@ -17,18 +17,27 @@ const useAuth = () => {
 						setUser(ContextUser);
 						setLoggedIn(true);
 						setLoading(false);
-					} else {
-						const fetchedUser = await fetchAuthenticatedUser();
-						if (fetchedUser.user) {
-							setUser(fetchedUser.user);
-							setLoggedIn(true);
-							setLoading(false);
-						} else {
-							setUser(null);
-							setLoggedIn(false);
-							setLoading(false);
-						}
-					}
+					} /* else {
+						await dispatch(getAuthenticatedUser())
+							.then(unwrapResult)
+							.then((fetchedUser: any) => {
+								if (fetchedUser.user) {
+									setUser(fetchedUser.user);
+									setLoggedIn(true);
+									setLoading(false);
+								} else {
+									setUser(null);
+									setLoggedIn(false);
+									setLoading(false);
+								}
+							})
+							.catch((err: any) => {
+								console.error(err);
+								setUser(null);
+								setLoggedIn(false);
+								setLoading(false);
+							});
+					} */
 				} else {
 					setUser(null);
 					setLoggedIn(false);

@@ -92,7 +92,12 @@ const Navbar: React.FC = () => {
 						<Avatar src="/vectors/favicon.svg" alt="Avatar" />
 						<span className={classNames("-avatar-details")}>
 							{authState.user?.name}
-							<button onClick={logout}>
+							<button
+								onClick={(e) => {
+									e.preventDefault();
+									// logoutUser();
+								}}
+							>
 								Logout <IoIosArrowForward />
 							</button>
 						</span>
