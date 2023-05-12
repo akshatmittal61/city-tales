@@ -1,4 +1,4 @@
-import { ApiRequest, ApiResponse } from "@/interfaces/api";
+import { ApiRequest, ApiResponse } from "@/types/api";
 import jwt from "jsonwebtoken";
 import { jwtSecret } from "@/config";
 

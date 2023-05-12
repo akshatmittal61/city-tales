@@ -1,5 +1,5 @@
 import React from "react";
-import { Blog as BlogProps } from "@/interfaces/Blog";
+import { Blog as BlogProps } from "@/types/Blog";
 import Button from "@/library/Button";
 import styles from "./BlogCard.module.scss";
 import { stylesConfig } from "@/utils/functions";

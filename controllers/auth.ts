@@ -5,7 +5,7 @@ import User from "@/models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { jwtSecret } from "@/config";
-import { ApiRequest, ApiResponse } from "@/interfaces/api";
+import { ApiRequest, ApiResponse } from "@/types/api";
 
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
 	try {

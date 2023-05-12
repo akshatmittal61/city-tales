@@ -1,5 +1,5 @@
 import { wallpapers } from "@/assets/images";
-import { Blog } from "@/interfaces/Blog";
+import { Blog } from "@/types/Blog";
 
 export const sampleBlogs: Blog[] = [
 	{

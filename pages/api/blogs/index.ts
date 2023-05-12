@@ -1,7 +1,7 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
 import { addBlog, getAllBlogs } from "@/controllers/blogs";
 import connectDB from "@/db";
-import { ApiRequest, ApiResponse } from "@/interfaces/api";
+import { ApiRequest, ApiResponse } from "@/types/api";
 import { isAdmin } from "@/middleware/roles";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {

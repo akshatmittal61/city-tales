@@ -1,4 +1,4 @@
-import { ReviewItem } from "@/interfaces/Review";
+import { ReviewItem } from "@/types/Review";
 import { sampleWalks } from "./landing";
 
 export const sampleReviews: ReviewItem[] = [

@@ -1,5 +1,5 @@
 import styles from "@/styles/Auth.module.scss";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { stylesConfig } from "@/utils/functions";
 import { rumiDarwaza } from "@/assets/images";
 import Avatar from "@/components/Avatar/Avatar";
@@ -9,16 +9,17 @@ import Button from "@/library/Button";
 import Link from "next/link";
 import regex from "@/constants/regex";
 import { loginValidator } from "@/validations/auth";
-import { LoginValues } from "@/interfaces/auth";
-import { fetchAuthenticatedUser, loginUser } from "@/utils/api/auth";
+import { LoginValues } from "@/types/auth";
 import { useRouter } from "next/router";
-import GlobalContext from "@/context/GlobalContext";
+import { useDispatch } from "react-redux";
+import { getAuthenticatedUser, loginUser } from "@/global/helpers/user";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
-	const { setUser } = useContext(GlobalContext);
+	const dispatch = useDispatch<any>();
 
 	const [inputCred, setInputCred] = useState<LoginValues>({
 		email: "",
@@ -31,6 +32,14 @@ const SignInPage: React.FC = () => {
 		setInputCred((prev) => ({ ...prev, [name]: value }));
 	};
 
+	const setGlobalUser = async () => {
+		try {
+			await dispatch(getAuthenticatedUser());
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setLoading(true);
@@ -38,12 +47,15 @@ const SignInPage: React.FC = () => {
 			await loginValidator(inputCred).catch((err) => {
 				throw err.map((err: any) => err.message).join(", ");
 			});
-			const login = await loginUser(inputCred);
-			localStorage.setItem("token", login.token);
-			const verifiedUser: any = await fetchAuthenticatedUser();
-			setUser(verifiedUser.user);
-			console.log(verifiedUser);
-			router.push("/");
+			await dispatch(loginUser(inputCred))
+				.then(unwrapResult)
+				.then(() => {
+					setGlobalUser();
+					router.push("/");
+					if (router.query.redirect)
+						router.push(router.query.redirect as string);
+					else router.push("/");
+				});
 		} catch (error: any) {
 			console.error(error);
 			alert(error.message);

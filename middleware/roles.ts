@@ -1,6 +1,6 @@
 import { jwtSecret } from "@/config";
 import { USER_ROLES } from "@/constants/enum";
-import { ApiRequest, ApiResponse } from "@/interfaces/api";
+import { ApiRequest, ApiResponse } from "@/types/api";
 import { getUserById } from "@/services/user";
 import jwt from "jsonwebtoken";
 

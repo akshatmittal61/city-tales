@@ -1,7 +1,7 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
 import { getAuthenicatedUser } from "@/controllers/auth";
 import connectDB from "@/db";
-import { ApiRequest, ApiResponse } from "@/interfaces/api";
+import { ApiRequest, ApiResponse } from "@/types/api";
 import authMiddleware from "@/middleware/auth";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
