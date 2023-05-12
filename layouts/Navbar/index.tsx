@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Navbar.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import { navLinks } from "@/constants/navbar";
@@ -9,8 +9,9 @@ import Button from "@/library/Button";
 import { RiMenuFoldLine, RiUserLine } from "react-icons/ri";
 import { useRouter } from "next/router";
 import { IoIosArrowForward, IoIosMenu } from "react-icons/io";
-import GlobalContext from "@/context/GlobalContext";
 import { useOnClickOutside } from "@/hooks/mouse-events";
+import { useDispatch } from "react-redux";
+import { logout } from "@/global/slices/user";
 
 const classNames = stylesConfig(styles, "navbar");
 
@@ -19,7 +20,7 @@ const Navbar: React.FC = () => {
 	const authState = useAuth();
 	const navMenuRef = useRef<any>(null);
 	const [expandNavMenu, setExpandNavMenu] = useState(false);
-	const { logout } = useContext(GlobalContext);
+	const dispatch = useDispatch<any>();
 	const lastScrollTop = useRef<any>(0);
 	const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 	const handleScroll = () => {
@@ -35,6 +36,14 @@ const Navbar: React.FC = () => {
 		});
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
+
+	const logoutUser = async () => {
+		try {
+			await dispatch(logout());
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	useEffect(() => {
 		setExpandNavMenu(false);
@@ -92,7 +101,7 @@ const Navbar: React.FC = () => {
 						<Avatar src="/vectors/favicon.svg" alt="Avatar" />
 						<span className={classNames("-avatar-details")}>
 							{authState.user?.name}
-							<button onClick={logout}>
+							<button onClick={logoutUser}>
 								Logout <IoIosArrowForward />
 							</button>
 						</span>

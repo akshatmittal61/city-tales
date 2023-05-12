@@ -1,7 +1,7 @@
 import { LoginValues, RegisterValues } from "@/types/auth";
 import { http } from "../http";
 
-const registerUser = async (user: RegisterValues) => {
+export const register = async (user: RegisterValues) => {
 	try {
 		const response = await http.post("/auth/register", user);
 		return Promise.resolve(response.data);
@@ -11,7 +11,7 @@ const registerUser = async (user: RegisterValues) => {
 	}
 };
 
-const loginUser = async (user: LoginValues) => {
+export const login = async (user: LoginValues) => {
 	try {
 		const response = await http.post("/auth/login", user);
 		return Promise.resolve(response.data);
@@ -21,7 +21,7 @@ const loginUser = async (user: LoginValues) => {
 	}
 };
 
-const fetchAuthenticatedUser = async () => {
+export const fetchAuthenticatedUser = async () => {
 	try {
 		const response = await http.get("/auth/verify");
 		return Promise.resolve(response.data);
@@ -30,5 +30,3 @@ const fetchAuthenticatedUser = async () => {
 		return Promise.reject(error.response.data);
 	}
 };
-
-export { registerUser, loginUser, fetchAuthenticatedUser };

@@ -10,13 +10,16 @@ import Link from "next/link";
 import regex from "@/constants/regex";
 import { registerValidator } from "@/validations/auth";
 import { RegisterValues } from "@/types/auth";
-import { registerUser } from "@/utils/api/auth";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { registerUser } from "@/global/helpers/user";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
+	const dispatch = useDispatch<any>();
 	const [inputCred, setInputCred] = useState<RegisterValues>({
 		name: "",
 		email: "",
@@ -35,8 +38,11 @@ const SignInPage: React.FC = () => {
 			await registerValidator(inputCred).catch((err) => {
 				throw err.map((err: any) => err.message).join(", ");
 			});
-			await registerUser(inputCred);
-			router.push("/login");
+			await dispatch(registerUser(inputCred))
+				.then(unwrapResult)
+				.then(() => {
+					router.push("/login");
+				});
 		} catch (error: any) {
 			console.error(error);
 			alert(error.toString());
