@@ -89,7 +89,11 @@ const Navbar: React.FC = () => {
 				{authState.loggedIn ? (
 					<div className={classNames("-avatar")}>
 						<Avatar
-							src="/vectors/favicon.svg"
+							src={
+								authState.user.avatar
+									? authState.user.avatar
+									: "/vectors/favicon.svg"
+							}
 							alt="Avatar"
 							onClick={() =>
 								router.push({

@@ -18,6 +18,13 @@
 		@include typography(heading, h3);
 	}
 
+	&-container {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+	}
+
 	&-form {
 		width: 60%;
 		display: flex;
@@ -25,5 +32,11 @@
 		align-items: flex-start;
 		flex-flow: column;
 		gap: 40px;
+	}
+	&-avatar {
+		width: 40%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 }

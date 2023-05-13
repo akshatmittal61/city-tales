@@ -7,6 +7,7 @@ import Button from "@/library/Button";
 import { useDispatch } from "react-redux";
 import { updateUserDetails } from "@/global/helpers/user";
 import regex from "@/constants/regex";
+import Avatar from "@/components/Avatar/Avatar";
 
 const classes = stylesConfig(styles, "my-account-personal-info");
 
@@ -19,15 +20,16 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 }) => {
 	const dispatch = useDispatch<any>();
 	const [loading, setLoading] = useState(false);
-	const [userDetails, setUserDetails] = useState({
+	const [userDetails, setUserDetails] = useState<any>({
 		name: user?.name ?? "",
 		email: user?.email ?? "",
 		phone: user?.phone ?? "",
+		avatar: user?.avatar ?? "",
 	});
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setUserDetails((prev) => ({ ...prev, [name]: value }));
+		setUserDetails((prev: any) => ({ ...prev, [name]: value }));
 	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,54 +56,75 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 			name: user?.name ?? "",
 			email: user?.email ?? "",
 			phone: user?.phone ?? "",
+			avatar: user?.avatar ?? "",
 		});
 	}, [user]);
 
 	return (
 		<article className={classes("")}>
 			<h1 className={classes("-header")}>Personal Info</h1>
-			<form className={classes("-form")} onSubmit={handleSubmit}>
-				<Input
-					name="name"
-					value={userDetails.name}
-					onChange={handleChange}
-					placeholder="Enter your name"
-					error={!regex.name.test(userDetails.name)}
-					errorMessage="Name is required"
-					required
-					style={{
-						width: "100%",
-					}}
-				/>
-				<Input
-					value={userDetails.email}
-					disabled
-					placeholder="Enter your email"
-					error={userDetails.email === ""}
-					errorMessage="Email is required"
-					required
-					style={{
-						width: "100%",
-					}}
-				/>
-				<Input
-					name="phone"
-					value={userDetails.phone}
-					placeholder="Enter your phone number"
-					style={{
-						width: "100%",
-					}}
-					error={
-						!regex.phone.test(userDetails.phone) &&
-						userDetails.phone !== ""
-					}
-					errorMessage="A valid Phone number is required"
-					onChange={handleChange}
-				/>
-				<Button type="submit" loading={loading}>
-					Update Details
-				</Button>
-			</form>
+			<div className={classes("-container")}>
+				<form className={classes("-form")} onSubmit={handleSubmit}>
+					<Input
+						name="name"
+						value={userDetails.name}
+						onChange={handleChange}
+						placeholder="Enter your name"
+						error={!regex.name.test(userDetails.name)}
+						errorMessage="Name is required"
+						required
+						style={{
+							width: "100%",
+						}}
+					/>
+					<Input
+						value={userDetails.email}
+						disabled
+						placeholder="Enter your email"
+						error={userDetails.email === ""}
+						errorMessage="Email is required"
+						required
+						style={{
+							width: "100%",
+						}}
+					/>
+					<Input
+						name="phone"
+						value={userDetails.phone}
+						placeholder="Enter your phone number"
+						style={{
+							width: "100%",
+						}}
+						error={
+							!regex.phone.test(userDetails.phone) &&
+							userDetails.phone !== ""
+						}
+						errorMessage="A valid Phone number is required"
+						onChange={handleChange}
+					/>
+					<Input
+						name="avatar"
+						value={userDetails.avatar}
+						placeholder="Avatar URL"
+						style={{
+							width: "100%",
+						}}
+						onChange={handleChange}
+					/>
+					<Button type="submit" loading={loading}>
+						Update Details
+					</Button>
+				</form>
+				<div className={classes("-avatar")}>
+					{user && regex.avatar.test(userDetails.avatar) ? (
+						<Avatar
+							src={userDetails.avatar}
+							size="large"
+							alt={userDetails.name}
+						/>
+					) : null}
+				</div>
+			</div>
 		</article>
 	);
 };

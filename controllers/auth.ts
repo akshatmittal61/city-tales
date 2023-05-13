@@ -120,7 +120,6 @@ export const updateDetails = async (req: ApiRequest, res: ApiResponse) => {
 			{ $set: updateDetails },
 			{ new: true }
 		).select("-password");
-		console.log(req.body, updateDetails, updatedUser);
 		return res
 			.status(200)
 			.json({ user: updatedUser, message: RESPONSE_MESSAGES.SUCCESS });

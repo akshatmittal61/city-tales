@@ -23,7 +23,8 @@ const UserSchema = new mongoose.Schema(
 		},
 		avatar: {
 			type: String,
-			default: "",
+			default:
+				"https://raw.githubusercontent.com/akshatmittal61/planner/master/src/images/user.svg",
 		},
 		date: {
 			type: Date,
