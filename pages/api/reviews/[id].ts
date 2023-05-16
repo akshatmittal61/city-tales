@@ -1,5 +1,5 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { getReviewByWalkId } from "@/controllers/reviews";
+import { getUserReview } from "@/controllers/reviews";
 import connectDB from "@/db";
 import { ApiRequest, ApiResponse } from "@/types/api";
 
@@ -10,7 +10,7 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 
 		switch (method) {
 			case "GET":
-				return getReviewByWalkId(req, res);
+				return getUserReview(req, res);
 			default:
 				res.setHeader("Allow", ["GET", "POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);

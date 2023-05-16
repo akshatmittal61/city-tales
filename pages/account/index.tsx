@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/Account.module.scss";
 import { stylesConfig } from "@/utils/functions";
-import { PersonalInfo, SidePane } from "@/components/Account";
+import { PersonalInfo, Review, SidePane } from "@/components/Account";
 import {
 	MyAccountSidePaneNavigationItem,
 	TNavigationItem,
@@ -36,6 +36,8 @@ const MyAccountPage: React.FC = () => {
 			<SidePane activeTab={activeTab} onClick={handleTabClick} />
 			{activeTab === "personal-info" ? (
 				<PersonalInfo user={authState.user} />
+			) : activeTab === "my-review" ? (
+				<Review />
 			) : null}
 		</main>
 	);
