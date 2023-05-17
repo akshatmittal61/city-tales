@@ -1,51 +1,61 @@
 import React from "react";
-import { WalkProps } from "../types";
+import { WalkItem } from "../types";
 import Image from "next/image";
 import Button from "@/library/Button";
 import { IoIosArrowForward } from "react-icons/io";
-import { useRouter } from "next/router";
 import styles from "./Walks.module.scss";
-import { stylesConfig } from "@/utils/functions";
+import { openLink, stylesConfig } from "@/utils/functions";
 
-const classes = stylesConfig(styles);
+const classes = stylesConfig(styles, "home-walks-walk");
+
+interface WalkProps extends WalkItem {
+	style?: React.CSSProperties;
+	button?: {
+		text: string;
+		action: any;
+	};
+	showSlots?: boolean;
+}
 
 const Walk: React.FC<WalkProps> = ({
 	title,
 	description,
 	image,
-	link,
 	slotsLeft,
+	style,
+	button = {
+		text: "Book Now",
+		action: () => {
+			openLink("https://razorpay.com/");
+		},
+	},
+	showSlots = true,
 }) => {
-	const router = useRouter();
 	return (
-		<div className={classes("home-walks-walk")}>
-			<div className={classes("home-walks-walk__content")}>
-				<h1 className={classes("home-walks-walk__content--title")}>
-					{title}
-				</h1>
-				<p className={classes("home-walks-walk__content--description")}>
+		<div className={classes("")} style={style}>
+			<div className={classes("__content")}>
+				<h1 className={classes("__content--title")}>{title}</h1>
+				<p className={classes("__content--description")}>
 					{description}
 				</p>
-				<div className={classes("home-walks-walk__content--actions")}>
+				<div className={classes("__content--actions")}>
 					<Button
 						variant="outlined"
 						icon={<IoIosArrowForward />}
 						iconPosition="right"
-						onClick={() => router.push(link)}
+						onClick={button.action}
 						size="small"
 					>
-						Book Now
+						{button.text}
 					</Button>
-					<span
-						className={classes(
-							"home-walks-walk__content--actions__slots"
-						)}
-					>
-						{slotsLeft} slots left
-					</span>
+					{showSlots ? (
+						<span className={classes("__content--actions__slots")}>
+							{slotsLeft} slots left
+						</span>
+					) : null}
 				</div>
 			</div>
-			<div className={classes("home-walks-walk__image")}>
+			<div className={classes("__image")}>
 				<Image src={image} alt={title} width={1920} height={1080} />
 			</div>
 		</div>

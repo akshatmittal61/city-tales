@@ -9,7 +9,7 @@ import Button from "@/library/Button";
 import { IoIosArrowForward } from "react-icons/io";
 import { useRouter } from "next/router";
 
-const classes = stylesConfig(styles);
+const classes = stylesConfig(styles, "home-exploration-block");
 
 const ExplorationBlock: React.FC<ExplorationItem> = ({
 	image,
@@ -20,22 +20,16 @@ const ExplorationBlock: React.FC<ExplorationItem> = ({
 }) => {
 	const router = useRouter();
 	return (
-		<div className={classes("home-exploration-block")} style={style}>
-			<div className={classes("home-exploration-block__image")}>
+		<div className={classes("")} style={style}>
+			<div className={classes("__image")}>
 				<Image src={image} alt={title} width={1920} height={1080} />
 			</div>
-			<div className={classes("home-exploration-block__content")}>
-				<h2
-					className={classes(
-						"home-exploration-block__content--header"
-					)}
-				>
+			<div className={classes("__content")}>
+				<h2 className={classes("__content--header")}>
 					<Image src={icons.map} alt="Map" />
 					<Link href={link}>{title}</Link>
 				</h2>
-				<p className={classes("home-exploration-block__content--text")}>
-					{description}
-				</p>
+				<p className={classes("__content--text")}>{description}</p>
 				<Button
 					variant="outlined"
 					icon={<IoIosArrowForward />}

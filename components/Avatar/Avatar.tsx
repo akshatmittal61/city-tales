@@ -4,7 +4,7 @@ import { stylesConfig } from "@/utils/functions";
 import Image from "next/image";
 
 interface IAvatarProps {
-	size?: "small" | "medium" | "large";
+	size?: "small" | "medium" | "large" | number;
 	src?: string;
 	alt?: string;
 	className?: string;
@@ -28,7 +28,7 @@ const Avatar: React.FC<IAvatarProps> = ({
 			case "large":
 				return 100;
 			default:
-				return 50;
+				return typeof size === "number" ? size : 50;
 		}
 	};
 

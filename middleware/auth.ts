@@ -1,11 +1,11 @@
-import { ApiRequest, ApiResponse } from "@/interfaces/api";
+import { ApiRequest, ApiResponse } from "@/types/api";
 import jwt from "jsonwebtoken";
 import { jwtSecret } from "@/config";
 
 const authMiddleware =
 	(next: Function) => (req: ApiRequest, res: ApiResponse) => {
 		// get x-auth-token from header
-		const token = req.headers["x-auth-token"] + "";
+		const token = req.headers["x-auth-token"] as string;
 		if (!token) {
 			return res
 				.status(401)

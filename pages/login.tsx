@@ -1,5 +1,5 @@
 import styles from "@/styles/Auth.module.scss";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { stylesConfig } from "@/utils/functions";
 import { rumiDarwaza } from "@/assets/images";
 import Avatar from "@/components/Avatar/Avatar";
@@ -9,72 +9,92 @@ import Button from "@/library/Button";
 import Link from "next/link";
 import regex from "@/constants/regex";
 import { loginValidator } from "@/validations/auth";
-import { LoginValues } from "@/interfaces/auth";
-import { fetchAuthenticatedUser, loginUser } from "@/utils/api/auth";
+import { LoginValues } from "@/types/auth";
 import { useRouter } from "next/router";
-import GlobalContext from "@/context/GlobalContext";
+import { useDispatch } from "react-redux";
+import { getAuthenticatedUser, loginUser } from "@/global/helpers/user";
+import { unwrapResult } from "@reduxjs/toolkit";
 
-const classNames = stylesConfig(styles);
+const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
-	const { setUser } = useContext(GlobalContext);
+	const dispatch = useDispatch<any>();
 
 	const [inputCred, setInputCred] = useState<LoginValues>({
 		email: "",
 		password: "",
 	});
+	const [loading, setLoading] = useState(false);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setInputCred((prev) => ({ ...prev, [name]: value }));
 	};
 
+	const setGlobalUser = async () => {
+		try {
+			await dispatch(getAuthenticatedUser());
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setLoading(true);
 		try {
 			await loginValidator(inputCred).catch((err) => {
 				throw err.map((err: any) => err.message).join(", ");
 			});
-			const login = await loginUser(inputCred);
-			localStorage.setItem("token", login.token);
-			const verifiedUser: any = await fetchAuthenticatedUser();
-			setUser(verifiedUser.user);
-			console.log(verifiedUser);
-			router.push("/");
+			await dispatch(loginUser(inputCred))
+				.then(unwrapResult)
+				.then(() => {
+					setGlobalUser();
+					router.push("/");
+					if (router.query.redirect)
+						router.push(router.query.redirect as string);
+					else router.push("/");
+				});
 		} catch (error: any) {
 			console.error(error);
 			alert(error.message);
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	return (
-		<main className={classNames("auth")}>
+		<main className={classNames("")}>
 			<section
-				className={classNames("auth-graphic")}
+				className={classNames("-graphic")}
 				style={{
 					backgroundImage: `url(${rumiDarwaza.src})`,
 				}}
 			>
-				<div className={classNames("auth-graphic__text")}>
+				<div className={classNames("-graphic__text")}>
 					Content for City tales comes here Atleast 3 lines. Content
 					for City tales comes here
 				</div>
 			</section>
-			<section className={classNames("auth-content")}>
-				<div className={classNames("auth-content-head")}>
-					<h1 className={classNames("auth-content-head__icon")}>
-						<Avatar src={favicon.src} alt="Avatar" />
+			<section className={classNames("-content")}>
+				<div className={classNames("-content-head")}>
+					<h1 className={classNames("-content-head__icon")}>
+						<Avatar
+							src={favicon.src}
+							alt="Avatar"
+							onClick={() => router.push("/")}
+						/>
 					</h1>
-					<h1 className={classNames("auth-content-head__title")}>
+					<h1 className={classNames("-content-head__title")}>
 						Login
 					</h1>
-					<h3 className={classNames("auth-content-head__subtitle")}>
+					<h3 className={classNames("-content-head__subtitle")}>
 						Welcome back again!
 					</h3>
 				</div>
 				<form
-					className={classNames("auth-content-form")}
+					className={classNames("-content-form")}
 					onSubmit={handleSubmit}
 				>
 					<Input
@@ -96,12 +116,12 @@ const SignInPage: React.FC = () => {
 						value={inputCred.password}
 						onChange={handleInputChange}
 					/>
-					<Button type="submit" variant="outlined">
+					<Button type="submit" variant="outlined" loading={loading}>
 						Login
 					</Button>
 				</form>
-				<div className={classNames("auth-content-footer")}>
-					<p className={classNames("auth-content-footer__text")}>
+				<div className={classNames("-content-footer")}>
+					<p className={classNames("-content-footer__text")}>
 						Dont have an account? <Link href="/signup">Signup</Link>
 					</p>
 				</div>

@@ -8,9 +8,9 @@ import {
 import {
 	sampleExplorations,
 	sampleHighlights,
-	sampleReviews,
 	sampleWalks,
 } from "@/constants/landing";
+import { sampleReviews } from "@/constants/reviews";
 
 const HomePage: React.FC<{
 	highlights: typeof sampleHighlights;

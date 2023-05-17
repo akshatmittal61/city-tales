@@ -4,29 +4,30 @@ import { stylesConfig } from "@/utils/functions";
 import Button from "@/library/Button";
 import { IoIosArrowForward } from "react-icons/io";
 import Review from "./Review";
+import { useRouter } from "next/router";
 
-const classes = stylesConfig(styles);
+const classes = stylesConfig(styles, "reviews");
 
 const HomeReviewsSection: React.FC<{
 	reviews: any[];
 }> = ({ reviews }) => {
+	const router = useRouter();
 	return (
-		<section className={classes("home-reviews")}>
-			<div className={classes("home-reviews-header")}>
-				<h1 className={classes("home-reviews-header__title")}>
-					Reviews
-				</h1>
+		<section className={classes("")}>
+			<div className={classes("-header")}>
+				<h1 className={classes("-header__title")}>Reviews</h1>
 			</div>
-			<div className={classes("home-reviews-body")}>
+			<div className={classes("-body")}>
 				{reviews.map((review: any, index: number) => (
 					<Review key={index} {...review} />
 				))}
 			</div>
-			<div className={classes("home-reviews-foot")}>
+			<div className={classes("-foot")}>
 				<Button
 					variant="outlined"
 					iconPosition="right"
 					icon={<IoIosArrowForward />}
+					onClick={() => router.push("/reviews")}
 				>
 					See All
 				</Button>

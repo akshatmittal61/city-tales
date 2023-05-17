@@ -9,14 +9,17 @@ import Button from "@/library/Button";
 import Link from "next/link";
 import regex from "@/constants/regex";
 import { registerValidator } from "@/validations/auth";
-import { RegisterValues } from "@/interfaces/auth";
-import { registerUser } from "@/utils/api/auth";
+import { RegisterValues } from "@/types/auth";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { registerUser } from "@/global/helpers/user";
+import { unwrapResult } from "@reduxjs/toolkit";
 
-const classNames = stylesConfig(styles);
+const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
+	const dispatch = useDispatch<any>();
 	const [inputCred, setInputCred] = useState<RegisterValues>({
 		name: "",
 		email: "",
@@ -35,8 +38,11 @@ const SignInPage: React.FC = () => {
 			await registerValidator(inputCred).catch((err) => {
 				throw err.map((err: any) => err.message).join(", ");
 			});
-			await registerUser(inputCred);
-			router.push("/login");
+			await dispatch(registerUser(inputCred))
+				.then(unwrapResult)
+				.then(() => {
+					router.push("/login");
+				});
 		} catch (error: any) {
 			console.error(error);
 			alert(error.toString());
@@ -44,32 +50,36 @@ const SignInPage: React.FC = () => {
 	};
 
 	return (
-		<main className={classNames("auth")}>
+		<main className={classNames("")}>
 			<section
-				className={classNames("auth-graphic")}
+				className={classNames("-graphic")}
 				style={{
 					backgroundImage: `url(${rumiDarwaza.src})`,
 				}}
 			>
-				<div className={classNames("auth-graphic__text")}>
+				<div className={classNames("-graphic__text")}>
 					Content for City tales comes here Atleast 3 lines. Content
 					for City tales comes here
 				</div>
 			</section>
-			<section className={classNames("auth-content")}>
-				<div className={classNames("auth-content-head")}>
-					<h1 className={classNames("auth-content-head__icon")}>
-						<Avatar src={favicon.src} alt="Avatar" />
+			<section className={classNames("-content")}>
+				<div className={classNames("-content-head")}>
+					<h1 className={classNames("-content-head__icon")}>
+						<Avatar
+							src={favicon.src}
+							alt="Avatar"
+							onClick={() => router.push("/")}
+						/>
 					</h1>
-					<h1 className={classNames("auth-content-head__title")}>
+					<h1 className={classNames("-content-head__title")}>
 						Create an Account
 					</h1>
-					<h3 className={classNames("auth-content-head__subtitle")}>
+					<h3 className={classNames("-content-head__subtitle")}>
 						Let&apos;s get you started
 					</h3>
 				</div>
 				<form
-					className={classNames("auth-content-form")}
+					className={classNames("-content-form")}
 					onSubmit={handleSubmit}
 				>
 					<Input
@@ -125,8 +135,8 @@ const SignInPage: React.FC = () => {
 						Create Account
 					</Button>
 				</form>
-				<div className={classNames("auth-content-footer")}>
-					<p className={classNames("auth-content-footer__text")}>
+				<div className={classNames("-content-footer")}>
+					<p className={classNames("-content-footer__text")}>
 						Already have an account?{" "}
 						<Link href="/login">Login</Link>
 					</p>

@@ -1,5 +1,5 @@
 import regex from "@/constants/regex";
-import { LoginValues, RegisterValues } from "@/interfaces/auth";
+import { LoginValues, RegisterValues } from "@/types/auth";
 
 const getErrorArray = (
 	errors: Partial<LoginValues> | Partial<RegisterValues>

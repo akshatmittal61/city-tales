@@ -13,11 +13,14 @@ const ReviewSchema = new mongoose.Schema(
 		rating: {
 			type: Number,
 			required: true,
-			//
 		},
 		date: {
 			type: Date,
 			default: Date.now,
+		},
+		walk: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Walk",
 		},
 	},
 	{

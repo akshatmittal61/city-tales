@@ -74,30 +74,50 @@
 			font-weight: 400;
 			line-height: 120%;
 			letter-spacing: -0.02em;
+
+			@include responsive(phone) {
+				font-size: 61px;
+			}
 		} @else if $size ==h2 {
 			font-family: var(--font-alice);
 			font-size: 61px;
 			font-weight: 400;
 			line-height: 120%;
 			letter-spacing: -0.02em;
+
+			@include responsive(phone) {
+				font-size: 47px;
+			}
 		} @else if $size ==h3 {
 			font-family: var(--font-alice);
 			font-size: 47px;
 			font-weight: 400;
 			line-height: 120%;
 			letter-spacing: -0.02em;
+
+			@include responsive(phone) {
+				font-size: 36px;
+			}
 		} @else if $size ==h4 {
 			font-family: var(--font-alice);
 			font-size: 36px;
 			font-weight: 400;
 			line-height: 120%;
 			letter-spacing: -0.02em;
+
+			@include responsive(phone) {
+				font-size: 27px;
+			}
 		} @else if $size ==h5 {
 			font-family: var(--font-alice);
 			font-size: 27px;
 			font-weight: 400;
 			line-height: 120%;
 			letter-spacing: -0.02em;
+
+			@include responsive(phone) {
+				font-size: 21px;
+			}
 		}
 	} @else if $type ==body {
 		@if $size ==lg {
@@ -106,12 +126,30 @@
 			font-weight: 500;
 			line-height: 170%;
 			letter-spacing: -0.01em;
+
+			@include responsive(phone) {
+				font-size: 16px;
+			}
 		} @else if $size ==md {
 			font-family: var(--font-noto-sans);
 			font-size: 16px;
 			font-weight: 500;
 			line-height: 170%;
 			letter-spacing: -0.01em;
+
+			@include responsive(phone) {
+				font-size: 14px;
+			}
+		} @else if $size ==sm {
+			font-family: var(--font-noto-sans);
+			font-size: 14px;
+			font-weight: 500;
+			line-height: 170%;
+			letter-spacing: -0.01em;
+
+			@include responsive(phone) {
+				font-size: 12px;
+			}
 		}
 	} @else if $type ==btn {
 		@if $size ==md {
@@ -119,16 +157,28 @@
 			font-weight: 600;
 			font-size: 16px;
 			line-height: 120%;
+
+			@include responsive(phone) {
+				font-size: 14px;
+			}
 		} @else if $size ==sm {
 			font-family: var(--font-noto-sans);
 			font-weight: 500;
 			font-size: 14px;
 			line-height: 120%;
+
+			@include responsive(phone) {
+				font-size: 12px;
+			}
 		} @else if $size ==lg {
 			font-family: var(--font-noto-sans);
 			font-weight: 500;
 			font-size: 21px;
 			line-height: 110%;
+
+			@include responsive(phone) {
+				font-size: 16px;
+			}
 		}
 	}
 }

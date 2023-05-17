@@ -8,19 +8,10 @@ export interface ExplorationItem {
 	style?: React.CSSProperties;
 }
 
-export interface WalkProps {
+export interface WalkItem {
+	id: string;
 	title: string;
 	description: string;
 	image: string;
-	link: string;
 	slotsLeft?: number;
-}
-
-export interface ReviewItem {
-	user: string;
-	content: string;
-	rating: number;
-	date: Date | string;
-	image: string;
-	title: string;
 }

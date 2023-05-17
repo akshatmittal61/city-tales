@@ -62,33 +62,6 @@ const BlogSchema = new mongoose.Schema(
 			],
 			default: [],
 		},
-		tourBookedBy: {
-			type: [
-				{
-					type: mongoose.Schema.Types.ObjectId,
-					ref: "User",
-				},
-			],
-			default: [],
-		},
-		reviews: {
-			type: [
-				{
-					type: mongoose.Schema.Types.ObjectId,
-					ref: "Review",
-				},
-			],
-			default: [],
-		},
-		slots: {
-			type: [
-				{
-					type: mongoose.Schema.Types.ObjectId,
-					ref: "Slot",
-				},
-			],
-			default: [],
-		},
 	},
 	{
 		timestamps: true,

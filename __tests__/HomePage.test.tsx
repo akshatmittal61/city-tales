@@ -5,9 +5,9 @@ import { render } from "@testing-library/react";
 import {
 	sampleExplorations,
 	sampleHighlights,
-	sampleReviews,
 	sampleWalks,
 } from "@/constants/landing";
+import { sampleReviews } from "@/constants/reviews";
 
 const mockPush = jest.fn();
 

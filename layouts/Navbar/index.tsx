@@ -4,10 +4,23 @@ import { stylesConfig } from "@/utils/functions";
 import { navLinks } from "@/constants/navbar";
 import Link from "next/link";
 import Avatar from "@/components/Avatar/Avatar";
+import useAuth from "@/hooks/auth";
+import Button from "@/library/Button";
+import { RiMenuFoldLine, RiUserLine } from "react-icons/ri";
+import { useRouter } from "next/router";
+import { IoIosArrowForward, IoIosMenu } from "react-icons/io";
+import { useOnClickOutside } from "@/hooks/mouse-events";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "@/global/helpers/user";
 
-const classNames = stylesConfig(styles);
+const classNames = stylesConfig(styles, "navbar");
 
 const Navbar: React.FC = () => {
+	const router = useRouter();
+	const authState = useAuth();
+	const navMenuRef = useRef<any>(null);
+	const [expandNavMenu, setExpandNavMenu] = useState(false);
+	const dispatch = useDispatch<any>();
 	const lastScrollTop = useRef<any>(0);
 	const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 	const handleScroll = () => {
@@ -23,25 +36,96 @@ const Navbar: React.FC = () => {
 		});
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
+
+	const logout = async () => {
+		try {
+			await dispatch(logoutUser());
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	useEffect(() => {
+		setExpandNavMenu(false);
+	}, [router.pathname]);
+
+	useOnClickOutside(navMenuRef, () => setExpandNavMenu(false));
+
 	return (
 		<nav
-			className={classNames("navbar")}
+			className={classNames("", {
+				"-expand": expandNavMenu,
+			})}
 			style={{
 				translate: isNavbarVisible
 					? "0"
 					: "0 calc(-1 * var(--nav-height))",
 			}}
 		>
-			<ul className={classNames("navbar-links")}>
-				{navLinks.map(({ link, text }, index) => (
-					<li key={index}>
-						<Link href={link} className={classNames("navbar-link")}>
-							{text}
-						</Link>
-					</li>
-				))}
-			</ul>
-			<Avatar src="/vectors/favicon.svg" alt="Avatar" />
+			<div className={classNames("-left")}>
+				<h1
+					className={classNames("-title")}
+					onClick={() => router.push("/")}
+				>
+					City Tales
+				</h1>
+			</div>
+			<button
+				className={classNames("-burger")}
+				onClick={() => setExpandNavMenu((prev) => !prev)}
+			>
+				{expandNavMenu ? <RiMenuFoldLine /> : <IoIosMenu />}
+			</button>
+			<div className={classNames("-right")} ref={navMenuRef}>
+				<ul className={classNames("-links")}>
+					{navLinks.map(({ link, text }, index) => (
+						<li key={index}>
+							<Link href={link} className={classNames("-link")}>
+								{text}
+							</Link>
+						</li>
+					))}
+				</ul>
+				{authState.loggedIn ? (
+					<div className={classNames("-avatar")}>
+						<Avatar
+							src={
+								authState.user.avatar
+									? authState.user.avatar
+									: "/vectors/favicon.svg"
+							}
+							alt="Avatar"
+							onClick={() =>
+								router.push({
+									pathname: "/account",
+									query: {
+										tab: "personal-info",
+									},
+								})
+							}
+						/>
+						<span className={classNames("-avatar-details")}>
+							{authState.user?.name}
+							<button
+								onClick={(e) => {
+									e.preventDefault();
+									logout();
+								}}
+							>
+								Logout <IoIosArrowForward />
+							</button>
+						</span>
+					</div>
+				) : (
+					<Button
+						variant="outlined"
+						icon={<RiUserLine />}
+						onClick={() => router.push("/login")}
+					>
+						Login
+					</Button>
+				)}
+			</div>
 		</nav>
 	);
 };
