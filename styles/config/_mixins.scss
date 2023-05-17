@@ -140,6 +140,16 @@
 			@include responsive(phone) {
 				font-size: 14px;
 			}
+		} @else if $size ==sm {
+			font-family: var(--font-noto-sans);
+			font-size: 14px;
+			font-weight: 500;
+			line-height: 170%;
+			letter-spacing: -0.01em;
+
+			@include responsive(phone) {
+				font-size: 12px;
+			}
 		}
 	} @else if $type ==btn {
 		@if $size ==md {

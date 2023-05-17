@@ -9,8 +9,8 @@ export const sidePaneNavigation: MyAccountSidePaneNavigationItem[] = [
 		icon: <IoMdPerson />,
 	},
 	{
-		id: "my-reviews",
-		label: "My Reviews",
+		id: "my-review",
+		label: "My Review",
 		icon: <RiMessageLine />,
 	},
 	{

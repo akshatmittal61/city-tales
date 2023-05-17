@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { IoIosArrowForward, IoIosMenu } from "react-icons/io";
 import { useOnClickOutside } from "@/hooks/mouse-events";
 import { useDispatch } from "react-redux";
-import { logout } from "@/global/slices/user";
+import { logoutUser } from "@/global/helpers/user";
 
 const classNames = stylesConfig(styles, "navbar");
 
@@ -37,9 +37,9 @@ const Navbar: React.FC = () => {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-	const logoutUser = async () => {
+	const logout = async () => {
 		try {
-			await dispatch(logout());
+			await dispatch(logoutUser());
 		} catch (error) {
 			console.error(error);
 		}
@@ -87,21 +87,31 @@ const Navbar: React.FC = () => {
 					))}
 				</ul>
 				{authState.loggedIn ? (
-					<div
-						className={classNames("-avatar")}
-						onClick={() =>
-							router.push({
-								pathname: "/account",
-								query: {
-									tab: "personal-info",
-								},
-							})
-						}
-					>
-						<Avatar src="/vectors/favicon.svg" alt="Avatar" />
+					<div className={classNames("-avatar")}>
+						<Avatar
+							src={
+								authState.user.avatar
+									? authState.user.avatar
+									: "/vectors/favicon.svg"
+							}
+							alt="Avatar"
+							onClick={() =>
+								router.push({
+									pathname: "/account",
+									query: {
+										tab: "personal-info",
+									},
+								})
+							}
+						/>
 						<span className={classNames("-avatar-details")}>
 							{authState.user?.name}
-							<button onClick={logoutUser}>
+							<button
+								onClick={(e) => {
+									e.preventDefault();
+									logout();
+								}}
+							>
 								Logout <IoIosArrowForward />
 							</button>
 						</span>

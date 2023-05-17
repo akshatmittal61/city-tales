@@ -1,6 +1,7 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { getUserReview } from "@/controllers/reviews";
+import { updateDetails } from "@/controllers/auth";
 import connectDB from "@/db";
+import authMiddleware from "@/middleware/auth";
 import { ApiRequest, ApiResponse } from "@/types/api";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
@@ -9,10 +10,10 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 		const { method } = req;
 
 		switch (method) {
-			case "GET":
-				return getUserReview(req, res);
+			case "PATCH":
+				return authMiddleware(updateDetails)(req, res);
 			default:
-				res.setHeader("Allow", ["GET", "POST"]);
+				res.setHeader("Allow", ["POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);
 		}
 	} catch (error: any) {

@@ -9,6 +9,8 @@ const regex = {
 	name: /^[a-zA-Z ]{2,30}$/,
 	// number should be a valid number, contain only numbers and have a length of 10 characters
 	number: /^\d{10}$/,
+	// avatar should be a valid url or empty string
+	avatar: /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg|webp))?$/,
 };
 
 export default regex;

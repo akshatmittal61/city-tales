@@ -1,3 +1,14 @@
+export interface BlogComment {
+	id: string;
+	user: {
+		id: string;
+		name: string;
+		avatar: string;
+	};
+	content: string;
+	date: Date;
+}
+
 export interface Blog {
 	id: string;
 	title: string;
@@ -15,14 +26,6 @@ export interface Blog {
 	status: string;
 	tags?: string[];
 	likes?: number;
-	comments?: {
-		id: string;
-		user: {
-			id: number;
-			name: string;
-			avatar: string;
-		};
-		content: string;
-		date: Date;
-	}[];
+	bookmarked?: boolean;
+	comments?: BlogComment[];
 }

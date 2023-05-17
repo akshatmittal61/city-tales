@@ -13,7 +13,10 @@ export interface RegisterValues {
 type USER_ROLES = "admin" | "user" | "guest";
 
 export interface IUser {
+	_id: string;
 	name: string;
 	email: string;
+	phone?: string;
+	avatar?: string;
 	role: USER_ROLES;
 }

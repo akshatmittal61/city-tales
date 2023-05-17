@@ -1,13 +1,14 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { NextApiRequest, NextApiResponse } from "next";
 import { loginValidator, registerValidator } from "@/validations/auth";
 import User from "@/models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { jwtSecret } from "@/config";
 import { ApiRequest, ApiResponse } from "@/types/api";
+import regex from "@/constants/regex";
+import { IUser } from "@/types/auth";
 
-const register = async (req: NextApiRequest, res: NextApiResponse) => {
+export const register = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const { name, email, password } = req.body;
 		let errors: any = null;
@@ -46,7 +47,7 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
-const login = async (req: NextApiRequest, res: NextApiResponse) => {
+export const login = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const { email, password } = req.body;
 		let errors: any = null;
@@ -79,9 +80,13 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
-const getAuthenicatedUser = async (req: ApiRequest, res: ApiResponse) => {
+export const getAuthenicatedUser = async (
+	req: ApiRequest,
+	res: ApiResponse
+) => {
 	try {
 		const user = await User.findById(req.user.id).select("-password");
+		if (!user) return res.status(404).json({ message: "User not found" });
 		return res.status(200).json({ user });
 	} catch (error) {
 		console.error(error);
@@ -91,23 +96,46 @@ const getAuthenicatedUser = async (req: ApiRequest, res: ApiResponse) => {
 	}
 };
 
-/* const logout = async (req: NextApiRequest, res: NextApiResponse) => {};
-
-const forgotPassword = async (req: NextApiRequest, res: NextApiResponse) => {};
-
-const resetPassword = async (req: NextApiRequest, res: NextApiResponse) => {};
-
-const updateDetails = async (req: NextApiRequest, res: NextApiResponse) => {};
-
-const updatePassword = async (req: NextApiRequest, res: NextApiResponse) => {}; */
-
-export {
-	register,
-	login,
-	getAuthenicatedUser,
-	/* logout,
-	forgotPassword,
-	resetPassword,
-	updateDetails,
-	updatePassword, */
+export const updateDetails = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { name, phone, avatar } = req.body;
+		const user = await User.findById(req.user.id).select("-password");
+		if (!user) return res.status(404).json({ message: "User not found" });
+		if (!name && !phone && !avatar)
+			return res.status(400).json({ message: "Invalid request" });
+		const updateDetails: Partial<IUser> = {};
+		type KeysToUpdate = "name" | "phone" | "avatar";
+		const keysToUpdate: KeysToUpdate[] = ["name", "phone", "avatar"];
+		keysToUpdate.forEach((key: KeysToUpdate) => {
+			if (key in req.body) {
+				if (!regex[key].test(req.body[key]))
+					return res
+						.status(400)
+						.json({ message: `Invalid ${key} provided` });
+				updateDetails[key] = req.body[key];
+			}
+		});
+		const updatedUser = await User.findByIdAndUpdate(
+			req.user.id,
+			{ $set: updateDetails },
+			{ new: true }
+		).select("-password");
+		return res
+			.status(200)
+			.json({ user: updatedUser, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error) {
+		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
 };
+
+/* const logout = async (req: ApiRequest, res: ApiResponse) => {};
+
+const forgotPassword = async (req: ApiRequest, res: ApiResponse) => {};
+
+const resetPassword = async (req: ApiRequest, res: ApiResponse) => {};
+
+
+const updatePassword = async (req: ApiRequest, res: ApiResponse) => {}; */

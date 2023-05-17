@@ -6,11 +6,11 @@ import store from "@/global/store";
 import useLayoutEffect from "@/hooks/useIsomorphicLayoutEffect";
 import { useState } from "react";
 import Overlay from "@/layouts/Overlay";
-// import AOS from "aos";
-// import "aos/dist/aos.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function App({ Component, pageProps }: AppProps) {
-	// if (typeof window !== "undefined") AOS.init();
+	if (typeof window !== "undefined") AOS.init();
 	const [showOverlay, setShowOverlay] = useState(true);
 
 	useLayoutEffect(() => {

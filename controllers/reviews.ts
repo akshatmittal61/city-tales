@@ -3,7 +3,7 @@ import Review from "@/models/Review";
 import Walk from "@/models/Walk";
 import { ApiRequest, ApiResponse } from "@/types/api";
 
-const getAllReviews = async (req: ApiRequest, res: ApiResponse) => {
+export const getAllReviews = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const reviews: any = await Review.find()
 			.populate("user")
@@ -20,7 +20,7 @@ const getAllReviews = async (req: ApiRequest, res: ApiResponse) => {
 	}
 };
 
-const getReviewByWalkId = async (req: ApiRequest, res: ApiResponse) => {
+export const getReviewByWalkId = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const { id } = req.query;
 		const foundWalk = await Walk.findById(id);
@@ -45,7 +45,7 @@ const getReviewByWalkId = async (req: ApiRequest, res: ApiResponse) => {
 	}
 };
 
-const addReview = async (req: ApiRequest, res: ApiResponse) => {
+export const addWalkReview = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		let { user, walk, rating, content } = req.body;
 		if (!user || !walk || !rating || !content)
@@ -73,4 +73,78 @@ const addReview = async (req: ApiRequest, res: ApiResponse) => {
 	}
 };
 
-export { getAllReviews, addReview, getReviewByWalkId };
+export const getUserReview = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const foundReview = await Review.findOne({
+			user: req.query.id,
+		}).populate("user");
+		if (!foundReview)
+			return res.status(404).json({ message: "Review not found" });
+		return res.status(200).json({
+			data: {
+				...foundReview._doc,
+				isSubmitted: true,
+			},
+			message: RESPONSE_MESSAGES.SUCCESS,
+		});
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Review not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const updateUserReview = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { rating, content } = req.body;
+		if (!rating && !content)
+			return res.status(400).json({ message: "Invalid request" });
+		const foundReview = await Review.findOne({ user: req.user.id });
+		if (!foundReview)
+			return res.status(404).json({ message: "Review not found" });
+		if (rating) foundReview.rating = rating % 6;
+		if (content) foundReview.content = content;
+		await foundReview.save();
+		await foundReview.populate("user");
+		return res
+			.status(200)
+			.json({ data: foundReview, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Review not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const addUserReview = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { rating, content } = req.body;
+		if (!rating || !content)
+			return res.status(400).json({ message: "Invalid request" });
+		const foundReview = await Review.findOne({ user: req.user.id });
+		if (foundReview) {
+			return updateUserReview(req, res);
+		}
+		const newReview = new Review({
+			user: req.user.id,
+			rating: rating % 6,
+			content,
+		});
+		await newReview.save();
+		await newReview.populate("user");
+		return res
+			.status(200)
+			.json({ data: newReview, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error) {
+		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};

@@ -12,9 +12,19 @@ const UserSchema = new mongoose.Schema(
 			required: true,
 			unique: true,
 		},
+		phone: {
+			type: String,
+			unique: true,
+			default: "",
+		},
 		password: {
 			type: String,
 			required: true,
+		},
+		avatar: {
+			type: String,
+			default:
+				"https://raw.githubusercontent.com/akshatmittal61/planner/master/src/images/user.svg",
 		},
 		date: {
 			type: Date,

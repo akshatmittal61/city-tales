@@ -111,7 +111,7 @@
 		@include typography(btn, md);
 
 		&-details {
-			display: none;
+			display: flex;
 			justify-content: center;
 			align-items: flex-start;
 			flex-flow: column;

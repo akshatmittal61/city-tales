@@ -87,6 +87,11 @@ export const getServerSideProps = async () => {
 					sampleBlogs.map((blog) => ({
 						...blog,
 						date: blog.date?.toString() ?? "2000-01-01",
+						comments:
+							blog.comments?.map((comment) => ({
+								...comment,
+								date: comment.date?.toString() ?? "2000-01-01",
+							})) ?? [],
 					}))
 				)
 				.flat(),
