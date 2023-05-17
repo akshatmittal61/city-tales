@@ -1,6 +1,6 @@
 import { sampleWalks } from "@/constants/landing";
 import React, { useState } from "react";
-import styles from "@/styles/BookTour.module.scss";
+import styles from "@/styles/Enquiry.module.scss";
 import { randomId, stylesConfig } from "@/utils/functions";
 import Link from "next/link";
 import { IoIosArrowForward } from "react-icons/io";
@@ -9,7 +9,7 @@ import Responsive from "@/layouts/Responsive";
 import Input from "@/library/Input";
 import Button from "@/library/Button";
 
-const classes = stylesConfig(styles, "book-tour");
+const classes = stylesConfig(styles, "enquiry");
 
 const BookATourPage: React.FC<{ walk: any; reviews: any[] }> = ({
 	walk,
@@ -54,18 +54,21 @@ const BookATourPage: React.FC<{ walk: any; reviews: any[] }> = ({
 						value={userDetails.name}
 						onChange={handleChange}
 						name="name"
+						style={{ width: "100%" }}
 					/>
 					<Input
 						placeholder="Email"
 						value={userDetails.email}
 						onChange={handleChange}
 						name="email"
+						style={{ width: "100%" }}
 					/>
 					<Input
 						placeholder="Phone No. (with area code)"
 						value={userDetails.phone}
 						onChange={handleChange}
 						name="phone"
+						style={{ width: "100%" }}
 					/>
 					<Input
 						placeholder="No. of Visitors"
@@ -74,6 +77,7 @@ const BookATourPage: React.FC<{ walk: any; reviews: any[] }> = ({
 						name="visitors"
 						type="number"
 						min={1}
+						style={{ width: "100%" }}
 					/>
 					<Button variant="outlined">Send Email</Button>
 				</form>

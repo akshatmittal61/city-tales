@@ -3,7 +3,6 @@ import { WalkItem } from "../types";
 import Image from "next/image";
 import Button from "@/library/Button";
 import { IoIosArrowForward } from "react-icons/io";
-import { useRouter } from "next/router";
 import styles from "./Walks.module.scss";
 import { stylesConfig } from "@/utils/functions";
 
@@ -11,17 +10,22 @@ const classes = stylesConfig(styles, "home-walks-walk");
 
 interface WalkProps extends WalkItem {
 	style?: React.CSSProperties;
+	button: {
+		text: string;
+		action: any;
+	};
+	showSlots?: boolean;
 }
 
 const Walk: React.FC<WalkProps> = ({
-	id,
 	title,
 	description,
 	image,
 	slotsLeft,
 	style,
+	button,
+	showSlots = true,
 }) => {
-	const router = useRouter();
 	return (
 		<div className={classes("")} style={style}>
 			<div className={classes("__content")}>
@@ -34,14 +38,16 @@ const Walk: React.FC<WalkProps> = ({
 						variant="outlined"
 						icon={<IoIosArrowForward />}
 						iconPosition="right"
-						onClick={() => router.push(`/walks/${id}/book-a-tour`)}
+						onClick={button.action}
 						size="small"
 					>
-						Book Now
+						{button.text}
 					</Button>
-					<span className={classes("__content--actions__slots")}>
-						{slotsLeft} slots left
-					</span>
+					{showSlots ? (
+						<span className={classes("__content--actions__slots")}>
+							{slotsLeft} slots left
+						</span>
+					) : null}
 				</div>
 			</div>
 			<div className={classes("__image")}>
