@@ -13,10 +13,12 @@ const classes = stylesConfig(styles, "my-account");
 
 const MyAccountPage: React.FC = () => {
 	const router = useRouter();
+	const [open, setOpen] = useState(false);
 	const [activeTab, setActiveTab] =
 		useState<TNavigationItem>("personal-info");
 	const handleTabClick = (tab: MyAccountSidePaneNavigationItem) => {
 		setActiveTab(tab.id);
+		setOpen(false);
 	};
 	const authState = useAuth();
 
@@ -33,7 +35,12 @@ const MyAccountPage: React.FC = () => {
 
 	return (
 		<main className={classes("")}>
-			<SidePane activeTab={activeTab} onClick={handleTabClick} />
+			<SidePane
+				activeTab={activeTab}
+				onClick={handleTabClick}
+				open={open}
+				onOpen={() => setOpen((prev) => !prev)}
+			/>
 			{activeTab === "personal-info" ? (
 				<PersonalInfo user={authState.user} />
 			) : activeTab === "my-review" ? (
