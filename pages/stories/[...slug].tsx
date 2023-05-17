@@ -19,6 +19,13 @@ const BlogPage: React.FC<Blog> = ({
 	bookmarked,
 }) => {
 	const [showCommentPane, setShowCommentPane] = useState(false);
+	const handleBookmark = () => {
+		if (bookmarked) {
+			alert("Bookmark removed");
+		} else {
+			alert("Bookmark added");
+		}
+	};
 	return (
 		<div className={classes("")}>
 			<div
@@ -42,7 +49,10 @@ const BlogPage: React.FC<Blog> = ({
 						>
 							<AiOutlineComment />
 						</button>
-						<button className={classes("-header__actions__button")}>
+						<button
+							className={classes("-header__actions__button")}
+							onClick={handleBookmark}
+						>
 							<IoMdBookmark />
 						</button>
 						<button className={classes("-header__actions__button")}>

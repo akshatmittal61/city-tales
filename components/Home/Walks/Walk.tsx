@@ -4,13 +4,13 @@ import Image from "next/image";
 import Button from "@/library/Button";
 import { IoIosArrowForward } from "react-icons/io";
 import styles from "./Walks.module.scss";
-import { stylesConfig } from "@/utils/functions";
+import { openLink, stylesConfig } from "@/utils/functions";
 
 const classes = stylesConfig(styles, "home-walks-walk");
 
 interface WalkProps extends WalkItem {
 	style?: React.CSSProperties;
-	button: {
+	button?: {
 		text: string;
 		action: any;
 	};
@@ -23,7 +23,12 @@ const Walk: React.FC<WalkProps> = ({
 	image,
 	slotsLeft,
 	style,
-	button,
+	button = {
+		text: "Book Now",
+		action: () => {
+			openLink("https://razorpay.com/");
+		},
+	},
 	showSlots = true,
 }) => {
 	return (
