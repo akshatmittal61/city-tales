@@ -1,47 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import { sampleBlogs } from "@/constants/blogs";
 import { Blog } from "@/types/Blog";
 import styles from "@/styles/Blog.module.scss";
 import { stylesConfig } from "@/utils/functions";
-import Button from "@/library/Button";
-import { AiOutlineLike } from "react-icons/ai";
+import { AiOutlineComment, AiOutlineLike } from "react-icons/ai";
 import { IoMdBookmark, IoMdShare } from "react-icons/io";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
+import { CommentPane } from "@/components/Blog";
 
 const classes = stylesConfig(styles, "blog");
 
-const BlogPage: React.FC<Blog> = ({ title, content, coverImage }) => (
-	<div className={classes("")}>
-		<div
-			className={classes("-cover")}
-			style={{
-				backgroundImage: `url(${
-					coverImage ? coverImage : "/images/rumi-darwaza.png"
-				})`,
-			}}
-		></div>
-		<div className={classes("-window")}>
-			<div className={classes("-header")}>
-				<h1 className={classes("-header__title")}>{title}</h1>
-				<div className={classes("-header__actions")}>
-					<Button icon={<AiOutlineLike />}>Like</Button>
-					<Button icon={<IoMdBookmark />}>Bookmark</Button>
-					<Button icon={<IoMdShare />}>Share</Button>
+const BlogPage: React.FC<Blog> = ({
+	title,
+	content,
+	coverImage,
+	comments,
+	bookmarked,
+}) => {
+	const [showCommentPane, setShowCommentPane] = useState(false);
+	return (
+		<div className={classes("")}>
+			<div
+				className={classes("-cover")}
+				style={{
+					backgroundImage: `url(${
+						coverImage ? coverImage : "/images/rumi-darwaza.png"
+					})`,
+				}}
+			></div>
+			<div className={classes("-window")}>
+				<div className={classes("-header")}>
+					<h1 className={classes("-header__title")}>{title}</h1>
+					<div className={classes("-header__actions")}>
+						<button className={classes("-header__actions__button")}>
+							<AiOutlineLike />
+						</button>
+						<button
+							className={classes("-header__actions__button")}
+							onClick={() => setShowCommentPane(!showCommentPane)}
+						>
+							<AiOutlineComment />
+						</button>
+						<button className={classes("-header__actions__button")}>
+							<IoMdBookmark />
+						</button>
+						<button className={classes("-header__actions__button")}>
+							<IoMdShare />
+						</button>
+					</div>
+				</div>
+				<div className={classes("-content")}>
+					<ReactMarkdown
+						remarkPlugins={[remarkGfm]}
+						className={classes("-content__markdown")}
+						linkTarget={"_blank"}
+					>
+						{content}
+					</ReactMarkdown>
 				</div>
 			</div>
-			<div className={classes("-content")}>
-				<ReactMarkdown
-					remarkPlugins={[remarkGfm]}
-					className={classes("-content__markdown")}
-					linkTarget={"_blank"}
-				>
-					{content}
-				</ReactMarkdown>
-			</div>
+			{showCommentPane ? (
+				<CommentPane
+					comments={comments ?? []}
+					close={() => setShowCommentPane(false)}
+				/>
+			) : null}
 		</div>
-	</div>
-);
+	);
+};
 
 export default BlogPage;
 
@@ -56,6 +83,10 @@ export const getServerSideProps = async (context: any) => {
 			props: {
 				...blog,
 				date: blog?.date?.toString(),
+				comments: blog?.comments?.map((comment) => ({
+					...comment,
+					date: comment?.date?.toString(),
+				})),
 			},
 		};
 	} catch (error) {

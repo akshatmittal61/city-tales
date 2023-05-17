@@ -58,6 +58,31 @@ If you are interested in learning more about stars and astronomy, check out thes
 		tags: ["Space", "Universe", "Stars"],
 		type: "blog",
 		status: "published",
+		comments: new Array(10)
+			.fill([
+				{
+					id: "qfiqg3bi",
+					user: {
+						id: "1d2gd12g1d2g1",
+						name: "John Doe",
+						avatar: "https://i.pravatar.cc/150?img=1",
+					},
+					content:
+						"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
+					date: new Date("2021-01-01"),
+				},
+				{
+					id: "di3f102hnf1",
+					user: {
+						id: "pd3jo0pdf3",
+						name: "Jane Doe",
+						avatar: "https://i.pravatar.cc/150?img=2",
+					},
+					content: "Lorem ipsum dolor sit amet consectetur.",
+					date: new Date("2021-01-02"),
+				},
+			])
+			.flat(),
 	},
 	{
 		id: "239fg293gf",

@@ -3,6 +3,7 @@
 .blog {
 	width: 100%;
 	min-height: 100vh;
+	position: relative;
 
 	&-cover {
 		width: 100%;
@@ -58,6 +59,25 @@
 			justify-content: flex-end;
 			align-items: center;
 			gap: 12px;
+			padding-right: 16px;
+
+			&__button {
+				all: unset;
+				box-sizing: border-box;
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+				width: 32px;
+				height: 32px;
+				cursor: pointer;
+				user-select: none;
+
+				img,
+				svg {
+					width: 75%;
+					height: 75%;
+				}
+			}
 
 			@include responsive(phone) {
 				width: 100%;
