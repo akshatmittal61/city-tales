@@ -1,3 +1,5 @@
+import { IUser } from "./auth";
+
 export interface BlogComment {
 	id: string;
 	user: {
@@ -25,7 +27,7 @@ export interface Blog {
 	type: string;
 	status: string;
 	tags?: string[];
-	likes?: number;
-	bookmarked?: boolean;
+	likes?: IUser[];
+	bookmarks?: IUser[];
 	comments?: BlogComment[];
 }

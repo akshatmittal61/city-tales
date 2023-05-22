@@ -12,6 +12,7 @@ import { IoIosArrowForward, IoIosMenu } from "react-icons/io";
 import { useOnClickOutside } from "@/hooks/mouse-events";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/global/helpers/user";
+import { favicon } from "@/assets/vectors";
 
 const classNames = stylesConfig(styles, "navbar");
 
@@ -63,6 +64,11 @@ const Navbar: React.FC = () => {
 			}}
 		>
 			<div className={classNames("-left")}>
+				<Avatar
+					src={favicon}
+					alt="City-Tales"
+					onClick={() => router.push("/")}
+				/>
 				<h1
 					className={classNames("-title")}
 					onClick={() => router.push("/")}
@@ -105,7 +111,18 @@ const Navbar: React.FC = () => {
 							}
 						/>
 						<span className={classNames("-avatar-details")}>
-							{authState.user?.name}
+							<span
+								onClick={() =>
+									router.push({
+										pathname: "/account",
+										query: {
+											tab: "personal-info",
+										},
+									})
+								}
+							>
+								{authState.user?.name}
+							</span>
 							<button
 								onClick={(e) => {
 									e.preventDefault();
