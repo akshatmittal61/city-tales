@@ -1,3 +1,6 @@
+import { WalkItem } from "@/components/Home/types";
+import { Blog } from "./Blog";
+
 export interface LoginValues {
 	email: string;
 	password: string;
@@ -18,5 +21,7 @@ export interface IUser {
 	email: string;
 	phone?: string;
 	avatar?: string;
+	bookmarks?: Blog[];
+	bookedEvents?: WalkItem[];
 	role: USER_ROLES;
 }
