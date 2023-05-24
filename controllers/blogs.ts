@@ -3,12 +3,8 @@ import Blog from "@/models/Blog";
 import Comment from "@/models/Comment";
 import User from "@/models/User";
 import { ApiRequest, ApiResponse } from "@/types/api";
-import { NextApiRequest, NextApiResponse } from "next";
 
-export const getAllBlogs = async (
-	req: NextApiRequest,
-	res: NextApiResponse
-) => {
+export const getAllBlogs = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const blogs: any = await Blog.find()
 			.populate("users")
@@ -24,10 +20,7 @@ export const getAllBlogs = async (
 	}
 };
 
-export const getBlogById = async (
-	req: NextApiRequest,
-	res: NextApiResponse
-) => {
+export const getBlogById = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const { id } = req.query;
 		const blog: any = await Blog.findById(id)
@@ -66,7 +59,7 @@ export const getBlogById = async (
 	}
 };
 
-export const addBlog = async (req: NextApiRequest, res: NextApiResponse) => {
+export const addBlog = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		let {
 			title,
