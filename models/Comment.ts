@@ -18,6 +18,15 @@ const CommentSchema = new mongoose.Schema(
 			type: Date,
 			default: Date.now,
 		},
+		replies: {
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Comment",
+				},
+			],
+			default: [],
+		},
 	},
 	{
 		timestamps: true,

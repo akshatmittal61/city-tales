@@ -18,9 +18,9 @@ const ReviewSchema = new mongoose.Schema(
 			type: Date,
 			default: Date.now,
 		},
-		walk: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Walk",
+		approved: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	{

@@ -1,8 +1,14 @@
 import { BLOG, RESPONSE_MESSAGES } from "@/constants/enum";
 import Blog from "@/models/Blog";
+import Comment from "@/models/Comment";
+import User from "@/models/User";
+import { ApiRequest, ApiResponse } from "@/types/api";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const getAllBlogs = async (req: NextApiRequest, res: NextApiResponse) => {
+export const getAllBlogs = async (
+	req: NextApiRequest,
+	res: NextApiResponse
+) => {
 	try {
 		const blogs: any = await Blog.find()
 			.populate("users")
@@ -18,10 +24,34 @@ const getAllBlogs = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
-const getBlogById = async (req: NextApiRequest, res: NextApiResponse) => {
+export const getBlogById = async (
+	req: NextApiRequest,
+	res: NextApiResponse
+) => {
 	try {
 		const { id } = req.query;
-		const blog: any = await Blog.findById(id).populate("users");
+		const blog: any = await Blog.findById(id)
+			.populate({
+				path: "users",
+				populate: {
+					path: "user",
+					model: "User",
+				},
+			})
+			.populate({
+				path: "comments",
+				populate: {
+					path: "user",
+					model: "User",
+				},
+			})
+			.populate({
+				path: "likes",
+				populate: {
+					path: "user",
+					model: "User",
+				},
+			});
 		if (!blog) return res.status(404).json({ message: "Blog not found" });
 		return res
 			.status(200)
@@ -36,7 +66,7 @@ const getBlogById = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
-const addBlog = async (req: NextApiRequest, res: NextApiResponse) => {
+export const addBlog = async (req: NextApiRequest, res: NextApiResponse) => {
 	try {
 		let {
 			title,
@@ -79,4 +109,134 @@ const addBlog = async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 };
 
-export { getAllBlogs, getBlogById, addBlog };
+export const toggleBlogLike = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const blog = await Blog.findById(id);
+		if (!blog) return res.status(404).json({ message: "Blog not found" });
+		const isLiked = blog.likes.find(
+			(likedUser: any) => likedUser.toString() === req.user.id
+		);
+		if (isLiked) {
+			blog.likes = blog.likes.filter(
+				(likedUser: any) => likedUser.toString() !== req.user.id
+			);
+		} else {
+			blog.likes.push(req.user.id);
+		}
+		await blog.save();
+		return res
+			.status(200)
+			.json({ data: blog, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Blog not found" });
+		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const addCommentToBlog = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const { content } = req.body;
+		if (!content)
+			return res.status(400).json({ message: "Invalid request" });
+		const blog = await Blog.findById(id);
+		if (!blog) return res.status(404).json({ message: "Blog not found" });
+		const newComment = new Comment({
+			user: req.user.id,
+			blog: blog._id.toString(),
+			content,
+			date: new Date(),
+		});
+		await newComment.save();
+		blog.comments.push(newComment._id);
+		await blog.save();
+		return res
+			.status(201)
+			.json({ data: newComment, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Blog not found" });
+		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const addReplyToComment = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const { content } = req.body;
+		if (!content)
+			return res.status(400).json({ message: "Invalid request" });
+		const comment = await Comment.findById(id);
+		if (!comment)
+			return res.status(404).json({ message: "Comment not found" });
+		const newComment = new Comment({
+			user: req.user.id,
+			blog: comment.blog.toString(),
+			content,
+			date: new Date(),
+		});
+		await newComment.save();
+		comment.replies.push(newComment._id);
+		await comment.save();
+		return res
+			.status(201)
+			.json({ data: newComment, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Comment not found" });
+		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const toggleBookmark = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const loggedInUser = await User.findById(req.user.id);
+		const blog = await Blog.findById(id);
+		if (!blog) return res.status(404).json({ message: "Blog not found" });
+		const isBookmarked = blog.bookmarks.find(
+			(bookmarkedUser: any) => bookmarkedUser.toString() === req.user.id
+		);
+		if (isBookmarked) {
+			blog.bookmarks = blog.bookmarks.filter(
+				(bookmarkedUser: any) =>
+					bookmarkedUser.toString() !== req.user.id
+			);
+			loggedInUser.bookmarks = loggedInUser.bookmarks.filter(
+				(bookmarkedBlog: any) => bookmarkedBlog.toString() !== blog._id
+			);
+		} else {
+			blog.bookmarks.push(req.user.id);
+			loggedInUser.bookmarks.push(blog._id);
+		}
+		await blog.save();
+		await loggedInUser.save();
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Blog not found" });
+		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const getBookmarkedBlogs = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const loggedInUser = await User.findById(req.user.id);
+		const blogs: any = await Blog.find({
+			_id: { $in: loggedInUser.bookmarks },
+		})
+			.populate("users")
+			.sort({ createdAt: -1 });
+		return res
+			.status(200)
+			.json({ data: blogs, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};

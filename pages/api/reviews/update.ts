@@ -1,8 +1,7 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { addUserReview, getAllReviews } from "@/controllers/reviews";
+import { updateUserReview } from "@/controllers/reviews";
 import connectDB from "@/db";
 import authMiddleware from "@/middleware/auth";
-import { isAdmin } from "@/middleware/roles";
 import { ApiRequest, ApiResponse } from "@/types/api";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
@@ -11,10 +10,8 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 		const { method } = req;
 
 		switch (method) {
-			case "GET":
-				return isAdmin(getAllReviews)(req, res);
-			case "POST":
-				return authMiddleware(addUserReview)(req, res);
+			case "PATCH":
+				return authMiddleware(updateUserReview)(req, res);
 			default:
 				res.setHeader("Allow", ["GET", "POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);

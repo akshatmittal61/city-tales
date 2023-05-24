@@ -1,6 +1,7 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { getUserReview } from "@/controllers/reviews";
+import { deleteReview, getUserReview } from "@/controllers/reviews";
 import connectDB from "@/db";
+import { isAdmin } from "@/middleware/roles";
 import { ApiRequest, ApiResponse } from "@/types/api";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
@@ -11,6 +12,8 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 		switch (method) {
 			case "GET":
 				return getUserReview(req, res);
+			case "DELETE":
+				return isAdmin(deleteReview)(req, res);
 			default:
 				res.setHeader("Allow", ["GET", "POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);
