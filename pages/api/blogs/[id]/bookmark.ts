@@ -13,7 +13,7 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 			case "GET":
 				return authMiddleware(getBookmarkedBlogs)(req, res);
 			case "PATCH":
-				return toggleBookmark(req, res);
+				return authMiddleware(toggleBookmark)(req, res);
 			default:
 				res.setHeader("Allow", ["GET", "PATCH"]);
 				res.status(405).end(`Method ${method} Not Allowed`);

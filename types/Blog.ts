@@ -1,7 +1,7 @@
 import { IUser } from "./auth";
 
 export interface BlogComment {
-	id: string;
+	_id: string;
 	user: {
 		id: string;
 		name: string;
@@ -9,13 +9,15 @@ export interface BlogComment {
 	};
 	content: string;
 	date: Date;
+	replies?: BlogComment[];
 }
 
 export interface Blog {
 	id: string;
+	_id: string;
 	title: string;
 	content: string;
-	author: {
+	user: {
 		id: string;
 		name: string;
 		avatar: string;

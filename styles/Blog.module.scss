@@ -77,6 +77,24 @@
 					width: 75%;
 					height: 75%;
 				}
+
+				&__loading {
+					width: 20px;
+					height: 20px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					border: 2px solid var(--color-brand-black);
+					border-radius: 50%;
+					border-bottom-color: transparent;
+					animation: spin 1s linear infinite;
+
+					@keyframes spin {
+						100% {
+							transform: rotate(360deg);
+						}
+					}
+				}
 			}
 
 			@include responsive(phone) {

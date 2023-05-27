@@ -12,7 +12,9 @@ http.interceptors.request.use(
 	async function (Config: any) {
 		const config = Config;
 		// const access_token = token?.accessToken;
-		const token = localStorage.getItem("token");
+		let token = null;
+		if (typeof window !== "undefined" && localStorage)
+			token = localStorage?.getItem("token");
 		try {
 			if (token) {
 				config.headers["x-auth-token"] = `${token}`;

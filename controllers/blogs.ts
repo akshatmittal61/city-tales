@@ -7,7 +7,10 @@ import { ApiRequest, ApiResponse } from "@/types/api";
 export const getAllBlogs = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const blogs: any = await Blog.find()
-			.populate("users")
+			.populate({
+				path: "user",
+				select: "name email avatar",
+			})
 			.sort({ createdAt: -1 });
 		return res
 			.status(200)
@@ -25,10 +28,22 @@ export const getBlogById = async (req: ApiRequest, res: ApiResponse) => {
 		const { id } = req.query;
 		const blog: any = await Blog.findById(id)
 			.populate({
-				path: "users",
+				path: "user",
+				select: "name email avatar",
+			})
+			.populate({
+				path: "likes",
+				select: "name email avatar",
+			})
+			.populate({
+				path: "comments",
 				populate: {
-					path: "user",
-					model: "User",
+					path: "replies",
+					populate: {
+						path: "user",
+						model: "User",
+						select: "name email avatar",
+					},
 				},
 			})
 			.populate({
@@ -36,14 +51,12 @@ export const getBlogById = async (req: ApiRequest, res: ApiResponse) => {
 				populate: {
 					path: "user",
 					model: "User",
+					select: "name email avatar",
 				},
 			})
 			.populate({
-				path: "likes",
-				populate: {
-					path: "user",
-					model: "User",
-				},
+				path: "bookmarks",
+				select: "name email avatar",
 			});
 		if (!blog) return res.status(404).json({ message: "Blog not found" });
 		return res
@@ -83,6 +96,7 @@ export const addBlog = async (req: ApiRequest, res: ApiResponse) => {
 		if (!Object.values(BLOG.STATUS).includes(status))
 			status = BLOG.STATUS.DRAFT;
 		const blog = new Blog({
+			user: req.user.id,
 			title,
 			content,
 			type,
@@ -118,6 +132,22 @@ export const toggleBlogLike = async (req: ApiRequest, res: ApiResponse) => {
 			blog.likes.push(req.user.id);
 		}
 		await blog.save();
+		await blog.populate({
+			path: "likes",
+			select: "name email avatar",
+		});
+		await blog.populate({
+			path: "comments",
+			populate: {
+				path: "user",
+				model: "User",
+				select: "name email avatar",
+			},
+		});
+		await blog.populate({
+			path: "bookmarks",
+			select: "name email avatar",
+		});
 		return res
 			.status(200)
 			.json({ data: blog, message: RESPONSE_MESSAGES.SUCCESS });
@@ -131,6 +161,7 @@ export const toggleBlogLike = async (req: ApiRequest, res: ApiResponse) => {
 
 export const addCommentToBlog = async (req: ApiRequest, res: ApiResponse) => {
 	try {
+		console.log(req.body);
 		const { id } = req.query;
 		const { content } = req.body;
 		if (!content)
@@ -146,6 +177,10 @@ export const addCommentToBlog = async (req: ApiRequest, res: ApiResponse) => {
 		await newComment.save();
 		blog.comments.push(newComment._id);
 		await blog.save();
+		await newComment.populate({
+			path: "user",
+			select: "name email avatar",
+		});
 		return res
 			.status(201)
 			.json({ data: newComment, message: RESPONSE_MESSAGES.SUCCESS });
@@ -175,6 +210,12 @@ export const addReplyToComment = async (req: ApiRequest, res: ApiResponse) => {
 		await newComment.save();
 		comment.replies.push(newComment._id);
 		await comment.save();
+		await comment.populate("replies");
+		await newComment.populate({
+			path: "user",
+			select: "name email avatar",
+		});
+		console.log(newComment);
 		return res
 			.status(201)
 			.json({ data: newComment, message: RESPONSE_MESSAGES.SUCCESS });
@@ -208,7 +249,26 @@ export const toggleBookmark = async (req: ApiRequest, res: ApiResponse) => {
 			loggedInUser.bookmarks.push(blog._id);
 		}
 		await blog.save();
+		await blog.populate({
+			path: "likes",
+			select: "name email avatar",
+		});
+		await blog.populate({
+			path: "comments",
+			populate: {
+				path: "user",
+				model: "User",
+				select: "name email avatar",
+			},
+		});
+		await blog.populate({
+			path: "bookmarks",
+			select: "name email avatar",
+		});
 		await loggedInUser.save();
+		return res
+			.status(200)
+			.json({ data: blog, message: RESPONSE_MESSAGES.SUCCESS });
 	} catch (error: any) {
 		console.error(error);
 		if (error.kind === "ObjectId")

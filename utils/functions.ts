@@ -57,8 +57,8 @@ export const getValueFromKey = (obj: any, key: string) => {
 export const convertToSlug = (text: string) => {
 	return text
 		.toLowerCase()
-		.replace(/ /g, "")
-		.replace(/[^\w-]+/g, "");
+		.replace(/ /g, "-")
+		.replace(/[^\w-]+/g, "-");
 };
 
 // function to convert a slug (kebab case) text to running case sentence
@@ -67,7 +67,6 @@ export const convertToSentence = (text: string) => {
 		?.split("-")
 		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(" ")
-		.replace(/-/g, " ")
 		.replace(/_/g, " ");
 };
 

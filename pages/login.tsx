@@ -51,7 +51,6 @@ const SignInPage: React.FC = () => {
 				.then(unwrapResult)
 				.then(() => {
 					setGlobalUser();
-					router.push("/");
 					if (router.query.redirect)
 						router.push(router.query.redirect as string);
 					else router.push("/");

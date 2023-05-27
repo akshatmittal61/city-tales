@@ -4,6 +4,7 @@ import { Blog } from "@/types/Blog";
 export const sampleBlogs: Blog[] = [
 	{
 		id: "17gdw1972gf91",
+		_id: "17gdw1972gf91",
 		title: "A Walk through the stars",
 		content: `
 Have you ever looked up at the night sky and wondered what's out there? The stars have fascinated people for centuries, inspiring countless works of art, literature, and science. In this blog post, we'll take a walk through the stars and explore some of the amazing things we can learn about the universe by studying them.
@@ -50,7 +51,7 @@ If you are interested in learning more about stars and astronomy, check out thes
 		excerpt:
 			"A Walk Through the Stars is a mesmerizing journey through the universe, exploring the beauty and wonder of the stars. From our own sun to distant galaxies, this blog post takes you on a tour of the cosmos, uncovering the mysteries and marvels of the night sky.",
 		coverImage: wallpapers[0],
-		author: {
+		user: {
 			id: "1d2gd12g1d2g1",
 			name: "John Doe",
 			avatar: "https://i.pravatar.cc/150?img=1",
@@ -86,6 +87,7 @@ If you are interested in learning more about stars and astronomy, check out thes
 	},
 	{
 		id: "239fg293gf",
+		_id: "239fg293gf",
 		title: "A tour of the universe",
 		content: `
 Have you ever looked up at the night sky and felt overwhelmed by the vastness of space? The universe is an incredibly complex and awe-inspiring place, filled with billions of galaxies, stars, and planets. In this blog post, we'll take a tour of the universe and explore some of the amazing things we can learn about it.
@@ -139,7 +141,7 @@ If you are interested in learning more about the universe and astronomy, check o
 		excerpt:
 			"A Tour of the Universe is an awe-inspiring journey through the vast expanse of space, delving into the mysteries and wonders of the cosmos. From the Big Bang to black holes, this blog post explores the origins and evolution of the universe, revealing the incredible forces and phenomena that shape our world.",
 		coverImage: wallpapers[1],
-		author: {
+		user: {
 			id: "1d2gd12g1d2g1",
 			name: "Karl Seagel",
 			avatar: "https://i.pravatar.cc/150?img=1",
@@ -150,6 +152,7 @@ If you are interested in learning more about the universe and astronomy, check o
 	},
 	{
 		id: "h28d91ho1",
+		_id: "h28d91ho1",
 		title: "A ride inside the wormholes",
 		content: `
 Have you ever heard of wormholes? These are fascinating objects that have captured the imagination of science fiction writers for decades. But what exactly are they, and how do they work? In this blog post, we'll take a ride inside the wormholes and explore some of the incredible things they can do.
@@ -192,7 +195,7 @@ If you are interested in learning more about wormholes and their potential impli
 		excerpt:
 			"A Ride Inside the Wormholes is a mind-bending journey through the world of theoretical physics, exploring the strange and fascinating concept of wormholes. From the theory of relativity to the mysteries of dark matter, this blog post delves into the cutting-edge science that is reshaping our understanding of the universe.",
 		coverImage: wallpapers[2],
-		author: {
+		user: {
 			id: "1d2gd12g1d2g1",
 			name: "Brian Greene",
 			avatar: "https://i.pravatar.cc/150?img=1",
@@ -203,6 +206,7 @@ If you are interested in learning more about wormholes and their potential impli
 	},
 	{
 		id: "2fofieh204if20",
+		_id: "2fofieh204if20",
 		title: "Exploring the mysteries of the Block Holes",
 		content: `
 Black holes are some of the most fascinating objects in the universe. They are also some of the most mysterious, with many questions still remaining about their nature and behavior. In this blog post, we'll explore some of the mysteries of black holes and what we know about them.
@@ -262,7 +266,7 @@ If you are interested in learning more about black holes, check out these resour
 		excerpt:
 			"Exploring the Mysteries of Black Holes is a captivating exploration of one of the most enigmatic phenomena in the universe. From their origins to their behavior, this blog post reveals the fascinating properties of black holes, and the many questions that remain unanswered about these cosmic wonders.",
 		coverImage: wallpapers[3],
-		author: {
+		user: {
 			id: "1d2gd12g1d2g1",
 			name: "Brian Greene",
 			avatar: "https://i.pravatar.cc/150?img=1",

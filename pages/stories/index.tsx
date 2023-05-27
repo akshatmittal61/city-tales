@@ -5,6 +5,7 @@ import Filters from "@/library/Filter/Filters";
 import styles from "@/styles/Stories.module.scss";
 import { convertToSlug, stylesConfig } from "@/utils/functions";
 import Responsive from "@/layouts/Responsive";
+import { fetchAllBlogs } from "@/utils/api/blogs";
 
 const classes = stylesConfig(styles, "blogs");
 
@@ -80,21 +81,19 @@ const BlogsPage: React.FC<{ blogs: any[] }> = ({ blogs }) => {
 export default BlogsPage;
 
 export const getServerSideProps = async () => {
-	return {
-		props: {
-			blogs: Array(11)
-				.fill(
-					sampleBlogs.map((blog) => ({
-						...blog,
-						date: blog.date?.toString() ?? "2000-01-01",
-						comments:
-							blog.comments?.map((comment) => ({
-								...comment,
-								date: comment.date?.toString() ?? "2000-01-01",
-							})) ?? [],
-					}))
-				)
-				.flat(),
-		},
-	};
+	try {
+		const res = await fetchAllBlogs();
+		return {
+			props: {
+				blogs: JSON.parse(JSON.stringify(res.data)),
+			},
+		};
+	} catch (error: any) {
+		console.error(error);
+		return {
+			props: {
+				blogs: [],
+			},
+		};
+	}
 };

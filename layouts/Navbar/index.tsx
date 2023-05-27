@@ -137,7 +137,12 @@ const Navbar: React.FC = () => {
 					<Button
 						variant="outlined"
 						icon={<RiUserLine />}
-						onClick={() => router.push("/login")}
+						onClick={() =>
+							router.push({
+								pathname: "/login",
+								query: { redirect: router.pathname },
+							})
+						}
 					>
 						Login
 					</Button>

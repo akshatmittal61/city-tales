@@ -2,7 +2,7 @@ import React from "react";
 import { Blog as BlogProps } from "@/types/Blog";
 import Button from "@/library/Button";
 import styles from "./BlogCard.module.scss";
-import { stylesConfig } from "@/utils/functions";
+import { convertToSlug, stylesConfig } from "@/utils/functions";
 import { IoIosArrowForward } from "react-icons/io";
 import Image from "next/image";
 import { bookmark, nipLight } from "@/assets/vectors";
@@ -12,6 +12,7 @@ const classes = stylesConfig(styles, "blogs-blog");
 
 const Blog: React.FC<BlogProps> = ({
 	id,
+	_id,
 	title,
 	content,
 	coverImage,
@@ -46,7 +47,7 @@ const Blog: React.FC<BlogProps> = ({
 					onClick={() =>
 						router.push(
 							"/stories/[...slug]",
-							`/stories/${id}/${title}`
+							`/stories/${id ?? _id}/${convertToSlug(title)}`
 						)
 					}
 				>

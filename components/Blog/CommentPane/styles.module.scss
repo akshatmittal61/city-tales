@@ -4,19 +4,28 @@
 	position: fixed;
 	right: 0;
 	top: 0;
-	width: 25vw;
+	width: 30vw;
 	height: 100vh;
 	display: flex;
 	justify-content: flex-start;
 	align-items: flex-start;
 	flex-flow: column;
+	gap: 20px;
 	background-color: #fff;
 	box-shadow: var(--shadow-elevation-8dp);
 	padding: calc(var(--nav-height) + 30px) 32px 0 32px;
+	transition: all 0.3s ease-in-out;
+
+	@include responsive(tablet) {
+		width: 50vw;
+	}
+
+	@include responsive(phone) {
+		width: 80vw;
+	}
 
 	&-header {
 		@include typography(heading, h5);
-		margin-bottom: 32px;
 	}
 
 	&-form {
@@ -62,8 +71,7 @@
 		align-items: flex-start;
 		flex-flow: column;
 		flex: 0 1 auto;
-		gap: 32px;
-		padding: 16px 0;
+		gap: 16px;
 		overflow-y: auto;
 
 		&__comment {
@@ -73,6 +81,8 @@
 			align-items: flex-start;
 			flex-flow: column;
 			gap: 10px;
+			padding-bottom: 16px;
+			border-bottom: 1px solid #dedede;
 
 			&--header {
 				width: 100%;
@@ -102,6 +112,66 @@
 				width: 100%;
 				@include typography(body, md);
 				color: var(--color-brand-black);
+			}
+
+			&--footer {
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				&--replies {
+					width: 95%;
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					flex-flow: column;
+					margin-left: auto;
+				}
+
+				&--count {
+					display: flex;
+					justify-content: flex-start;
+					align-items: center;
+					gap: 8px;
+					@include typography(body, sm);
+				}
+
+				&--reply {
+					cursor: pointer;
+					user-select: none;
+				}
+
+				&-form {
+					width: 100%;
+					height: 100px;
+					display: flex;
+					justify-content: center;
+					align-items: flex-end;
+					flex-flow: column;
+					gap: 12px;
+					margin-left: auto;
+
+					textarea {
+						all: unset;
+						width: 100%;
+						height: 100%;
+						box-sizing: border-box;
+						@include typography(body, sm);
+						color: var(--color-brand-black);
+						border: 1px solid transparent;
+						border-bottom-color: #4b4b4b;
+						transition: all 0.2s ease-in-out;
+						flex: 0 1 auto;
+					}
+
+					&__bar {
+						width: 100%;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+					}
+				}
 			}
 		}
 	}

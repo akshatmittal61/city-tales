@@ -67,6 +67,15 @@ const BlogSchema = new mongoose.Schema(
 			],
 			default: [],
 		},
+		bookmarks: {
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "User",
+				},
+			],
+			default: [],
+		},
 	},
 	{
 		timestamps: true,
