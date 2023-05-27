@@ -1,5 +1,5 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { toggleBookmark } from "@/controllers/blogs";
+import { getBookmarkedBlogs } from "@/controllers/blogs";
 import connectDB from "@/db";
 import authMiddleware from "@/middleware/auth";
 import { ApiRequest, ApiResponse } from "@/types/api";
@@ -10,8 +10,8 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 		const { method } = req;
 
 		switch (method) {
-			case "PATCH":
-				return authMiddleware(toggleBookmark)(req, res);
+			case "GET":
+				return authMiddleware(getBookmarkedBlogs)(req, res);
 			default:
 				res.setHeader("Allow", ["GET", "PATCH"]);
 				res.status(405).end(`Method ${method} Not Allowed`);

@@ -31,7 +31,17 @@ const Blog: React.FC<BlogProps> = ({
 				}}
 			></div>
 			<div className={classes("__content")}>
-				<h3 className={classes("__content--title")}>{title}</h3>
+				<h3
+					className={classes("__content--title")}
+					onClick={() =>
+						router.push(
+							"/stories/[...slug]",
+							`/stories/${id ?? _id}/${convertToSlug(title)}`
+						)
+					}
+				>
+					{title}
+				</h3>
 				<p className={classes("__content--excerpt")}>
 					{excerpt
 						? excerpt.length > 150

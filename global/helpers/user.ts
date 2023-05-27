@@ -6,6 +6,7 @@ import {
 	patchUserDetails,
 	register,
 } from "@/utils/api/auth";
+import { fetchBookmarkedBlogs } from "@/utils/api/blogs";
 import { fetchReview, postReview } from "@/utils/api/user";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -98,6 +99,19 @@ export const addReview = createAsyncThunk(
 	async (review: IReview, { rejectWithValue }) => {
 		try {
 			const response = await postReview(review);
+			return Promise.resolve(response.data);
+		} catch (error) {
+			console.error("Error: ", error);
+			return rejectWithValue(error);
+		}
+	}
+);
+
+export const getBookmarkedBlogs = createAsyncThunk(
+	"user/getBookmarkedBlogs",
+	async (_, { rejectWithValue }) => {
+		try {
+			const response = await fetchBookmarkedBlogs();
 			return Promise.resolve(response.data);
 		} catch (error) {
 			console.error("Error: ", error);

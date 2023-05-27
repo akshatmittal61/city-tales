@@ -233,22 +233,33 @@ export const toggleBookmark = async (req: ApiRequest, res: ApiResponse) => {
 		const loggedInUser = await User.findById(req.user.id);
 		const blog = await Blog.findById(id);
 		if (!blog) return res.status(404).json({ message: "Blog not found" });
-		const isBookmarked = blog.bookmarks.find(
-			(bookmarkedUser: any) => bookmarkedUser.toString() === req.user.id
-		);
+		const isBookmarked =
+			blog.bookmarks?.find(
+				(bookmarkedUser: any) =>
+					bookmarkedUser.toString() === req.user.id
+			) ||
+			loggedInUser.bookmarks?.find(
+				(bookmarkedBlog: any) => bookmarkedBlog.toString() === blog._id
+			);
 		if (isBookmarked) {
-			blog.bookmarks = blog.bookmarks.filter(
+			blog.bookmarks = blog.bookmarks?.filter(
 				(bookmarkedUser: any) =>
 					bookmarkedUser.toString() !== req.user.id
 			);
-			loggedInUser.bookmarks = loggedInUser.bookmarks.filter(
-				(bookmarkedBlog: any) => bookmarkedBlog.toString() !== blog._id
+			loggedInUser.bookmarks = loggedInUser.bookmarks?.filter(
+				(bookmarkedBlog: any) =>
+					bookmarkedBlog.toString() !== blog._id.toString()
 			);
 		} else {
-			blog.bookmarks.push(req.user.id);
-			loggedInUser.bookmarks.push(blog._id);
+			if (blog.bookmarks && Array.isArray(blog.bookmarks))
+				blog.bookmarks?.push(req.user.id);
+			else blog.bookmarks = [req.user.id];
+			if (loggedInUser.bookmarks && Array.isArray(loggedInUser.bookmarks))
+				loggedInUser.bookmarks?.push(blog._id);
+			else loggedInUser.bookmarks = [blog._id];
 		}
 		await blog.save();
+		await loggedInUser.save();
 		await blog.populate({
 			path: "likes",
 			select: "name email avatar",
@@ -265,7 +276,6 @@ export const toggleBookmark = async (req: ApiRequest, res: ApiResponse) => {
 			path: "bookmarks",
 			select: "name email avatar",
 		});
-		await loggedInUser.save();
 		return res
 			.status(200)
 			.json({ data: blog, message: RESPONSE_MESSAGES.SUCCESS });
@@ -280,10 +290,13 @@ export const toggleBookmark = async (req: ApiRequest, res: ApiResponse) => {
 export const getBookmarkedBlogs = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const loggedInUser = await User.findById(req.user.id);
-		const blogs: any = await Blog.find({
+		const blogs = await Blog.find({
 			_id: { $in: loggedInUser.bookmarks },
 		})
-			.populate("users")
+			.populate({
+				path: "user",
+				select: "name email avatar",
+			})
 			.sort({ createdAt: -1 });
 		return res
 			.status(200)
