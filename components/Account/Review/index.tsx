@@ -16,11 +16,16 @@ const classes = stylesConfig(styles, "my-account-review");
 interface MyAccountReviewProps {}
 
 const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
-	const dispatch = useDispatch<any>();
 	const user = useSelector(userSelector);
+	const dispatch = useDispatch<any>();
 	const globalReview = useSelector(reviewSelector);
 	const [userReview, setUserReview] = useState<IReview>({
-		user: user ?? null,
+		user: user ?? {
+			_id: "",
+			name: "",
+			email: "",
+			role: "user",
+		},
 		content: globalReview?.content ?? "",
 		rating: globalReview?.rating ?? 0,
 		date: globalReview?.date ?? Date.now().toString(),
@@ -61,7 +66,12 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 
 	useEffect(() => {
 		setUserReview({
-			user: globalReview?.user ?? null,
+			user: globalReview?.user ?? {
+				_id: "",
+				name: "",
+				email: "",
+				role: "user",
+			},
 			content: globalReview?.content ?? "",
 			rating: globalReview?.rating ?? 0,
 			date: globalReview?.date ?? Date.now().toString(),

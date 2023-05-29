@@ -18,7 +18,7 @@ const MyAccountEvents: React.FC = () => {
 					<Responsive.Row>
 						{user?.bookedEvents?.map((event, index) => (
 							<Responsive.Col
-								key={event.id + index}
+								key={event._id + index}
 								xlg={33}
 								lg={50}
 								md={50}

@@ -1,45 +1,52 @@
 import { ReviewItem } from "@/types/Review";
-import { sampleWalks } from "./landing";
 
 export const sampleReviews: ReviewItem[] = [
 	{
 		user: {
+			_id: "1",
 			name: "John Doe",
-		}.name,
+			email: "akshatmittal2506@gmail.com",
+			role: "user",
+		},
 		rating: 4,
 		content:
 			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
 		date: new Date("2020-01-01"),
-		walk: sampleWalks[0],
 	},
 	{
 		user: {
+			_id: "1",
 			name: "Kimberly Smith",
-		}.name,
+			email: "akshatmittal2506@gmail.com",
+			role: "user",
+		},
 		rating: 4,
 		content:
 			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
 		date: new Date("2020-02-01"),
-		walk: sampleWalks[1],
 	},
 	{
 		user: {
+			_id: "1",
 			name: "Nick Jones",
-		}.name,
+			email: "akshatmittal2506@gmail.com",
+			role: "user",
+		},
 		rating: 4,
 		content:
 			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
 		date: new Date("2020-03-01"),
-		walk: sampleWalks[2],
 	},
 	{
 		user: {
+			_id: "1",
 			name: "Rebecca Williams",
-		}.name,
+			email: "akshatmittal2506@gmail.com",
+			role: "user",
+		},
 		rating: 4,
 		content:
 			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
 		date: new Date("2020-04-01"),
-		walk: sampleWalks[3],
 	},
 ];

@@ -1,5 +1,5 @@
-import { WalkItem } from "@/components/Home/types";
 import { Blog } from "./Blog";
+import { IWalk } from "./Walk";
 
 export interface LoginValues {
 	email: string;
@@ -22,6 +22,6 @@ export interface IUser {
 	phone?: string;
 	avatar?: string;
 	bookmarks?: Blog[];
-	bookedEvents?: WalkItem[];
+	bookedEvents?: IWalk[];
 	role: USER_ROLES;
 }

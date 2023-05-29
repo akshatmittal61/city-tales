@@ -1,6 +1,4 @@
 import Walk from "@/components/Home/Walks/Walk";
-import { WalkItem } from "@/components/Home/types";
-import { sampleWalks } from "@/constants/landing";
 import Responsive from "@/layouts/Responsive";
 import styles from "@/styles/Walks.module.scss";
 import { IWalk } from "@/types/Walk";
