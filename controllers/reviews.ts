@@ -5,7 +5,10 @@ import { ApiRequest, ApiResponse } from "@/types/api";
 export const getAllReviews = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const reviews: any = await Review.find()
-			.populate("user")
+			.populate({
+				path: "user",
+				select: "name email avatar",
+			})
 			.sort({ createdAt: -1 });
 		return res
 			.status(200)
@@ -70,20 +73,27 @@ export const updateUserReview = async (req: ApiRequest, res: ApiResponse) => {
 
 export const addUserReview = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		const { rating, content } = req.body;
+		const { rating, content, image } = req.body;
 		if (!rating || !content)
 			return res.status(400).json({ message: "Invalid request" });
 		const foundReview = await Review.findOne({ user: req.user.id });
 		if (foundReview) {
 			return updateUserReview(req, res);
 		}
-		const newReview = new Review({
+		const reviewBody: any = {
 			user: req.user.id,
 			rating: rating % 6,
 			content,
-		});
+		};
+		if (image) reviewBody.image = image;
+		console.log(reviewBody);
+		const newReview = new Review(reviewBody);
 		await newReview.save();
-		await newReview.populate("user");
+		await newReview.populate({
+			path: "user",
+			select: "name email avatar",
+		});
+		console.log(newReview);
 		return res
 			.status(200)
 			.json({ data: newReview, message: RESPONSE_MESSAGES.SUCCESS });
@@ -118,7 +128,7 @@ export const toggleReviewApproval = async (
 	res: ApiResponse
 ) => {
 	try {
-		const { id } = req.query;
+		const { id } = req.body;
 		const foundReview = await Review.findById(id);
 		if (!foundReview)
 			return res.status(404).json({ message: "Review not found" });
@@ -157,7 +167,7 @@ export const getReviewById = async (req: ApiRequest, res: ApiResponse) => {
 export const getApprovedReviews = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const reviews: any = await Review.find({ approved: true })
-			.populate("user")
+			.populate({ path: "user", select: "name email avatar" })
 			.sort({ createdAt: -1 });
 		return res
 			.status(200)

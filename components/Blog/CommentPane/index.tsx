@@ -1,9 +1,7 @@
 import { stylesConfig } from "@/utils/functions";
 import styles from "./styles.module.scss";
 import React, { useEffect, useRef, useState } from "react";
-import Avatar from "@/components/Avatar/Avatar";
 import { BlogComment } from "@/types/Blog";
-import moment from "moment";
 import { useOnClickOutside } from "@/hooks/mouse-events";
 import Button from "@/library/Button";
 import { toast } from "react-toastify";

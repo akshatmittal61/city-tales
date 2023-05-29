@@ -1,18 +1,17 @@
-import { WalkItem } from "@/components/Home/types";
 import { IUser } from "./auth";
 
 export interface ReviewItem {
-	user: string;
+	user: IUser;
 	content: string;
 	rating: number;
 	date: Date | string;
-	walk: WalkItem;
+	image?: string;
 }
 
 export interface IReview {
-	user: IUser | null;
+	user: IUser;
 	content: string;
 	rating: number;
 	date: any;
-	isSubmitted: boolean;
+	isSubmitted?: boolean;
 }
