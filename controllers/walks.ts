@@ -4,7 +4,12 @@ import { ApiRequest, ApiResponse } from "@/types/api";
 
 export const getAllWalks = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		const walks = await Walk.find({}).populate("user", "tourBookedBy");
+		const walks = await Walk.find()
+			.populate({
+				path: "user",
+				select: "name email avatar",
+			})
+			.sort({ createdAt: -1 });
 		return res.json({ data: walks, message: RESPONSE_MESSAGES.SUCCESS });
 	} catch (error: any) {
 		console.error(error);
@@ -32,7 +37,7 @@ export const getWalkById = async (req: ApiRequest, res: ApiResponse) => {
 
 export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		const {
+		let {
 			title,
 			content,
 			date,
@@ -47,13 +52,13 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			!title ||
 			!content ||
 			!date ||
-			!excerpt ||
 			!location ||
 			!coverImage ||
 			!slots ||
 			!price
 		)
 			return res.status(400).json({ message: "Invalid request" });
+		if (!excerpt) excerpt = content.slice(0, 100);
 		const newWalk = new Walk({
 			title,
 			content,

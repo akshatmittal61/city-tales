@@ -3,12 +3,16 @@ import { WalkItem } from "@/components/Home/types";
 import { sampleWalks } from "@/constants/landing";
 import Responsive from "@/layouts/Responsive";
 import styles from "@/styles/Walks.module.scss";
+import { IWalk } from "@/types/Walk";
+import { fetchAllWalks } from "@/utils/api/walks";
 import { randomId, stylesConfig } from "@/utils/functions";
+import { useRouter } from "next/router";
 import React from "react";
 
 const classes = stylesConfig(styles, "walks");
 
-const WalksPage: React.FC<{ walks: any[] }> = ({ walks }) => {
+const WalksPage: React.FC<{ walks: IWalk[] }> = ({ walks }) => {
+	const router = useRouter();
 	return (
 		<main className={classes("")}>
 			<div className={classes("-head")}>
@@ -16,7 +20,7 @@ const WalksPage: React.FC<{ walks: any[] }> = ({ walks }) => {
 			</div>
 			<div className={classes("-body")}>
 				<Responsive.Row>
-					{walks.map((walk: WalkItem) => (
+					{walks.map((walk: IWalk) => (
 						<Responsive.Col
 							xlg={50}
 							lg={50}
@@ -30,6 +34,12 @@ const WalksPage: React.FC<{ walks: any[] }> = ({ walks }) => {
 									margin: "10px 0",
 								}}
 								{...walk}
+								button={{
+									text: "View Details",
+									action: () => {
+										router.push(`/walks/${walk._id}`);
+									},
+								}}
 							/>
 						</Responsive.Col>
 					))}
@@ -42,9 +52,15 @@ const WalksPage: React.FC<{ walks: any[] }> = ({ walks }) => {
 export default WalksPage;
 
 export const getServerSideProps = async () => {
-	return {
-		props: {
-			walks: sampleWalks,
-		},
-	};
+	try {
+		const res = await fetchAllWalks();
+		return {
+			props: { walks: JSON.parse(JSON.stringify(res.data)) },
+		};
+	} catch (error: any) {
+		console.error(error);
+		return {
+			props: { walks: [] },
+		};
+	}
 };

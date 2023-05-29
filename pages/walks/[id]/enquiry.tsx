@@ -1,20 +1,15 @@
-import { sampleWalks } from "@/constants/landing";
 import React, { useState } from "react";
 import styles from "@/styles/Enquiry.module.scss";
-import { randomId, stylesConfig } from "@/utils/functions";
-import Link from "next/link";
-import { IoIosArrowForward } from "react-icons/io";
-import { sampleReviews } from "@/constants/reviews";
-import Responsive from "@/layouts/Responsive";
+import { stylesConfig } from "@/utils/functions";
+import { fetchWalkById } from "@/utils/api/walks";
 import Input from "@/library/Input";
 import Button from "@/library/Button";
+import { IWalk } from "@/types/Walk";
+import { MapPin } from "react-feather";
 
 const classes = stylesConfig(styles, "enquiry");
 
-const BookATourPage: React.FC<{ walk: any; reviews: any[] }> = ({
-	walk,
-	reviews,
-}) => {
+const BookATourPage: React.FC<{ walk: IWalk; reviews: any[] }> = ({ walk }) => {
 	const [userDetails, setUserDetails] = useState({
 		name: "",
 		email: "",
@@ -79,64 +74,52 @@ const BookATourPage: React.FC<{ walk: any; reviews: any[] }> = ({
 						min={1}
 						style={{ width: "100%" }}
 					/>
-					<Button variant="outlined">Send Email</Button>
+					<div className={classes("-details-form-group")}>
+						<Button
+							variant="outlined"
+							onClick={() => {
+								window.open(
+									`https://wa.me/+919456849466?text=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
+								);
+							}}
+							style={{ width: "50%" }}
+						>
+							Contact on WhatsApp
+						</Button>
+						<Button
+							variant="outlined"
+							onClick={() => {
+								window.open(
+									`mailto:akshatmittal2506@gmail.com?subject=Enquiry for ${walk.title}&body=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
+								);
+							}}
+							style={{ width: "50%" }}
+						>
+							Send Email
+						</Button>
+					</div>
 				</form>
 			</article>
 			<aside
-				className={classes("-reviews")}
+				className={classes("-right")}
 				style={{
-					backgroundImage: `url(${walk.image})`,
+					backgroundImage: `url(${walk.coverImage})`,
 				}}
 			>
-				<div className={classes("-reviews-header")}>
-					<h1 className={classes("-reviews-header__title")}>
-						Reviews
+				<div className={classes("-right-header")}>
+					<h1 className={classes("-right-header__title")}>
+						{walk.title}
 					</h1>
-					<Link href={"/reviews"}>
-						See All <IoIosArrowForward />
-					</Link>
 				</div>
-				<div className={classes("-reviews-body")}>
-					<Responsive.Row>
-						{reviews.map((review) => (
-							<Responsive.Col
-								xlg={50}
-								lg={50}
-								md={100}
-								sm={100}
-								key={[
-									review.walk.title,
-									review.user.name,
-									randomId(),
-									Date.now(),
-								].join("-")}
-							>
-								<div className={classes("-reviews__review")}>
-									<h4
-										className={classes(
-											"-reviews__review--title"
-										)}
-									>
-										{review.walk.title}
-									</h4>
-									<p
-										className={classes(
-											"-reviews__review--text"
-										)}
-									>
-										&quot;{review.content.slice(0, 100)}...
-									</p>
-									<span
-										className={classes(
-											"-reviews__review--user"
-										)}
-									>
-										- {review.user}
-									</span>
-								</div>
-							</Responsive.Col>
-						))}
-					</Responsive.Row>
+				<div className={classes("-right-location")}>
+					<MapPin />
+					<span>{walk.location}</span>
+				</div>
+				<div className={classes("-right-excerpt")}>
+					{walk.excerpt}
+					{walk.excerpt[walk.excerpt.length - 1] !== "."
+						? "..."
+						: null}
 				</div>
 			</aside>
 		</main>
@@ -148,32 +131,19 @@ export default BookATourPage;
 export const getServerSideProps = async (context: any) => {
 	const { id } = context.query;
 	try {
-		if (id) {
-			const walk = sampleWalks.find((walk) => walk.id === id);
-			if (walk) {
-				const reviews = sampleReviews.filter(
-					(review) => review.walk.id === id
-				);
-				return {
-					props: {
-						walk: walk,
-						reviews: Array(10)
-							.fill(reviews)
-							.flat()
-							?.map((review: any) => ({
-								...review,
-								date: review.date.toISOString(),
-							})),
-					},
-				};
-			}
-		}
+		const res = await fetchWalkById(id);
+		return {
+			props: {
+				walk: JSON.parse(JSON.stringify(res.data)),
+				found: true,
+			},
+		};
 	} catch (error) {
 		console.error(error);
 		return {
 			props: {
 				walk: null,
-				reviews: [],
+				found: false,
 			},
 		};
 	}

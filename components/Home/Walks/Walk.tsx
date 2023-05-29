@@ -1,14 +1,14 @@
 import React from "react";
-import { WalkItem } from "../types";
 import Image from "next/image";
 import Button from "@/library/Button";
 import { IoIosArrowForward } from "react-icons/io";
 import styles from "./Walks.module.scss";
 import { openLink, stylesConfig } from "@/utils/functions";
+import { IWalk } from "@/types/Walk";
 
 const classes = stylesConfig(styles, "home-walks-walk");
 
-interface WalkProps extends WalkItem {
+interface WalkProps extends IWalk {
 	style?: React.CSSProperties;
 	button?: {
 		text: string;
@@ -19,9 +19,9 @@ interface WalkProps extends WalkItem {
 
 const Walk: React.FC<WalkProps> = ({
 	title,
-	description,
-	image,
-	slotsLeft,
+	content,
+	coverImage,
+	slots,
 	style,
 	button = {
 		text: "Book Now",
@@ -35,9 +35,7 @@ const Walk: React.FC<WalkProps> = ({
 		<div className={classes("")} style={style}>
 			<div className={classes("__content")}>
 				<h1 className={classes("__content--title")}>{title}</h1>
-				<p className={classes("__content--description")}>
-					{description}
-				</p>
+				<p className={classes("__content--description")}>{content}</p>
 				<div className={classes("__content--actions")}>
 					<Button
 						variant="outlined"
@@ -50,13 +48,18 @@ const Walk: React.FC<WalkProps> = ({
 					</Button>
 					{showSlots ? (
 						<span className={classes("__content--actions__slots")}>
-							{slotsLeft} slots left
+							{slots} slots left
 						</span>
 					) : null}
 				</div>
 			</div>
 			<div className={classes("__image")}>
-				<Image src={image} alt={title} width={1920} height={1080} />
+				<Image
+					src={coverImage}
+					alt={title}
+					width={1920}
+					height={1080}
+				/>
 			</div>
 		</div>
 	);
