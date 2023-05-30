@@ -1,4 +1,4 @@
-import { RESPONSE_MESSAGES } from "@/constants/enum";
+import { RESPONSE_MESSAGES, WALK } from "@/constants/enum";
 import Walk from "@/models/Walk";
 import { ApiRequest, ApiResponse } from "@/types/api";
 
@@ -47,6 +47,7 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			slots,
 			price,
 			tags,
+			type,
 		} = req.body;
 		if (
 			!title ||
@@ -55,7 +56,8 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			!location ||
 			!coverImage ||
 			!slots ||
-			!price
+			!price ||
+			!type
 		)
 			return res.status(400).json({ message: "Invalid request" });
 		if (!excerpt) excerpt = content.slice(0, 100);
@@ -70,11 +72,48 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			price,
 			tags,
 			user: req.user.id,
+			status: WALK.STATUS.DRAFT,
 		});
 		await newWalk.save();
 		return res.json({ data: newWalk, message: RESPONSE_MESSAGES.SUCCESS });
 	} catch (error: any) {
 		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const publishWalk = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const walk = await Walk.findById(id);
+		if (!walk) return res.status(404).json({ message: "Walk not found" });
+		walk.status = WALK.STATUS.PUBLISHED;
+		await walk.save();
+		return res.json({ data: walk, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Walk not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const archiveWalk = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const walk = await Walk.findById(id);
+		if (!walk) return res.status(404).json({ message: "Walk not found" });
+		walk.status = WALK.STATUS.ARCHIVED;
+		await walk.save();
+		return res.json({ data: walk, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Walk not found" });
 		return res
 			.status(500)
 			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });

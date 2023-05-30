@@ -96,6 +96,7 @@ const ReviewPopup: React.FC<IReviewPopupProps> = ({ review, onClose }) => {
 						)
 					)}
 				</div>
+				<h2 className={classes("__title")}>{review.title}</h2>
 				<p className={classes("__content")}>
 					<ReactMarkdown
 						remarkPlugins={[remarkGfm]}
@@ -104,7 +105,6 @@ const ReviewPopup: React.FC<IReviewPopupProps> = ({ review, onClose }) => {
 					>
 						{review.content}
 					</ReactMarkdown>
-					{"..."}
 				</p>
 			</div>
 		</div>

@@ -1,17 +1,11 @@
 import { IUser } from "./auth";
 
-export interface ReviewItem {
-	user: IUser;
-	content: string;
-	rating: number;
-	date: Date | string;
-	image?: string;
-}
-
 export interface IReview {
 	user: IUser;
+	title: string;
 	content: string;
 	rating: number;
+	image?: string;
 	date: any;
 	isSubmitted?: boolean;
 }

@@ -91,7 +91,7 @@
 			justify-content: space-between;
 			align-items: flex-start;
 			flex-flow: column;
-			padding-bottom: 36px;
+			padding-bottom: 24px;
 
 			@include responsive(phone) {
 				width: 100%;
@@ -100,7 +100,7 @@
 			}
 
 			&--title {
-				@include typography(heading, h3);
+				@include typography(heading, h4);
 			}
 
 			&--rating {
@@ -118,7 +118,7 @@
 
 			&--content {
 				width: 100%;
-				@include typography(body, md);
+				@include typography(body, sm);
 				overflow: hidden;
 				flex: 0 1 auto;
 			}
@@ -126,6 +126,41 @@
 			&--user {
 				font-weight: 700;
 				color: #4b4b4b;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				gap: 16px;
+
+				&__avatar {
+					width: 48px;
+					height: 48px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					border-radius: 500px;
+					overflow: hidden;
+
+					img {
+						object-fit: cover;
+						max-width: 100%;
+						height: auto;
+					}
+				}
+
+				&__details {
+					display: flex;
+					justify-content: center;
+					align-items: flex-start;
+					flex-flow: column;
+
+					&--name {
+						@include typography(body, md);
+					}
+
+					&--date {
+						@include typography(body, sm);
+					}
+				}
 			}
 		}
 
@@ -189,7 +224,7 @@
 			}
 
 			&__title {
-				@include typography(heading, h1);
+				@include typography(heading, h3);
 			}
 
 			&-user {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ReviewItem } from "@/types/Review";
+import { IReview } from "@/types/Review";
 import Image from "next/image";
 import styles from "./Reviews.module.scss";
 import { stylesConfig } from "@/utils/functions";
@@ -9,15 +9,16 @@ import { AiOutlineStar, AiTwotoneStar } from "react-icons/ai";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import remarkGfm from "remark-gfm";
 import ReviewPopup from "./ReviewPopup";
+import moment from "moment";
 
 const classes = stylesConfig(styles, "reviews-review");
 
-interface ReviewProps extends ReviewItem {
+interface ReviewProps extends IReview {
 	style?: React.CSSProperties;
 }
 
 const Review: React.FC<ReviewProps> = (props) => {
-	const { user, content, style, rating } = props;
+	const { user, content, style, rating, title } = props;
 	const [openPopup, setOpenPopup] = useState(false);
 	return (
 		<>
@@ -30,7 +31,7 @@ const Review: React.FC<ReviewProps> = (props) => {
 				onClick={() => setOpenPopup(true)}
 			>
 				<div className={classes("__body")}>
-					<h5 className={classes("__body--title")}>{user?.name}</h5>
+					<h5 className={classes("__body--title")}>{title}</h5>
 					<p className={classes("__body--content")}>
 						<ReactMarkdown
 							remarkPlugins={[remarkGfm]}
@@ -39,7 +40,6 @@ const Review: React.FC<ReviewProps> = (props) => {
 						>
 							{content}
 						</ReactMarkdown>
-						{"..."}
 					</p>
 					<div className={classes("__body--rating")}>
 						{[...Array(rating)].map((_, i) =>
@@ -49,6 +49,34 @@ const Review: React.FC<ReviewProps> = (props) => {
 								<AiOutlineStar key={i} width={32} height={32} />
 							)
 						)}
+					</div>
+					<div className={classes("__body--user")}>
+						{user?.avatar ? (
+							<div className={classes("__body--user__avatar")}>
+								<Image
+									src={user?.avatar}
+									alt={user?.name ?? ""}
+									width={60}
+									height={60}
+								/>
+							</div>
+						) : null}
+						<div className={classes("__body--user__details")}>
+							<h5
+								className={classes(
+									"__body--user__details--name"
+								)}
+							>
+								{user?.name ?? ""}
+							</h5>
+							<span
+								className={classes(
+									"__body--user__details--date"
+								)}
+							>
+								{moment(props.date).format("LL")}
+							</span>
+						</div>
 					</div>
 				</div>
 				{props.image ? (

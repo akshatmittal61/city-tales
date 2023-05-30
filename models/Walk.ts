@@ -1,3 +1,4 @@
+import { WALK } from "@/constants/enum";
 import mongoose from "mongoose";
 
 const WalkSchema = new mongoose.Schema({
@@ -17,12 +18,26 @@ const WalkSchema = new mongoose.Schema({
 		type: Date,
 		default: Date.now,
 	},
+	duration: {
+		type: Number,
+		default: 2,
+	},
 	excerpt: {
 		type: String,
 		required: true,
 	},
 	location: {
 		type: String,
+	},
+	type: {
+		type: String,
+		required: true,
+		enum: Object.values(WALK.TYPE),
+	},
+	status: {
+		type: String,
+		required: true,
+		enum: Object.values(WALK.STATUS),
 	},
 	tourBookedBy: {
 		type: [

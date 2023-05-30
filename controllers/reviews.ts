@@ -47,14 +47,15 @@ export const getUserReview = async (req: ApiRequest, res: ApiResponse) => {
 
 export const updateUserReview = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		const { rating, content } = req.body;
-		if (!rating && !content)
+		const { rating, title, content } = req.body;
+		if (!rating && !content && !title)
 			return res.status(400).json({ message: "Invalid request" });
 		const foundReview = await Review.findOne({ user: req.user.id });
 		if (!foundReview)
 			return res.status(404).json({ message: "Review not found" });
 		if (rating) foundReview.rating = rating % 6;
 		if (content) foundReview.content = content;
+		if (title) foundReview.title = title;
 		foundReview.approved = false;
 		await foundReview.save();
 		await foundReview.populate("user");
@@ -73,8 +74,8 @@ export const updateUserReview = async (req: ApiRequest, res: ApiResponse) => {
 
 export const addUserReview = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		const { rating, content, image } = req.body;
-		if (!rating || !content)
+		const { rating, content, title, image } = req.body;
+		if (!rating || !content || !title)
 			return res.status(400).json({ message: "Invalid request" });
 		const foundReview = await Review.findOne({ user: req.user.id });
 		if (foundReview) {
@@ -84,9 +85,10 @@ export const addUserReview = async (req: ApiRequest, res: ApiResponse) => {
 			user: req.user.id,
 			rating: rating % 6,
 			content,
+			title,
+			approved: false,
 		};
 		if (image) reviewBody.image = image;
-		console.log(reviewBody);
 		const newReview = new Review(reviewBody);
 		await newReview.save();
 		await newReview.populate({

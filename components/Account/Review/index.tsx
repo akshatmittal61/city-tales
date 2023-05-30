@@ -10,6 +10,9 @@ import { addReview, getUserReview } from "@/global/helpers/user";
 import { unwrapResult } from "@reduxjs/toolkit";
 import moment from "moment";
 import Avatar from "@/components/Avatar/Avatar";
+import Input from "@/library/Input";
+import { toast } from "react-toastify";
+import { uploadImage } from "@/utils/api/utils";
 
 const classes = stylesConfig(styles, "my-account-review");
 
@@ -19,6 +22,7 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 	const user = useSelector(userSelector);
 	const dispatch = useDispatch<any>();
 	const globalReview = useSelector(reviewSelector);
+	const [image, setImage] = useState<any>(null);
 	const [userReview, setUserReview] = useState<IReview>({
 		user: user ?? {
 			_id: "",
@@ -26,6 +30,7 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 			email: "",
 			role: "user",
 		},
+		title: globalReview?.title ?? "",
 		content: globalReview?.content ?? "",
 		rating: globalReview?.rating ?? 0,
 		date: globalReview?.date ?? Date.now().toString(),
@@ -59,6 +64,24 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 			else alert("An error occurred");
 		}
 	};
+
+	const uploadMedia = async (image: any) => {
+		const blob = new Blob([image], { type: "image/png" });
+		const file = new File([blob], `${user?.email}.png`, {
+			type: "image/png",
+		});
+		const data = new FormData();
+		data.append("file", file);
+		console.log(data, file, blob, image);
+		try {
+			const res = await uploadImage(data);
+			console.log(res);
+		} catch (error) {
+			console.error(error);
+			toast.error("An error occurred");
+		}
+	};
+
 	useEffect(() => {
 		if (!user) return;
 		dispatch(getUserReview(user?._id));
@@ -72,6 +95,7 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 				email: "",
 				role: "user",
 			},
+			title: globalReview?.title ?? "",
 			content: globalReview?.content ?? "",
 			rating: globalReview?.rating ?? 0,
 			date: globalReview?.date ?? Date.now().toString(),
@@ -148,6 +172,16 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 						className={classes("-container__form")}
 						onSubmit={handleSubmit}
 					>
+						<Input
+							placeholder="Please enter a title"
+							value={userReview.title}
+							onChange={(e) =>
+								setUserReview((prev) => ({
+									...prev,
+									title: e.target.value,
+								}))
+							}
+						/>
 						<textarea
 							className={classes("-container__form--textarea")}
 							placeholder="Write your review here..."
@@ -187,6 +221,25 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 									/>
 								)
 							)}
+						</div>
+						<div className={classes("-container__form--image")}>
+							<input
+								type="file"
+								id="file"
+								onChange={(e: any) => {
+									setImage(e.target.files[0]);
+									uploadMedia(e.target.files[0]);
+								}}
+							/>
+							<label
+								htmlFor="file"
+								style={{
+									cursor: "pointer",
+									marginLeft: "auto",
+								}}
+							>
+								{image ? image.name : "Upload Image"}
+							</label>
 						</div>
 						<Button type="submit">Submit Review</Button>
 					</form>
