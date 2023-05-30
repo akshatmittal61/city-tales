@@ -4,7 +4,7 @@ import styles from "@/styles/Reviews.module.scss";
 import { randomId, stylesConfig } from "@/utils/functions";
 import React from "react";
 import { fetchApprovedReviews } from "@/utils/api/review";
-import { IReview, ReviewItem } from "@/types/Review";
+import { IReview } from "@/types/Review";
 
 const classes = stylesConfig(styles, "reviews");
 
@@ -16,7 +16,7 @@ const ReviewsPage: React.FC<{ reviews: IReview[] }> = ({ reviews }) => {
 			</div>
 			<div className={classes("-body")}>
 				<Responsive.Row>
-					{reviews.map((review: ReviewItem) => (
+					{reviews.map((review: any) => (
 						<Responsive.Col
 							xlg={50}
 							lg={50}

@@ -1,6 +1,6 @@
-import { ReviewItem } from "@/types/Review";
+import { IReview } from "@/types/Review";
 
-export const sampleReviews: ReviewItem[] = [
+export const sampleReviews: IReview[] = [
 	{
 		user: {
 			_id: "1",
@@ -9,6 +9,7 @@ export const sampleReviews: ReviewItem[] = [
 			role: "user",
 		},
 		rating: 4,
+		title: "Sample title",
 		content:
 			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
 		date: new Date("2020-01-01"),
@@ -21,6 +22,7 @@ export const sampleReviews: ReviewItem[] = [
 			role: "user",
 		},
 		rating: 4,
+		title: "Sample title",
 		content:
 			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
 		date: new Date("2020-02-01"),
@@ -33,6 +35,7 @@ export const sampleReviews: ReviewItem[] = [
 			role: "user",
 		},
 		rating: 4,
+		title: "Sample title",
 		content:
 			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
 		date: new Date("2020-03-01"),
@@ -45,6 +48,7 @@ export const sampleReviews: ReviewItem[] = [
 			role: "user",
 		},
 		rating: 4,
+		title: "Sample title",
 		content:
 			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
 		date: new Date("2020-04-01"),
