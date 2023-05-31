@@ -17,4 +17,7 @@ export interface IWalk {
 	tags: ITag[];
 	reviews: IReview[];
 	blog?: Blog;
+	duration?: number;
+	type: "upcoming" | "available";
+	status: "draft" | "published" | "archived";
 }

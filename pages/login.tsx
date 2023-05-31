@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { stylesConfig } from "@/utils/functions";
 import { rumiDarwaza } from "@/assets/images";
 import Avatar from "@/components/Avatar/Avatar";
-import { favicon } from "@/assets/vectors";
+import { primaryLogo4 } from "@/assets/vectors";
 import Input from "@/library/Input";
 import Button from "@/library/Button";
 import Link from "next/link";
@@ -80,7 +80,7 @@ const SignInPage: React.FC = () => {
 				<div className={classNames("-content-head")}>
 					<h1 className={classNames("-content-head__icon")}>
 						<Avatar
-							src={favicon.src}
+							src={primaryLogo4.src}
 							alt="Avatar"
 							onClick={() => router.push("/")}
 						/>

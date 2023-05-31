@@ -1,30 +1,54 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./styles.module.scss";
 import { stylesConfig } from "@/utils/functions";
-import { useSelector } from "react-redux";
-import { userSelector } from "@/global/slices/user";
+import { useDispatch, useSelector } from "react-redux";
+import { bookedWalksSelector } from "@/global/slices/user";
 import Responsive from "@/layouts/Responsive";
 import Walk from "@/components/Home/Walks/Walk";
+import { toast } from "react-toastify";
+import { getBookedWalks } from "@/global/helpers/user";
+import { textureBg } from "@/assets/images";
 
 const classes = stylesConfig(styles, "my-account-events");
 
 const MyAccountEvents: React.FC = () => {
-	const user = useSelector(userSelector);
+	const dispatch = useDispatch<any>();
+	const bookedEvents = useSelector(bookedWalksSelector);
+
+	useEffect(() => {
+		const getEvents = async () => {
+			try {
+				await dispatch(getBookedWalks());
+			} catch (error: any) {
+				console.error(error);
+				toast.error(error.message);
+			}
+		};
+		getEvents();
+	}, [dispatch]);
+
 	return (
 		<article className={classes("")}>
 			<h1 className={classes("-header")}>My Booked Events</h1>
 			<div className={classes("-container")}>
-				{user?.bookedEvents && user?.bookedEvents?.length > 0 ? (
+				{bookedEvents && bookedEvents.length > 0 ? (
 					<Responsive.Row>
-						{user?.bookedEvents?.map((event, index) => (
+						{bookedEvents?.map((event, index) => (
 							<Responsive.Col
 								key={event._id + index}
-								xlg={33}
-								lg={50}
-								md={50}
+								xlg={100}
+								lg={100}
+								md={100}
 								sm={100}
 							>
-								<Walk {...event} />
+								<Walk
+									{...event}
+									style={{
+										width: "100%",
+										margin: "10px 0",
+										backgroundImage: `url(${textureBg.src})`,
+									}}
+								/>
 							</Responsive.Col>
 						))}
 					</Responsive.Row>

@@ -1,8 +1,7 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
 import connectDB from "@/db";
 import { ApiRequest, ApiResponse } from "@/types/api";
-import { isAdmin } from "@/middleware/roles";
-import { addWalk, getAllWalks } from "@/controllers/walks";
+import { getPublishedWalks } from "@/controllers/walks";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
@@ -11,9 +10,7 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 
 		switch (method) {
 			case "GET":
-				return isAdmin(getAllWalks)(req, res);
-			case "POST":
-				return isAdmin(addWalk)(req, res);
+				return getPublishedWalks(req, res);
 			default:
 				res.setHeader("Allow", ["GET", "POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);

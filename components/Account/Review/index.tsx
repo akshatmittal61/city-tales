@@ -13,6 +13,7 @@ import Avatar from "@/components/Avatar/Avatar";
 import Input from "@/library/Input";
 import { toast } from "react-toastify";
 import { uploadImage } from "@/utils/api/utils";
+import { http } from "@/utils/http";
 
 const classes = stylesConfig(styles, "my-account-review");
 
@@ -74,7 +75,11 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 		data.append("file", file);
 		console.log(data, file, blob, image);
 		try {
-			const res = await uploadImage(data);
+			const res = await http.post("/upload", file, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
 			console.log(res);
 		} catch (error) {
 			console.error(error);

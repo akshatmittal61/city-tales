@@ -3,8 +3,9 @@ import Image from "next/image";
 import Button from "@/library/Button";
 import { IoIosArrowForward } from "react-icons/io";
 import styles from "./Walks.module.scss";
-import { openLink, stylesConfig } from "@/utils/functions";
+import { stylesConfig } from "@/utils/functions";
 import { IWalk } from "@/types/Walk";
+import { useRouter } from "next/router";
 
 const classes = stylesConfig(styles, "home-walks-walk");
 
@@ -23,14 +24,10 @@ const Walk: React.FC<WalkProps> = ({
 	coverImage,
 	slots,
 	style,
-	button = {
-		text: "Book Now",
-		action: () => {
-			openLink("https://razorpay.com/");
-		},
-	},
-	showSlots = true,
+	type,
+	_id,
 }) => {
+	const router = useRouter();
 	return (
 		<div className={classes("")} style={style}>
 			<div className={classes("__content")}>
@@ -41,12 +38,14 @@ const Walk: React.FC<WalkProps> = ({
 						variant="outlined"
 						icon={<IoIosArrowForward />}
 						iconPosition="right"
-						onClick={button.action}
+						onClick={() => {
+							router.push(`/walks/${_id}`);
+						}}
 						size="small"
 					>
-						{button.text}
+						View Details
 					</Button>
-					{showSlots ? (
+					{type === "upcoming" ? (
 						<span className={classes("__content--actions__slots")}>
 							{slots} slots left
 						</span>

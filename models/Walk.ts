@@ -37,6 +37,7 @@ const WalkSchema = new mongoose.Schema({
 	status: {
 		type: String,
 		required: true,
+		default: WALK.STATUS.DRAFT,
 		enum: Object.values(WALK.STATUS),
 	},
 	tourBookedBy: {

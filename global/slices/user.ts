@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
 	addReview,
 	getAuthenticatedUser,
+	getBookedWalks,
 	getBookmarkedBlogs,
 	getUserReview,
 	loginUser,
@@ -15,6 +16,7 @@ const initialState: UserSlice = {
 	token: null,
 	review: null,
 	bookmarks: [],
+	bookedWalks: [],
 };
 
 export const userSlice = createSlice({
@@ -64,6 +66,9 @@ export const userSlice = createSlice({
 			}),
 			builder.addCase(getBookmarkedBlogs.fulfilled, (state, action) => {
 				state.bookmarks = action.payload;
+			}),
+			builder.addCase(getBookedWalks.fulfilled, (state, action) => {
+				state.bookedWalks = action.payload;
 			});
 	},
 });
@@ -74,3 +79,5 @@ export const userSelector = (state: { user: UserSlice }) => state.user.user;
 export const reviewSelector = (state: { user: UserSlice }) => state.user.review;
 export const bookmarksSelector = (state: { user: UserSlice }) =>
 	state.user.bookmarks;
+export const bookedWalksSelector = (state: { user: UserSlice }) =>
+	state.user.bookedWalks;

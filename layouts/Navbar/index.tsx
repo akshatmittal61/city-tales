@@ -12,7 +12,7 @@ import { IoIosArrowForward, IoIosMenu } from "react-icons/io";
 import { useOnClickOutside } from "@/hooks/mouse-events";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/global/helpers/user";
-import { favicon } from "@/assets/vectors";
+import { primaryLogo4 } from "@/assets/vectors";
 
 const classNames = stylesConfig(styles, "navbar");
 
@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
 		>
 			<div className={classNames("-left")}>
 				<Avatar
-					src={favicon}
+					src={primaryLogo4}
 					alt="City-Tales"
 					onClick={() => router.push("/")}
 				/>
