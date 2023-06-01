@@ -13,7 +13,7 @@ export interface RegisterValues {
 	confirmPassword?: string;
 }
 
-type USER_ROLES = "admin" | "user" | "guest";
+export type USER_ROLES = "admin" | "user" | "guest";
 
 export interface IUser {
 	_id: string;

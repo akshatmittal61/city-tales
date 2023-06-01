@@ -13,6 +13,7 @@ import { useOnClickOutside } from "@/hooks/mouse-events";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/global/helpers/user";
 import { primaryLogo4 } from "@/assets/vectors";
+import { USER_ROLES } from "@/constants/enum";
 
 const classNames = stylesConfig(styles, "navbar");
 
@@ -22,6 +23,8 @@ const Navbar: React.FC = () => {
 	const navMenuRef = useRef<any>(null);
 	const [expandNavMenu, setExpandNavMenu] = useState(false);
 	const dispatch = useDispatch<any>();
+	console.log(authState, authState.role === USER_ROLES.ADMIN);
+
 	const lastScrollTop = useRef<any>(0);
 	const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 	const handleScroll = () => {
@@ -91,6 +94,13 @@ const Navbar: React.FC = () => {
 							</Link>
 						</li>
 					))}
+					{authState.role === USER_ROLES.ADMIN ? (
+						<li>
+							<Link href="/admin" className={classNames("-link")}>
+								Admin panel
+							</Link>
+						</li>
+					) : null}
 				</ul>
 				{authState.loggedIn ? (
 					<div className={classNames("-avatar")}>

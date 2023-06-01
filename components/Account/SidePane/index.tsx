@@ -7,6 +7,10 @@ import {
 	TNavigationItem,
 } from "@/types/MyAccount";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
+import useAuth from "@/hooks/auth";
+import { USER_ROLES } from "@/constants/enum";
+import { useRouter } from "next/router";
+import { RiUserSettingsLine } from "react-icons/ri";
 
 const classes = stylesConfig(styles, "my-account-side-pane");
 
@@ -23,6 +27,8 @@ const MyAcocuntSidePane: React.FC<MyAcocuntSidePaneProps> = ({
 	open = false,
 	onOpen,
 }) => {
+	const router = useRouter();
+	const authState = useAuth();
 	return (
 		<aside
 			className={classes("")}
@@ -51,6 +57,19 @@ const MyAcocuntSidePane: React.FC<MyAcocuntSidePaneProps> = ({
 						</span>
 					</li>
 				))}
+				{authState.role === USER_ROLES.ADMIN ? (
+					<li
+						className={classes("-list__item")}
+						onClick={() => router.push("/admin")}
+					>
+						<span className={classes("-list__item--icon")}>
+							<RiUserSettingsLine />
+						</span>
+						<span className={classes("-list__item--label")}>
+							Admin Panel
+						</span>
+					</li>
+				) : null}
 			</ul>
 		</aside>
 	);
