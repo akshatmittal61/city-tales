@@ -1,0 +1,56 @@
+@import "@/styles/config/mixins";
+
+.admin-reviews {
+	width: 100%;
+	padding-top: var(--nav-height);
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-flow: column;
+	min-height: 100vh;
+	transition: all 0.3s ease-in-out;
+
+	&-head {
+		@include typography(heading, h1);
+
+		&__actions {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 8px;
+			margin: 8px auto;
+
+			&--btn {
+				@include init-button();
+				gap: 4px;
+				border-radius: 4px;
+				padding: 6px 12px;
+
+				&:hover {
+					background-color: rgba(0, 0, 0, 0.05);
+				}
+
+				&--tick {
+					color: var(--green);
+				}
+
+				&--cross {
+					color: var(--red);
+				}
+			}
+		}
+	}
+
+	&-approval {
+		@include init-button();
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		gap: 4px;
+
+		span {
+			width: 96px;
+		}
+	}
+}

@@ -29,3 +29,63 @@ export const postBlog = async (blog: any) => {
 		return [];
 	}
 };
+
+export const fetchAllReviews = async () => {
+	try {
+		const res = await http.get("/reviews");
+		return Promise.resolve(res.data);
+	} catch (error) {
+		console.error(error);
+		return Promise.reject(error);
+	}
+};
+
+export const toggleReviewApproval = async (id: string) => {
+	try {
+		const res = await http.patch("/reviews/approve", { id });
+		return Promise.resolve(res.data);
+	} catch (error) {
+		console.error(error);
+		return Promise.reject(error);
+	}
+};
+
+export const approveReview = async (id: string) => {
+	try {
+		const res = await http.patch("/reviews/approve", { id });
+		return Promise.resolve(res.data);
+	} catch (error) {
+		console.error(error);
+		return Promise.reject(error);
+	}
+};
+
+export const rejectReview = async (id: string) => {
+	try {
+		const res = await http.patch("/reviews/reject", { id });
+		return Promise.resolve(res.data);
+	} catch (error) {
+		console.error(error);
+		return Promise.reject(error);
+	}
+};
+
+export const approveMultipleReviews = async (ids: string[]) => {
+	try {
+		const res = await http.patch("/reviews/approve/multiple", { ids });
+		return Promise.resolve(res.data);
+	} catch (error) {
+		console.error(error);
+		return Promise.reject(error);
+	}
+};
+
+export const rejectMultipleReviews = async (ids: string[]) => {
+	try {
+		const res = await http.patch("/reviews/reject/multiple", { ids });
+		return Promise.resolve(res.data);
+	} catch (error) {
+		console.error(error);
+		return Promise.reject(error);
+	}
+};

@@ -1,8 +1,5 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import {
-	getApprovedReviews,
-	toggleReviewApproval,
-} from "@/controllers/reviews";
+import { getApprovedReviews, approveReview } from "@/controllers/reviews";
 import connectDB from "@/db";
 import { isAdmin } from "@/middleware/roles";
 import { ApiRequest, ApiResponse } from "@/types/api";
@@ -16,7 +13,7 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 			case "GET":
 				return getApprovedReviews(req, res);
 			case "PATCH":
-				return isAdmin(toggleReviewApproval)(req, res);
+				return isAdmin(approveReview)(req, res);
 			default:
 				res.setHeader("Allow", ["GET", "POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);

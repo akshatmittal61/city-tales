@@ -125,17 +125,81 @@ export const deleteReview = async (req: ApiRequest, res: ApiResponse) => {
 	}
 };
 
-export const toggleReviewApproval = async (
-	req: ApiRequest,
-	res: ApiResponse
-) => {
+export const approveReview = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const { id } = req.body;
 		const foundReview = await Review.findById(id);
 		if (!foundReview)
 			return res.status(404).json({ message: "Review not found" });
-		foundReview.approved = !foundReview.approved;
+		foundReview.approved = true;
 		await foundReview.save();
+		return res.status(200).json({ message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Review not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const rejectReview = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.body;
+		const foundReview = await Review.findById(id);
+		if (!foundReview)
+			return res.status(404).json({ message: "Review not found" });
+		foundReview.approved = false;
+		await foundReview.save();
+		return res.status(200).json({ message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Review not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const approveMultipleReviews = async (
+	req: ApiRequest,
+	res: ApiResponse
+) => {
+	try {
+		const { ids } = req.body;
+		const reviews = await Review.find({ _id: { $in: ids } });
+		if (!reviews.length)
+			return res.status(404).json({ message: "Review not found" });
+		reviews.forEach((review) => {
+			review.approved = true;
+		});
+		await Promise.all(reviews.map((review) => review.save()));
+		return res.status(200).json({ message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Review not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const rejectMultipleReviews = async (
+	req: ApiRequest,
+	res: ApiResponse
+) => {
+	try {
+		const { ids } = req.body;
+		const reviews = await Review.find({ _id: { $in: ids } });
+		if (!reviews.length)
+			return res.status(404).json({ message: "Review not found" });
+		reviews.forEach((review) => {
+			review.approved = false;
+		});
+		await Promise.all(reviews.map((review) => review.save()));
 		return res.status(200).json({ message: RESPONSE_MESSAGES.SUCCESS });
 	} catch (error: any) {
 		console.error(error);

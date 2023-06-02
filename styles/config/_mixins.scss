@@ -84,6 +84,19 @@
 	transition: all 0.3s ease-in-out;
 }
 
+@mixin hide-scrollbar {
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+
+		&-thumb {
+			background: transparent !important;
+		}
+	}
+}
+
 @mixin typography($type: body, $size: md) {
 	@if $type ==heading {
 		@if $size ==h1 {
