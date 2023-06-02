@@ -1,0 +1,59 @@
+@import "@/styles/config/mixins";
+
+.admin-users {
+	width: 100%;
+	padding-top: var(--nav-height);
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-flow: column;
+	min-height: 100vh;
+	transition: all 0.3s ease-in-out;
+
+	&-head {
+		@include typography(heading, h1);
+	}
+
+	&-container {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		flex-flow: row wrap;
+		gap: 16px;
+		padding: 24px 5%;
+	}
+
+	&-user {
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 12px;
+		padding: 16px;
+		border-radius: 12px;
+		overflow: hidden;
+		border: 2px solid rgba(75, 75, 75, 0.3);
+		position: relative;
+		margin: 12px 0;
+		background-color: rgba(172, 68, 44, 0.3);
+
+		&-name {
+			@include typography(heading, h4);
+		}
+
+		&-email,
+		&-phone,
+		&-date {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 4px;
+
+			svg {
+				width: 20px;
+				height: 20px;
+			}
+		}
+	}
+}

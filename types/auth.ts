@@ -24,4 +24,5 @@ export interface IUser {
 	bookmarks?: Blog[];
 	bookedEvents?: IWalk[];
 	role: USER_ROLES;
+	createdAt?: string | Date;
 }

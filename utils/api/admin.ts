@@ -10,6 +10,16 @@ export const fetchStats = async () => {
 	}
 };
 
+export const fetchAllUsers = async () => {
+	try {
+		const res = await http.get("/admin/users");
+		return Promise.resolve(res.data);
+	} catch (error: any) {
+		console.error(error);
+		return Promise.reject(error);
+	}
+};
+
 export const fetchAllBlogs = async () => {
 	try {
 		const res = await http.get("/blogs");
