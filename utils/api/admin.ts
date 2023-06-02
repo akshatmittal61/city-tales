@@ -99,3 +99,23 @@ export const rejectMultipleReviews = async (ids: string[]) => {
 		return Promise.reject(error);
 	}
 };
+
+export const fetchAllWalks = async () => {
+	try {
+		const res = await http.get("/walks");
+		return Promise.resolve(res.data);
+	} catch (error) {
+		console.error(error);
+		return Promise.reject(error);
+	}
+};
+
+export const postAWalk = async (walk: any) => {
+	try {
+		const response = await http.post("/walks", walk);
+		return Promise.resolve(response.data);
+	} catch (error) {
+		console.error(error);
+		return [];
+	}
+};
