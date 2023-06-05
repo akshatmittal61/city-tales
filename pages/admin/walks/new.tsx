@@ -6,11 +6,18 @@ import { useRouter } from "next/router";
 import { postAWalk } from "@/utils/api/admin";
 import Input from "@/library/Input";
 import Button from "@/library/Button";
+import "suneditor/dist/css/suneditor.min.css";
+import dynamic from "next/dynamic";
+
+const SunEditor = dynamic(() => import("suneditor-react"), {
+	ssr: false,
+});
 
 const classes = stylesConfig(styles, "admin-walk-new");
 
 const AdminNewWalkPage: React.FC = () => {
 	const router = useRouter();
+	const [showPreview, setShowPreview] = useState(false);
 	const [newWalk, setNewWalk] = useState({
 		title: "",
 		content: "",
@@ -31,14 +38,26 @@ const AdminNewWalkPage: React.FC = () => {
 		}));
 	};
 
+	const saveContent = (content: string) => {
+		setNewWalk((prev) => ({
+			...prev,
+			content,
+		}));
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
+			if (newWalk.map) {
+				const regex = /src="(.+?)"/;
+				const mapSrc = newWalk.map.match(regex);
+				if (mapSrc) {
+					newWalk.map = mapSrc[1];
+				}
+			}
 			const res = await postAWalk(newWalk);
-			router.push({
-				pathname: "/walks/[id]",
-				query: { id: res.data.id },
-			});
+			window.open(`/walks/${res.data.id}`, "_blank");
+			router.push("/admin/walks");
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error.message ?? "Something went wrong");
@@ -63,13 +82,57 @@ const AdminNewWalkPage: React.FC = () => {
 					onChange={handleChange}
 					placeholder="Date"
 				/>
-				<textarea
-					name="excerpt"
-					value={newWalk.excerpt}
-					onChange={handleChange}
-					placeholder="Excerpt"
-					className={classes("-form__content")}
+				<SunEditor
+					setOptions={{
+						width: "100%",
+						height: "auto",
+						minHeight: "100px",
+						maxHeight: "100%",
+						buttonList: [
+							["font", "fontSize", "formatBlock"],
+							[
+								"bold",
+								"underline",
+								"italic",
+								"strike",
+								"subscript",
+								"superscript",
+								"link",
+							],
+							["image", "fontColor", "align", "list"],
+							[
+								"undo",
+								"redo",
+								"removeFormat",
+								"preview",
+								"print",
+								"save",
+							],
+						],
+						callBackSave: saveContent,
+					}}
 				/>
+				{newWalk.content ? (
+					<div className={classes("-form__actions")}>
+						<Button
+							variant="outlined"
+							size="small"
+							onClick={() => setShowPreview((prev) => !prev)}
+							style={{
+								width: "fit-content",
+							}}
+						>
+							{showPreview ? "Hide Preview" : "Show Preview"}
+						</Button>
+					</div>
+				) : null}
+				{showPreview ? (
+					<div
+						className={classes("-form__preview")}
+						style={{ display: showPreview ? "block" : "none" }}
+						dangerouslySetInnerHTML={{ __html: newWalk.content }}
+					/>
+				) : null}
 				<Input
 					type="text"
 					name="location"
@@ -78,7 +141,7 @@ const AdminNewWalkPage: React.FC = () => {
 					placeholder="Location"
 				/>
 				<Input
-					type="url"
+					type="text"
 					name="map"
 					value={newWalk.map}
 					onChange={handleChange}
