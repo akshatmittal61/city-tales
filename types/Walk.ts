@@ -10,6 +10,7 @@ export interface IWalk {
 	date: Date | string;
 	excerpt: string;
 	location?: string;
+	map?: string;
 	tourBookedBy: IUser[];
 	coverImage: string;
 	slots: number;

@@ -23,7 +23,6 @@ const Navbar: React.FC = () => {
 	const navMenuRef = useRef<any>(null);
 	const [expandNavMenu, setExpandNavMenu] = useState(false);
 	const dispatch = useDispatch<any>();
-	console.log(authState, authState.role === USER_ROLES.ADMIN);
 
 	const lastScrollTop = useRef<any>(0);
 	const [isNavbarVisible, setIsNavbarVisible] = useState(true);

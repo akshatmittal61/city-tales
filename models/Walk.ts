@@ -29,6 +29,9 @@ const WalkSchema = new mongoose.Schema({
 	location: {
 		type: String,
 	},
+	map: {
+		type: String,
+	},
 	type: {
 		type: String,
 		required: true,

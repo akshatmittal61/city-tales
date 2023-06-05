@@ -5,17 +5,25 @@ import Input from "@/library/Input";
 import { toast } from "react-toastify";
 import { postBlog } from "@/utils/api/blogs";
 import { useRouter } from "next/router";
+import "suneditor/dist/css/suneditor.min.css";
+import dynamic from "next/dynamic";
+import Button from "@/library/Button";
+
+const SunEditor = dynamic(() => import("suneditor-react"), {
+	ssr: false,
+});
 
 const classes = stylesConfig(styles, "admin-blog-new");
 
 const AdminNewBlogPage: React.FC = () => {
 	const router = useRouter();
+	const [showPreview, setShowPreview] = useState(false);
 	const [newBlog, setNewBlog] = useState({
 		title: "",
 		content: "",
 		type: "story",
-		status: "draft",
-		tags: [],
+		status: "published",
+		tags: "",
 		coverImage: "",
 		excerpt: "",
 		location: "",
@@ -28,10 +36,23 @@ const AdminNewBlogPage: React.FC = () => {
 		});
 	};
 
+	const saveContent = (content: string) => {
+		setNewBlog((prev) => ({
+			...prev,
+			content,
+		}));
+	};
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			const res = await postBlog(newBlog);
+			const res = await postBlog({
+				...newBlog,
+				tags: newBlog.tags
+					.trim()
+					.split(",")
+					.map((tag: string) => tag.trim()),
+			});
 			router.push({
 				pathname: "/stories/[id]",
 				query: { id: res.data.id },
@@ -52,16 +73,105 @@ const AdminNewBlogPage: React.FC = () => {
 					onChange={handleChange}
 					placeholder="Title"
 					autoFocus
+					style={{ width: "100%" }}
 				/>
-				<textarea
-					name="content"
+				<Input
+					type="text"
+					name="excerpt"
 					onChange={handleChange}
-					placeholder="Your blog Content"
-					className={classes("-form__content")}
+					placeholder="Excerpt"
+					style={{ width: "100%" }}
+				/>
+				<SunEditor
+					setOptions={{
+						width: "100%",
+						height: "auto",
+						minHeight: "400px",
+						maxHeight: "100%",
+						buttonList: [
+							["font", "fontSize", "formatBlock"],
+							[
+								"bold",
+								"underline",
+								"italic",
+								"strike",
+								"subscript",
+								"superscript",
+								"link",
+							],
+							["image", "fontColor", "align", "list"],
+							[
+								"undo",
+								"redo",
+								"removeFormat",
+								"preview",
+								"print",
+								"save",
+							],
+						],
+						callBackSave: saveContent,
+					}}
+				/>
+				{newBlog.content ? (
+					<div className={classes("-form__actions")}>
+						<Button
+							variant="outlined"
+							size="small"
+							onClick={(e: any) => {
+								e?.preventDefault();
+								setShowPreview((prev) => !prev);
+							}}
+							style={{
+								width: "fit-content",
+							}}
+						>
+							{showPreview ? "Hide Preview" : "Show Preview"}
+						</Button>
+					</div>
+				) : null}
+				{showPreview ? (
+					<div
+						className={classes("-form__preview")}
+						style={{ display: showPreview ? "block" : "none" }}
+						dangerouslySetInnerHTML={{ __html: newBlog.content }}
+					/>
+				) : null}
+				<Input
+					type="file"
+					name="coverImage"
+					value={newBlog.coverImage}
+					onChange={handleChange}
+					placeholder="Cover Image"
+					style={{ width: "100%" }}
+				/>
+				<Input
+					type="text"
+					name="tags"
+					placeholder="Tags"
+					onChange={handleChange}
+					style={{ width: "100%" }}
 				/>
 				<div className={classes("-tags")}>
-					<Input type="text" name="tags" placeholder="Tags" />
+					{newBlog.tags
+						.trim()
+						.split(",")
+						.map((tag: string) => tag.trim())
+						.filter((tag: string) => tag !== "")
+						.map((tag: string, index: number) => (
+							<span className={classes("-tags-tag")} key={index}>
+								{tag}
+							</span>
+						))}
 				</div>
+				<Button
+					variant="filled"
+					type="submit"
+					style={{
+						width: "fit-content",
+					}}
+				>
+					Add Blog
+				</Button>
 			</form>
 		</main>
 	);

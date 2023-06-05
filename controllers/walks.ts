@@ -91,7 +91,7 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 		)
 			return res.status(400).json({ message: "Invalid request" });
 		if (!excerpt) excerpt = content.slice(0, 100);
-		const newWalk = new Walk({
+		const newWalkBody: any = {
 			title,
 			content,
 			date,
@@ -104,7 +104,9 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			type,
 			user: req.user.id,
 			status: WALK.STATUS.DRAFT,
-		});
+		};
+		if (req.body.map) newWalkBody.map = req.body.map;
+		const newWalk = new Walk(newWalkBody);
 		await newWalk.save();
 		return res.json({ data: newWalk, message: RESPONSE_MESSAGES.SUCCESS });
 	} catch (error: any) {
