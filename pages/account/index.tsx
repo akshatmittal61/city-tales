@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/Account.module.scss";
 import { stylesConfig } from "@/utils/functions";
-import { PersonalInfo, Review, SidePane } from "@/components/Account";
+import {
+	Bookmarks,
+	Events,
+	PersonalInfo,
+	Review,
+	SidePane,
+} from "@/components/Account";
 import {
 	MyAccountSidePaneNavigationItem,
 	TNavigationItem,
@@ -17,6 +23,10 @@ const MyAccountPage: React.FC = () => {
 	const [activeTab, setActiveTab] =
 		useState<TNavigationItem>("personal-info");
 	const handleTabClick = (tab: MyAccountSidePaneNavigationItem) => {
+		router.push({
+			pathname: "/account",
+			query: { tab: tab.id },
+		});
 		setActiveTab(tab.id);
 		setOpen(false);
 	};
@@ -33,6 +43,13 @@ const MyAccountPage: React.FC = () => {
 		}
 	}, [authState, router]);
 
+	useEffect(() => {
+		if (router.query.tab) {
+			setActiveTab(router.query.tab as any);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router.query.tab]);
+
 	return (
 		<main className={classes("")}>
 			<SidePane
@@ -43,6 +60,10 @@ const MyAccountPage: React.FC = () => {
 			/>
 			{activeTab === "personal-info" ? (
 				<PersonalInfo user={authState.user} />
+			) : activeTab === "my-bookmarks" ? (
+				<Bookmarks />
+			) : activeTab === "my-events" ? (
+				<Events />
 			) : activeTab === "my-review" ? (
 				<Review />
 			) : null}

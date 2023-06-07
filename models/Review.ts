@@ -6,9 +6,16 @@ const ReviewSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 		},
+		title: {
+			type: String,
+			required: true,
+		},
 		content: {
 			type: String,
 			required: true,
+		},
+		image: {
+			type: String,
 		},
 		rating: {
 			type: Number,
@@ -18,9 +25,9 @@ const ReviewSchema = new mongoose.Schema(
 			type: Date,
 			default: Date.now,
 		},
-		walk: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Walk",
+		approved: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	{

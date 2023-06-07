@@ -1,4 +1,8 @@
-export type TNavigationItem = "personal-info" | "my-review" | "my-events";
+export type TNavigationItem =
+	| "personal-info"
+	| "my-events"
+	| "my-bookmarks"
+	| "my-review";
 
 export interface MyAccountSidePaneNavigationItem {
 	id: TNavigationItem;

@@ -8,6 +8,7 @@ import wallpaper4 from "@/public/images/4.jpg";
 import wallpaper5 from "@/public/images/5.jpg";
 import wallpaper6 from "@/public/images/6.jpg";
 import wallpaper7 from "@/public/images/7.jpg";
+import comingSoon from "@/public/images/coming-soon.png";
 import { shuffle } from "lodash";
 import { getRandomElement } from "@/utils/functions";
 
@@ -47,4 +48,4 @@ export const wallpapers = wallpaperKeywords
 
 export const aboutPoster = getRandomElement(wallpapers);
 
-export { rumiDarwaza, textureBg };
+export { rumiDarwaza, textureBg, comingSoon };

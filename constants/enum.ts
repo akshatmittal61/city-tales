@@ -1,24 +1,25 @@
-const USER_ROLES = {
+export const USER_ROLES = {
 	ADMIN: "admin",
 	USER: "user",
 	GUEST: "guest",
 };
 
-const OTP_TYPES = {
+export const OTP_TYPES = {
 	REGISTER: "register",
 	RESET_PASSWORD: "reset_password",
 };
 
-const RESPONSE_MESSAGES = {
+export const RESPONSE_MESSAGES = {
 	SUCCESS: "Success",
 	FAILED: "Failed",
 	SERVER_ERROR: "Internal Server Error",
 };
 
-const BLOG: any = {
+export const BLOG: any = {
 	TYPE: {
+		SHOWCASE: "showcase",
+		EXPLORATION: "exploration",
 		STORY: "story",
-		WALK: "walk",
 	},
 	STATUS: {
 		DRAFT: "draft",
@@ -27,11 +28,21 @@ const BLOG: any = {
 	},
 };
 
-const SLOT: any = {
+export const SLOT: any = {
 	STATUS: {
 		AVAILABLE: "available",
 		BOOKED: "booked",
 	},
 };
 
-export { USER_ROLES, OTP_TYPES, RESPONSE_MESSAGES, BLOG, SLOT };
+export const WALK: any = {
+	STATUS: {
+		DRAFT: "draft",
+		PUBLISHED: "published",
+		ARCHIVED: "archived",
+	},
+	TYPE: {
+		UPCOMING: "upcoming",
+		AVAILABLE: "available",
+	},
+};

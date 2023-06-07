@@ -1,8 +1,10 @@
 import React from "react";
 import styles from "./Walks.module.scss";
-import { openLink, stylesConfig } from "@/utils/functions";
+import { stylesConfig } from "@/utils/functions";
 import Walk from "./Walk";
 import { useRouter } from "next/router";
+import Button from "@/library/Button";
+import { AiOutlineArrowRight } from "react-icons/ai";
 
 const classes = stylesConfig(styles, "home-walks");
 
@@ -14,22 +16,32 @@ const HomeWalksSection: React.FC<{
 		<section className={classes("")}>
 			<div className={classes("-header")}>
 				<h1 className={classes("-header__title")}>Walks</h1>
+				<Button
+					variant="filled"
+					icon={<AiOutlineArrowRight />}
+					iconPosition="right"
+					onClick={() => {
+						router.push("/walks");
+					}}
+				>
+					View All
+				</Button>
 			</div>
 			<div className={classes("-body")}>
-				{walks.slice(0, 2).map((walk, index: number) => (
+				{walks.map((walk, index: number) => (
 					<Walk
-						{...walk}
 						key={index}
+						style={{
+							width: "calc(50% - 20px)",
+							margin: "10px 0",
+						}}
+						{...walk}
 						button={{
-							text: index === 0 ? "Book Now" : "Raise Enquiry",
+							text: "View Details",
 							action: () => {
-								if (index === 0)
-									openLink("https://razorpay.com/");
-								else if (index === 1)
-									router.push(`/walks/${walk.id}/enquiry`);
+								router.push(`/walks/${walk._id}`);
 							},
 						}}
-						showSlots={index === 0}
 					/>
 				))}
 			</div>

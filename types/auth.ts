@@ -1,3 +1,6 @@
+import { Blog } from "./Blog";
+import { IWalk } from "./Walk";
+
 export interface LoginValues {
 	email: string;
 	password: string;
@@ -10,7 +13,7 @@ export interface RegisterValues {
 	confirmPassword?: string;
 }
 
-type USER_ROLES = "admin" | "user" | "guest";
+export type USER_ROLES = "admin" | "user" | "guest";
 
 export interface IUser {
 	_id: string;
@@ -18,5 +21,8 @@ export interface IUser {
 	email: string;
 	phone?: string;
 	avatar?: string;
+	bookmarks?: Blog[];
+	bookedEvents?: IWalk[];
 	role: USER_ROLES;
+	createdAt?: string | Date;
 }

@@ -1,79 +1,224 @@
 import React, { useState } from "react";
-import { sampleBlogs } from "@/constants/blogs";
-import { Blog } from "@/types/Blog";
+import { Blog, BlogComment } from "@/types/Blog";
 import styles from "@/styles/Blog.module.scss";
 import { stylesConfig } from "@/utils/functions";
-import { AiOutlineComment, AiOutlineLike } from "react-icons/ai";
-import { IoMdBookmark, IoMdShare } from "react-icons/io";
-import remarkGfm from "remark-gfm";
-import ReactMarkdown from "react-markdown";
+import { AiFillLike, AiOutlineComment, AiOutlineLike } from "react-icons/ai";
+import { IoMdShare } from "react-icons/io";
 import { CommentPane } from "@/components/Blog";
+import { useSelector } from "react-redux";
+import { userSelector } from "@/global/slices/user";
+import { useRouter } from "next/router";
+import useAuth from "@/hooks/auth";
+import { RiBookmarkFill, RiBookmarkLine } from "react-icons/ri";
+import { toast } from "react-toastify";
+import {
+	fetchBlogById,
+	toggleBookmark,
+	toggleLikeBlog,
+} from "@/utils/api/blogs";
 
 const classes = stylesConfig(styles, "blog");
 
-const BlogPage: React.FC<Blog> = ({
-	title,
-	content,
-	coverImage,
-	comments,
-	bookmarked,
-}) => {
+const BlogPage: React.FC<Blog> = (props) => {
+	const authState = useAuth();
+	const user = useSelector(userSelector);
+	const router = useRouter();
+
+	const [liking, setLiking] = useState(false);
+	const [bookmarking, setBookmarking] = useState(false);
 	const [showCommentPane, setShowCommentPane] = useState(false);
-	const handleBookmark = () => {
-		if (bookmarked) {
-			alert("Bookmark removed");
-		} else {
-			alert("Bookmark added");
+	const [currentStory, setCurrentStory] = useState<Blog>({
+		id: props._id,
+		_id: props._id,
+		title: props.title,
+		content: props.content,
+		excerpt: props.excerpt,
+		coverImage: props.coverImage,
+		likes: props.likes,
+		comments: props.comments,
+		bookmarks: props.bookmarks,
+		user: props.user,
+		type: props.type,
+		status: props.status,
+		tags: props.tags,
+		date: props.date,
+	});
+
+	const handleLike = () => {
+		if ((!authState.loading && !authState.loggedIn) || !user) {
+			router.push({
+				pathname: "/login",
+				query: { redirect: router.asPath },
+			});
+			return;
+		}
+		setLiking(true);
+		try {
+			toggleLikeBlog(currentStory._id)
+				.then((res) => {
+					setCurrentStory((prev) => ({
+						...prev,
+						likes: res.data.likes,
+					}));
+				})
+				.catch((err) => {
+					throw err;
+				});
+		} catch (error: any) {
+			console.error(error);
+			toast.error(error.message);
+		} finally {
+			setLiking(false);
 		}
 	};
+
+	const handleBookmark = () => {
+		if ((!authState.loading && !authState.loggedIn) || !user) {
+			router.push({
+				pathname: "/login",
+				query: { redirect: router.asPath },
+			});
+			return;
+		}
+		setBookmarking(true);
+		try {
+			toggleBookmark(currentStory._id)
+				.then((res) => {
+					setCurrentStory((prev) => ({
+						...prev,
+						bookmarks: res.data.bookmarks,
+					}));
+				})
+				.catch((err) => {
+					throw err;
+				});
+		} catch (error: any) {
+			console.error(error);
+			toast.error(error.message);
+		} finally {
+			setBookmarking(false);
+		}
+	};
+
+	const handleShare = () => {
+		if (typeof window !== "undefined") {
+			if (navigator.canShare?.() && navigator.share)
+				navigator
+					.share({
+						title: currentStory.title,
+						text: currentStory.content,
+						url: window.location.href,
+					})
+					.then(() => console.log("Successfuly shared"))
+					.catch((error) => console.log("Error sharing", error));
+			else {
+				navigator.clipboard.writeText(window.location.href);
+				toast.success("Link copied to clipboard");
+			}
+		}
+	};
+
 	return (
 		<div className={classes("")}>
 			<div
 				className={classes("-cover")}
 				style={{
 					backgroundImage: `url(${
-						coverImage ? coverImage : "/images/rumi-darwaza.png"
+						currentStory.coverImage
+							? currentStory.coverImage
+							: "/images/rumi-darwaza.png"
 					})`,
 				}}
 			></div>
 			<div className={classes("-window")}>
 				<div className={classes("-header")}>
-					<h1 className={classes("-header__title")}>{title}</h1>
+					<h1 className={classes("-header__title")}>
+						{currentStory.title}
+					</h1>
 					<div className={classes("-header__actions")}>
-						<button className={classes("-header__actions__button")}>
-							<AiOutlineLike />
-						</button>
+						{authState.loading ? null : (
+							<>
+								<button
+									className={classes(
+										"-header__actions__button"
+									)}
+									onClick={handleLike}
+								>
+									{!authState.user ? (
+										<AiOutlineLike />
+									) : liking ? (
+										<span
+											className={classes(
+												"-header__actions__button__loading"
+											)}
+										/>
+									) : currentStory.likes
+											?.map((user) => user?._id)
+											?.includes(authState.user._id) ? (
+										<AiFillLike />
+									) : (
+										<AiOutlineLike />
+									)}
+								</button>
+								<button
+									className={classes(
+										"-header__actions__button"
+									)}
+									onClick={() =>
+										setShowCommentPane(!showCommentPane)
+									}
+								>
+									<AiOutlineComment />
+								</button>
+								<button
+									className={classes(
+										"-header__actions__button"
+									)}
+									onClick={handleBookmark}
+								>
+									{!authState.user ? (
+										<RiBookmarkLine />
+									) : bookmarking ? (
+										<span
+											className={classes(
+												"-header__actions__button__loading"
+											)}
+										/>
+									) : currentStory.bookmarks
+											?.map((user) => user?._id)
+											?.includes(authState.user._id) ? (
+										<RiBookmarkFill />
+									) : (
+										<RiBookmarkLine />
+									)}
+								</button>
+							</>
+						)}
 						<button
 							className={classes("-header__actions__button")}
-							onClick={() => setShowCommentPane(!showCommentPane)}
+							onClick={handleShare}
 						>
-							<AiOutlineComment />
-						</button>
-						<button
-							className={classes("-header__actions__button")}
-							onClick={handleBookmark}
-						>
-							<IoMdBookmark />
-						</button>
-						<button className={classes("-header__actions__button")}>
 							<IoMdShare />
 						</button>
 					</div>
 				</div>
-				<div className={classes("-content")}>
-					<ReactMarkdown
-						remarkPlugins={[remarkGfm]}
-						className={classes("-content__markdown")}
-						linkTarget={"_blank"}
-					>
-						{content}
-					</ReactMarkdown>
-				</div>
+				<div
+					className={classes("-content")}
+					dangerouslySetInnerHTML={{ __html: currentStory.content }}
+				/>
 			</div>
 			{showCommentPane ? (
 				<CommentPane
-					comments={comments ?? []}
+					blogId={currentStory._id}
+					comments={currentStory.comments ?? []}
 					close={() => setShowCommentPane(false)}
+					setComments={(newComments: BlogComment[]) => {
+						console.log(newComments);
+						setCurrentStory((prev) => ({
+							...prev,
+							comments: newComments,
+						}));
+					}}
 				/>
 			) : null}
 		</div>
@@ -88,16 +233,9 @@ export const getServerSideProps = async (context: any) => {
 	const id = slug[0];
 
 	try {
-		const blog = sampleBlogs.find((blog) => blog.id === id);
+		const res = await fetchBlogById(id);
 		return {
-			props: {
-				...blog,
-				date: blog?.date?.toString(),
-				comments: blog?.comments?.map((comment) => ({
-					...comment,
-					date: comment?.date?.toString(),
-				})),
-			},
+			props: JSON.parse(JSON.stringify(res.data)),
 		};
 	} catch (error) {
 		console.log(error);

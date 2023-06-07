@@ -1,0 +1,40 @@
+@import "@/styles/config/mixins";
+
+.my-account-events {
+	width: 70%;
+	height: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-flow: column;
+	gap: 40px;
+	padding: 60px;
+	overflow-y: auto;
+
+	@include responsive(phone) {
+		width: 100%;
+		padding: 40px 20px 40px 60px;
+	}
+
+	&-header {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		@include typography(heading, h3);
+	}
+
+	&-container {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		flex-wrap: wrap;
+		gap: 48px;
+
+		&__empty {
+			@include typography(body, lg);
+			color: var(--color-brand-secondary);
+		}
+	}
+}

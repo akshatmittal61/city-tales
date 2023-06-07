@@ -12,6 +12,8 @@ import { IoIosArrowForward, IoIosMenu } from "react-icons/io";
 import { useOnClickOutside } from "@/hooks/mouse-events";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/global/helpers/user";
+import { primaryLogo4 } from "@/assets/vectors";
+import { USER_ROLES } from "@/constants/enum";
 
 const classNames = stylesConfig(styles, "navbar");
 
@@ -21,6 +23,7 @@ const Navbar: React.FC = () => {
 	const navMenuRef = useRef<any>(null);
 	const [expandNavMenu, setExpandNavMenu] = useState(false);
 	const dispatch = useDispatch<any>();
+
 	const lastScrollTop = useRef<any>(0);
 	const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 	const handleScroll = () => {
@@ -63,6 +66,11 @@ const Navbar: React.FC = () => {
 			}}
 		>
 			<div className={classNames("-left")}>
+				<Avatar
+					src={primaryLogo4}
+					alt="City-Tales"
+					onClick={() => router.push("/")}
+				/>
 				<h1
 					className={classNames("-title")}
 					onClick={() => router.push("/")}
@@ -85,6 +93,13 @@ const Navbar: React.FC = () => {
 							</Link>
 						</li>
 					))}
+					{authState.role === USER_ROLES.ADMIN ? (
+						<li>
+							<Link href="/admin" className={classNames("-link")}>
+								Admin panel
+							</Link>
+						</li>
+					) : null}
 				</ul>
 				{authState.loggedIn ? (
 					<div className={classNames("-avatar")}>
@@ -105,7 +120,18 @@ const Navbar: React.FC = () => {
 							}
 						/>
 						<span className={classNames("-avatar-details")}>
-							{authState.user?.name}
+							<span
+								onClick={() =>
+									router.push({
+										pathname: "/account",
+										query: {
+											tab: "personal-info",
+										},
+									})
+								}
+							>
+								{authState.user?.name}
+							</span>
 							<button
 								onClick={(e) => {
 									e.preventDefault();
@@ -120,7 +146,12 @@ const Navbar: React.FC = () => {
 					<Button
 						variant="outlined"
 						icon={<RiUserLine />}
-						onClick={() => router.push("/login")}
+						onClick={() =>
+							router.push({
+								pathname: "/login",
+								query: { redirect: router.pathname },
+							})
+						}
 					>
 						Login
 					</Button>

@@ -35,6 +35,24 @@ const UserSchema = new mongoose.Schema(
 			default: USER_ROLES.USER,
 			enum: Object.values(USER_ROLES),
 		},
+		bookmarks: {
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Blog",
+				},
+			],
+			default: [],
+		},
+		bookedEvents: {
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Walk",
+				},
+			],
+			default: [],
+		},
 	},
 	{
 		timestamps: true,

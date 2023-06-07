@@ -1,18 +1,19 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { getBlogById } from "@/controllers/blogs";
+import { addCommentToBlog } from "@/controllers/blogs";
 import connectDB from "@/db";
-import { NextApiRequest, NextApiResponse } from "next";
+import authMiddleware from "@/middleware/auth";
+import { ApiRequest, ApiResponse } from "@/types/api";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		await connectDB();
 		const { method } = req;
 
 		switch (method) {
-			case "GET":
-				return getBlogById(req, res);
+			case "POST":
+				return authMiddleware(addCommentToBlog)(req, res);
 			default:
-				res.setHeader("Allow", ["GET", "POST"]);
+				res.setHeader("Allow", ["POST"]);
 				res.status(405).end(`Method ${method} Not Allowed`);
 		}
 	} catch (error: any) {

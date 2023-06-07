@@ -1,10 +1,7 @@
+import { Blog } from "@/types/Blog";
 import React from "react";
 
-export interface ExplorationItem {
-	image: string;
-	title: string;
-	description: string;
-	link: string;
+export interface ExplorationItem extends Blog {
 	style?: React.CSSProperties;
 }
 

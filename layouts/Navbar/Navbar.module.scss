@@ -18,6 +18,7 @@
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
+		gap: 16px;
 	}
 
 	&-burger {
@@ -116,6 +117,11 @@
 			align-items: flex-start;
 			flex-flow: column;
 			gap: 4px;
+
+			span {
+				cursor: pointer;
+				user-select: none;
+			}
 
 			button {
 				all: unset;

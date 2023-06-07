@@ -4,6 +4,8 @@ import Footer from "./Footer";
 import Seo from "./Seo";
 import { frontendBaseUrl } from "@/constants/variables";
 import { useRouter } from "next/router";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Layout: React.FC<any> = ({ children }) => {
 	const router = useRouter();
@@ -67,6 +69,18 @@ const Layout: React.FC<any> = ({ children }) => {
 			{showNav ? <Navbar /> : null}
 			{children}
 			{showFooter ? <Footer /> : null}
+			<ToastContainer
+				position="bottom-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme="light"
+			/>
 		</>
 	);
 };

@@ -9,6 +9,7 @@
 	flex-flow: column;
 	gap: 40px;
 	padding: 60px;
+	overflow-y: auto;
 
 	@include responsive(phone) {
 		width: 100%;
@@ -83,12 +84,16 @@
 
 		&__form {
 			width: 60%;
-			height: 250px;
+			height: 350px;
 			display: flex;
 			justify-content: center;
 			align-items: flex-end;
 			flex-flow: column;
 			gap: 24px;
+
+			input {
+				width: 100%;
+			}
 
 			textarea {
 				all: unset;
@@ -115,6 +120,32 @@
 					height: 24px;
 					cursor: pointer;
 					user-select: none;
+				}
+			}
+
+			&--image {
+				width: 100%;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+
+				input {
+					display: none;
+				}
+
+				label {
+					@include init-button();
+					border-radius: 500px;
+					border: 1px solid transparent;
+					white-space: nowrap;
+					flex: 0 0 auto;
+					background-color: var(--color-brand-white);
+					color: var(--color-brand-black);
+					border-color: var(--color-brand-black);
+					padding: 8px 12px;
+					width: 100%;
+					margin: 0 auto 0 0;
+					@include typography(btn, sm);
 				}
 			}
 		}

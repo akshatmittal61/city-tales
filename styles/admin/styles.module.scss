@@ -1,0 +1,82 @@
+@import "@/styles/config/mixins";
+
+.admin {
+	width: 100%;
+	padding-top: var(--nav-height);
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-flow: column;
+	min-height: 100vh;
+	transition: all 0.3s ease-in-out;
+
+	&-head {
+		@include typography(heading, h1);
+	}
+
+	&-container {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		flex-flow: row wrap;
+		gap: 16px;
+		padding: 24px 5%;
+	}
+
+	&-block {
+		width: 45%;
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 36px;
+		border-radius: 8px;
+		border: 2px solid #1d1d1d;
+		padding: 16px 24px;
+		background-size: cover;
+		background-blend-mode: darken;
+		background-color: rgba(0, 0, 0, 0.05);
+
+		@include responsive(phone) {
+			width: 100%;
+		}
+
+		&-head {
+			@include typography(heading, h2);
+		}
+
+		&-body {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-end;
+
+			&__stats {
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				gap: 16px;
+
+				&-item {
+					display: flex;
+					justify-content: flex-end;
+					align-items: flex-start;
+					flex-flow: column;
+
+					&--head {
+						@include typography(body, lg);
+					}
+
+					&--value {
+						@include typography(body, md);
+					}
+				}
+			}
+		}
+
+		&-link {
+			@include typography(body, md);
+		}
+	}
+}

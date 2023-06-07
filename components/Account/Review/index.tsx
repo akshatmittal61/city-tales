@@ -10,25 +10,49 @@ import { addReview, getUserReview } from "@/global/helpers/user";
 import { unwrapResult } from "@reduxjs/toolkit";
 import moment from "moment";
 import Avatar from "@/components/Avatar/Avatar";
+import Input from "@/library/Input";
+import "suneditor/dist/css/suneditor.min.css";
+import dynamic from "next/dynamic";
+
+const SunEditor = dynamic(() => import("suneditor-react"), {
+	ssr: false,
+});
 
 const classes = stylesConfig(styles, "my-account-review");
 
 interface MyAccountReviewProps {}
 
 const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
-	const dispatch = useDispatch<any>();
 	const user = useSelector(userSelector);
+	const dispatch = useDispatch<any>();
 	const globalReview = useSelector(reviewSelector);
 	const [userReview, setUserReview] = useState<IReview>({
-		user: user ?? null,
+		user: user ?? {
+			_id: "",
+			name: "",
+			email: "",
+			role: "user",
+		},
+		title: globalReview?.title ?? "",
 		content: globalReview?.content ?? "",
 		rating: globalReview?.rating ?? 0,
 		date: globalReview?.date ?? Date.now().toString(),
 		isSubmitted: globalReview?.isSubmitted ?? false,
+		image: globalReview?.image ?? "",
 	});
 	const [allowEdit, setAllowEdit] = useState(
 		userReview.isSubmitted ? false : true
 	);
+
+	const saveContent = (content: string) => {
+		setUserReview((prev) => ({
+			...prev,
+			content,
+			image: content.includes("<img src=")
+				? content.match(/src="(.+?)"/)?.[1]
+				: userReview.image ?? "",
+		}));
+	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -54,6 +78,7 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 			else alert("An error occurred");
 		}
 	};
+
 	useEffect(() => {
 		if (!user) return;
 		dispatch(getUserReview(user?._id));
@@ -61,7 +86,13 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 
 	useEffect(() => {
 		setUserReview({
-			user: globalReview?.user ?? null,
+			user: globalReview?.user ?? {
+				_id: "",
+				name: "",
+				email: "",
+				role: "user",
+			},
+			title: globalReview?.title ?? "",
 			content: globalReview?.content ?? "",
 			rating: globalReview?.rating ?? 0,
 			date: globalReview?.date ?? Date.now().toString(),
@@ -106,9 +137,12 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 								</p>
 							</div>
 						</div>
-						<p className={classes("-container__review--content")}>
-							{userReview.content}
-						</p>
+						<p
+							className={classes("-container__review--content")}
+							dangerouslySetInnerHTML={{
+								__html: userReview.content,
+							}}
+						/>
 						<div className={classes("-container__review--rating")}>
 							{Array.from({ length: 5 }, (_, i) =>
 								i < userReview.rating ? (
@@ -138,16 +172,45 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 						className={classes("-container__form")}
 						onSubmit={handleSubmit}
 					>
-						<textarea
-							className={classes("-container__form--textarea")}
-							placeholder="Write your review here..."
-							value={userReview.content}
+						<Input
+							placeholder="Please enter a title"
+							value={userReview.title}
 							onChange={(e) =>
 								setUserReview((prev) => ({
 									...prev,
-									content: e.target.value,
+									title: e.target.value,
 								}))
 							}
+						/>
+						<SunEditor
+							onChange={(content: string) => saveContent(content)}
+							defaultValue={userReview.content}
+							setOptions={{
+								width: "100%",
+								height: "auto",
+								minHeight: "100px",
+								maxHeight: "100%",
+								buttonList: [
+									["font", "fontSize", "formatBlock"],
+									[
+										"bold",
+										"underline",
+										"italic",
+										"strike",
+										"subscript",
+										"superscript",
+										"link",
+									],
+									["image", "fontColor", "align", "list"],
+									[
+										"undo",
+										"redo",
+										"removeFormat",
+										"preview",
+										"print",
+									],
+								],
+							}}
 						/>
 						<div className={classes("-container__form--rating")}>
 							{Array.from({ length: 5 }, (_, i) =>

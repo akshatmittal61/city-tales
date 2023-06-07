@@ -31,7 +31,7 @@ const BlogSchema = new mongoose.Schema(
 			type: String,
 		},
 		type: {
-			type: String,
+			type: [String],
 			enum: Object.values(BLOG.TYPE),
 			default: BLOG.TYPE.STORY,
 		},
@@ -41,23 +41,32 @@ const BlogSchema = new mongoose.Schema(
 			default: BLOG.STATUS.DRAFT,
 		},
 		tags: {
-			type: [
-				{
-					type: mongoose.Schema.Types.ObjectId,
-					ref: "Tag",
-				},
-			],
+			type: [String],
 			default: [],
 		},
 		likes: {
-			type: Number,
-			default: 0,
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "User",
+				},
+			],
+			default: [],
 		},
 		comments: {
 			type: [
 				{
 					type: mongoose.Schema.Types.ObjectId,
 					ref: "Comment",
+				},
+			],
+			default: [],
+		},
+		bookmarks: {
+			type: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "User",
 				},
 			],
 			default: [],

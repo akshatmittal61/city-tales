@@ -14,15 +14,15 @@ export const navLinks: NavLink[] = [
 		isExternal: false,
 	},
 	{
-		text: "Quizzes",
-		link: "/quizzes",
-		icon: "question",
-		isExternal: false,
-	},
-	{
 		text: "Reviews",
 		link: "/reviews",
 		icon: "star",
+		isExternal: false,
+	},
+	{
+		text: "Quizzes",
+		link: "/quizzes",
+		icon: "question",
 		isExternal: false,
 	},
 	{
