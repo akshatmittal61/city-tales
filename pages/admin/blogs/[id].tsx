@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/admin/Blogs.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import Input from "@/library/Input";
 import { toast } from "react-toastify";
-import { postBlog } from "@/utils/api/blogs";
+import { fetchBlogById, patchBlog, postBlog } from "@/utils/api/blogs";
 import { useRouter } from "next/router";
 import "suneditor/dist/css/suneditor.min.css";
 import dynamic from "next/dynamic";
 import Button from "@/library/Button";
 import { BLOG } from "@/constants/enum";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -19,6 +20,7 @@ const classes = stylesConfig(styles, "admin-blog-new");
 const AdminNewBlogPage: React.FC = () => {
 	const router = useRouter();
 	const [showPreview, setShowPreview] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [newBlog, setNewBlog] = useState({
 		title: "",
 		content: "",
@@ -61,13 +63,24 @@ const AdminNewBlogPage: React.FC = () => {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			const res = await postBlog({
-				...newBlog,
-				tags: newBlog.tags
-					.trim()
-					.split(",")
-					.map((tag: string) => tag.trim()),
-			});
+			let res;
+			if (router.query.id === "new") {
+				res = await postBlog({
+					...newBlog,
+					tags: newBlog.tags
+						.trim()
+						.split(",")
+						.map((tag: string) => tag.trim()),
+				});
+			} else {
+				res = await patchBlog(router.query.id as string, {
+					...newBlog,
+					tags: newBlog.tags
+						.trim()
+						.split(",")
+						.map((tag: string) => tag.trim()),
+				});
+			}
 			router.push({
 				pathname: "/stories/[id]",
 				query: { id: res.data._id },
@@ -78,13 +91,62 @@ const AdminNewBlogPage: React.FC = () => {
 		}
 	};
 
-	return (
+	const fetchBlog = async () => {
+		try {
+			setIsLoading(true);
+			const id = router.query.id as string;
+			console.log(router);
+			const res = await fetchBlogById(id);
+			return {
+				...res.data,
+				tags: res.data.tags?.join(","),
+			};
+		} catch (error: any) {
+			console.error(error);
+			toast.error(error.message ?? "Something went wrong");
+			return null;
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		if (router.query.id === "new") {
+			setNewBlog({
+				title: "",
+				content: "",
+				type: [BLOG.TYPE.STORY],
+				status: BLOG.STATUS.PUBLISHED,
+				tags: "",
+				coverImage: "",
+				excerpt: "",
+				location: "",
+			});
+		} else
+			fetchBlog().then((res: any) => {
+				console.log(res);
+				setNewBlog((prev) => ({
+					...prev,
+					...res,
+				}));
+			});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router.query.id]);
+
+	return isLoading ? (
+		<div className={classes("-loading")}>
+			<AiOutlineLoading3Quarters className={classes("-loading-icon")} />
+		</div>
+	) : (
 		<main className={classes("")}>
-			<h1 className={classes("-head")}>Add a Blog</h1>
+			<h1 className={classes("-head")}>
+				{router.query.id === "new" ? "Add" : "Update"} Blog
+			</h1>
 			<form className={classes("-form")} onSubmit={handleSubmit}>
 				<Input
 					type="text"
 					name="title"
+					value={newBlog.title}
 					onChange={handleChange}
 					placeholder="Title"
 					autoFocus
@@ -93,12 +155,14 @@ const AdminNewBlogPage: React.FC = () => {
 				<Input
 					type="text"
 					name="excerpt"
+					value={newBlog.excerpt}
 					onChange={handleChange}
 					placeholder="Excerpt"
 					style={{ width: "100%" }}
 				/>
 				<SunEditor
 					placeholder="Content"
+					defaultValue={newBlog.content}
 					onChange={saveContent}
 					setOptions={{
 						width: "100%",
@@ -154,6 +218,7 @@ const AdminNewBlogPage: React.FC = () => {
 				) : null}
 				<SunEditor
 					placeholder="Cover Image"
+					defaultValue={`<img src="${newBlog.coverImage}" alt="Cover Image" />`}
 					onChange={(image: string) =>
 						setNewBlog((prev) => ({
 							...prev,
@@ -171,6 +236,7 @@ const AdminNewBlogPage: React.FC = () => {
 				<Input
 					type="text"
 					name="tags"
+					value={newBlog.tags}
 					placeholder="Tags"
 					onChange={handleChange}
 					style={{ width: "100%" }}
@@ -195,6 +261,9 @@ const AdminNewBlogPage: React.FC = () => {
 								type="checkbox"
 								name="type"
 								value={BLOG.TYPE.EXPLORATION}
+								checked={newBlog.type.includes(
+									BLOG.TYPE.EXPLORATION
+								)}
 								id="type-exploration"
 								onChange={(e: any) => {
 									handleTypeChange(e);
@@ -207,6 +276,9 @@ const AdminNewBlogPage: React.FC = () => {
 								type="checkbox"
 								name="type"
 								value={BLOG.TYPE.SHOWCASE}
+								checked={newBlog.type.includes(
+									BLOG.TYPE.SHOWCASE
+								)}
 								id="type-showcase"
 								onChange={(e: any) => {
 									handleTypeChange(e);
@@ -223,7 +295,7 @@ const AdminNewBlogPage: React.FC = () => {
 						width: "fit-content",
 					}}
 				>
-					Add Blog
+					{router.query.id === "new" ? "Add Blog" : "Update Blog"}
 				</Button>
 			</form>
 		</main>

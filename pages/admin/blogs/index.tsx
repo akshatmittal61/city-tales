@@ -49,7 +49,7 @@ const AdminBlogsPage: React.FC = () => {
 							md={50}
 							sm={100}
 						>
-							<Blog {...blog} />
+							<Blog isAdmin {...blog} />
 						</Responsive.Col>
 					))}
 				</Responsive.Row>
