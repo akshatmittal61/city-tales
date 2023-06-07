@@ -66,17 +66,18 @@ export const getWalkById = async (req: ApiRequest, res: ApiResponse) => {
 
 export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 	try {
+		console.log(req.body);
 		let {
 			title,
 			content,
 			date,
-			excerpt,
 			location,
 			coverImage,
 			slots,
 			price,
 			tags,
 			type,
+			razorpayLink,
 		} = req.body;
 		if (
 			!title ||
@@ -90,12 +91,10 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			!Object.values(WALK.TYPE).includes(type)
 		)
 			return res.status(400).json({ message: "Invalid request" });
-		if (!excerpt) excerpt = content.slice(0, 100);
 		const newWalkBody: any = {
 			title,
 			content,
 			date,
-			excerpt,
 			location,
 			coverImage,
 			slots,
@@ -104,6 +103,7 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			type,
 			user: req.user.id,
 			status: WALK.STATUS.DRAFT,
+			razorpayLink,
 		};
 		if (req.body.map) newWalkBody.map = req.body.map;
 		const newWalk = new Walk(newWalkBody);

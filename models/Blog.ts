@@ -41,12 +41,7 @@ const BlogSchema = new mongoose.Schema(
 			default: BLOG.STATUS.DRAFT,
 		},
 		tags: {
-			type: [
-				{
-					type: mongoose.Schema.Types.ObjectId,
-					ref: "Tag",
-				},
-			],
+			type: [String],
 			default: [],
 		},
 		likes: {

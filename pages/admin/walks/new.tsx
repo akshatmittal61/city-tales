@@ -29,6 +29,7 @@ const AdminNewWalkPage: React.FC = () => {
 		slots: "",
 		price: "",
 		type: "upcoming",
+		razorpayLink: "",
 	});
 
 	const handleChange = (e: any) => {
@@ -56,7 +57,7 @@ const AdminNewWalkPage: React.FC = () => {
 				}
 			}
 			const res = await postAWalk(newWalk);
-			window.open(`/walks/${res.data.id}`, "_blank");
+			window.open(`/walks/${res.data._id}`, "_blank");
 			router.push("/admin/walks");
 		} catch (error: any) {
 			console.error(error);
@@ -83,6 +84,7 @@ const AdminNewWalkPage: React.FC = () => {
 					placeholder="Date"
 				/>
 				<SunEditor
+					onChange={(content: string) => saveContent(content)}
 					setOptions={{
 						width: "100%",
 						height: "auto",
@@ -106,10 +108,8 @@ const AdminNewWalkPage: React.FC = () => {
 								"removeFormat",
 								"preview",
 								"print",
-								"save",
 							],
 						],
-						callBackSave: saveContent,
 					}}
 				/>
 				{newWalk.content ? (
@@ -117,7 +117,10 @@ const AdminNewWalkPage: React.FC = () => {
 						<Button
 							variant="outlined"
 							size="small"
-							onClick={() => setShowPreview((prev) => !prev)}
+							onClick={(e) => {
+								e.preventDefault();
+								setShowPreview((prev) => !prev);
+							}}
 							style={{
 								width: "fit-content",
 							}}
@@ -147,12 +150,21 @@ const AdminNewWalkPage: React.FC = () => {
 					onChange={handleChange}
 					placeholder="Embed map link"
 				/>
-				<Input
-					type="file"
-					name="coverImage"
-					value={newWalk.coverImage}
-					onChange={handleChange}
+				<SunEditor
 					placeholder="Cover Image"
+					onChange={(image: string) =>
+						setNewWalk((prev) => ({
+							...prev,
+							coverImage: image?.match(/src="(.+?)"/)?.[1] ?? "",
+						}))
+					}
+					setOptions={{
+						width: "100%",
+						height: "auto",
+						minHeight: "100px",
+						maxHeight: "100%",
+						buttonList: [["image", "preview"]],
+					}}
 				/>
 				<Input
 					type="number"
@@ -167,6 +179,13 @@ const AdminNewWalkPage: React.FC = () => {
 					value={newWalk.price}
 					onChange={handleChange}
 					placeholder="Price"
+				/>
+				<Input
+					type="url"
+					name="razorpayLink"
+					value={newWalk.razorpayLink}
+					onChange={handleChange}
+					placeholder="Razorpay Link"
 				/>
 				<select name="type" onChange={handleChange}>
 					<option value="upcoming">Upcoming Walks</option>

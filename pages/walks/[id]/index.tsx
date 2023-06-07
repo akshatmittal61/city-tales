@@ -99,7 +99,8 @@ const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
 							<Button
 								onClick={() => {
 									setBooked("pending");
-									openLink("https://rzp.io/l/2Z0Z1X1");
+									if (props.walk.razorpayLink)
+										openLink(props.walk.razorpayLink);
 								}}
 								variant="filled"
 							>
@@ -150,7 +151,10 @@ const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
 						</div>
 					</div>
 				) : null}
-				<p className={classes("-left-content")}>{content}</p>
+				<p
+					className={classes("-left-content")}
+					dangerouslySetInnerHTML={{ __html: content }}
+				/>
 				{
 					<div className={classes("-left-blocks")}>
 						{blocks.map((block) => {

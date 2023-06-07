@@ -55,7 +55,7 @@ const AdminNewBlogPage: React.FC = () => {
 			});
 			router.push({
 				pathname: "/stories/[id]",
-				query: { id: res.data.id },
+				query: { id: res.data._id },
 			});
 		} catch (error: any) {
 			console.error(error);
@@ -83,6 +83,8 @@ const AdminNewBlogPage: React.FC = () => {
 					style={{ width: "100%" }}
 				/>
 				<SunEditor
+					placeholder="Content"
+					onChange={saveContent}
 					setOptions={{
 						width: "100%",
 						height: "auto",
@@ -109,7 +111,6 @@ const AdminNewBlogPage: React.FC = () => {
 								"save",
 							],
 						],
-						callBackSave: saveContent,
 					}}
 				/>
 				{newBlog.content ? (
@@ -136,13 +137,21 @@ const AdminNewBlogPage: React.FC = () => {
 						dangerouslySetInnerHTML={{ __html: newBlog.content }}
 					/>
 				) : null}
-				<Input
-					type="file"
-					name="coverImage"
-					value={newBlog.coverImage}
-					onChange={handleChange}
+				<SunEditor
 					placeholder="Cover Image"
-					style={{ width: "100%" }}
+					onChange={(image: string) =>
+						setNewBlog((prev) => ({
+							...prev,
+							coverImage: image?.match(/src="(.+?)"/)?.[1] ?? "",
+						}))
+					}
+					setOptions={{
+						width: "100%",
+						height: "auto",
+						minHeight: "100px",
+						maxHeight: "100%",
+						buttonList: [["image", "preview"]],
+					}}
 				/>
 				<Input
 					type="text"

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Walks.module.scss";
-import { openLink, stylesConfig } from "@/utils/functions";
+import { stylesConfig } from "@/utils/functions";
 import Walk from "./Walk";
 import { useRouter } from "next/router";
 
@@ -18,18 +18,18 @@ const HomeWalksSection: React.FC<{
 			<div className={classes("-body")}>
 				{walks.slice(0, 2).map((walk, index: number) => (
 					<Walk
-						{...walk}
 						key={index}
+						style={{
+							width: "calc(50% - 20px)",
+							margin: "10px 0",
+						}}
+						{...walk}
 						button={{
-							text: index === 0 ? "Book Now" : "Raise Enquiry",
+							text: "View Details",
 							action: () => {
-								if (index === 0)
-									openLink("https://razorpay.com/");
-								else if (index === 1)
-									router.push(`/walks/${walk.id}/enquiry`);
+								router.push(`/walks/${walk._id}`);
 							},
 						}}
-						showSlots={index === 0}
 					/>
 				))}
 			</div>

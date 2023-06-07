@@ -32,7 +32,10 @@ const Walk: React.FC<WalkProps> = ({
 		<div className={classes("")} style={style}>
 			<div className={classes("__content")}>
 				<h1 className={classes("__content--title")}>{title}</h1>
-				<p className={classes("__content--description")}>{content}</p>
+				<p
+					className={classes("__content--description")}
+					dangerouslySetInnerHTML={{ __html: content }}
+				/>
 				<div className={classes("__content--actions")}>
 					<Button
 						variant="outlined"

@@ -4,8 +4,6 @@ import styles from "@/styles/Blog.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import { AiFillLike, AiOutlineComment, AiOutlineLike } from "react-icons/ai";
 import { IoMdShare } from "react-icons/io";
-import remarkGfm from "remark-gfm";
-import ReactMarkdown from "react-markdown";
 import { CommentPane } from "@/components/Blog";
 import { useSelector } from "react-redux";
 import { userSelector } from "@/global/slices/user";
@@ -204,15 +202,10 @@ const BlogPage: React.FC<Blog> = (props) => {
 						</button>
 					</div>
 				</div>
-				<div className={classes("-content")}>
-					<ReactMarkdown
-						remarkPlugins={[remarkGfm]}
-						className={classes("-content__markdown")}
-						linkTarget={"_blank"}
-					>
-						{currentStory.content}
-					</ReactMarkdown>
-				</div>
+				<div
+					className={classes("-content")}
+					dangerouslySetInnerHTML={{ __html: currentStory.content }}
+				/>
 			</div>
 			{showCommentPane ? (
 				<CommentPane

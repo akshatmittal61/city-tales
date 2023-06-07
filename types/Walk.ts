@@ -21,4 +21,5 @@ export interface IWalk {
 	duration?: number;
 	type: "upcoming" | "available";
 	status: "draft" | "published" | "archived";
+	razorpayLink?: string;
 }
