@@ -68,7 +68,9 @@ const SignInPage: React.FC = () => {
 			<section
 				className={classNames("-graphic")}
 				style={{
-					backgroundImage: `url(${rumiDarwaza.src})`,
+					// backgroundImage: `url(${rumiDarwaza.src})`,
+					backgroundImage:
+						"url(https://fastly.picsum.photos/id/866/536/354.jpg?hmac=tGofDTV7tl2rprappPzKFiZ9vDh5MKj39oa2D--gqhA)",
 				}}
 			>
 				<div className={classNames("-graphic__text")}>
@@ -80,7 +82,8 @@ const SignInPage: React.FC = () => {
 				<div className={classNames("-content-head")}>
 					<h1 className={classNames("-content-head__icon")}>
 						<Avatar
-							src={primaryLogo4.src}
+							// src={primaryLogo4.src}
+							src="https://fastly.picsum.photos/id/866/536/354.jpg?hmac=tGofDTV7tl2rprappPzKFiZ9vDh5MKj39oa2D--gqhA"
 							alt="Avatar"
 							onClick={() => router.push("/")}
 						/>
