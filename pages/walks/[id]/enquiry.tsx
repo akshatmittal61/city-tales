@@ -115,12 +115,7 @@ const BookATourPage: React.FC<{ walk: IWalk; reviews: any[] }> = ({ walk }) => {
 					<MapPin />
 					<span>{walk.location}</span>
 				</div>
-				<div className={classes("-right-excerpt")}>
-					{walk.excerpt}
-					{walk.excerpt[walk.excerpt.length - 1] !== "."
-						? "..."
-						: null}
-				</div>
+				<div className={classes("-right-excerpt")}>{walk.excerpt}</div>
 			</aside>
 		</main>
 	);
