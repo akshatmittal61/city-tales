@@ -31,7 +31,7 @@ const BlogSchema = new mongoose.Schema(
 			type: String,
 		},
 		type: {
-			type: String,
+			type: [String],
 			enum: Object.values(BLOG.TYPE),
 			default: BLOG.TYPE.STORY,
 		},

@@ -114,4 +114,29 @@
 			@include typography(body, sm);
 		}
 	}
+
+	&-type {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 8px;
+
+		&__checkboxes {
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 16px;
+			@include typography(body, md);
+
+			label {
+				display: inline-flex;
+				justify-content: flex-start;
+				align-items: center;
+				gap: 4px;
+			}
+		}
+	}
 }

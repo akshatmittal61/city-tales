@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import "suneditor/dist/css/suneditor.min.css";
 import dynamic from "next/dynamic";
 import Button from "@/library/Button";
+import { BLOG } from "@/constants/enum";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -21,8 +22,8 @@ const AdminNewBlogPage: React.FC = () => {
 	const [newBlog, setNewBlog] = useState({
 		title: "",
 		content: "",
-		type: "story",
-		status: "published",
+		type: [BLOG.TYPE.STORY],
+		status: BLOG.STATUS.PUBLISHED,
 		tags: "",
 		coverImage: "",
 		excerpt: "",
@@ -34,6 +35,20 @@ const AdminNewBlogPage: React.FC = () => {
 			...newBlog,
 			[e.target.name]: e.target.value,
 		});
+	};
+
+	const handleTypeChange = (e: any) => {
+		if (e.target.checked) {
+			setNewBlog((prev) => ({
+				...prev,
+				type: [...prev.type, e.target.value],
+			}));
+		} else {
+			setNewBlog((prev) => ({
+				...prev,
+				type: prev.type.filter((type) => type !== e.target.value),
+			}));
+		}
 	};
 
 	const saveContent = (content: string) => {
@@ -171,6 +186,35 @@ const AdminNewBlogPage: React.FC = () => {
 								{tag}
 							</span>
 						))}
+				</div>
+				<div className={classes("-type")}>
+					<label htmlFor="type">Type</label>
+					<div className={classes("-type__checkboxes")}>
+						<label htmlFor="type-exploration">
+							<input
+								type="checkbox"
+								name="type"
+								value={BLOG.TYPE.EXPLORATION}
+								id="type-exploration"
+								onChange={(e: any) => {
+									handleTypeChange(e);
+								}}
+							/>
+							Exploration
+						</label>
+						<label htmlFor="type-showcase">
+							<input
+								type="checkbox"
+								name="type"
+								value={BLOG.TYPE.SHOWCASE}
+								id="type-showcase"
+								onChange={(e: any) => {
+									handleTypeChange(e);
+								}}
+							/>
+							Showcase
+						</label>
+					</div>
 				</div>
 				<Button
 					variant="filled"

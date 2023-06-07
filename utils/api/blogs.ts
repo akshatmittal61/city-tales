@@ -99,3 +99,23 @@ export const postReplyToComment = async (id: string, reply: any) => {
 		return [];
 	}
 };
+
+export const fetchShowcaseBlogs = async () => {
+	try {
+		const response = await http.get("/blogs/showcase");
+		return Promise.resolve(response.data);
+	} catch (error) {
+		console.error(error);
+		return [];
+	}
+};
+
+export const fetchExplorationBlogs = async () => {
+	try {
+		const response = await http.get("/blogs/explorations");
+		return Promise.resolve(response.data);
+	} catch (error) {
+		console.error(error);
+		return [];
+	}
+};

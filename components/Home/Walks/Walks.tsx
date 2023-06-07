@@ -3,6 +3,8 @@ import styles from "./Walks.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import Walk from "./Walk";
 import { useRouter } from "next/router";
+import Button from "@/library/Button";
+import { AiOutlineArrowRight } from "react-icons/ai";
 
 const classes = stylesConfig(styles, "home-walks");
 
@@ -14,9 +16,19 @@ const HomeWalksSection: React.FC<{
 		<section className={classes("")}>
 			<div className={classes("-header")}>
 				<h1 className={classes("-header__title")}>Walks</h1>
+				<Button
+					variant="filled"
+					icon={<AiOutlineArrowRight />}
+					iconPosition="right"
+					onClick={() => {
+						router.push("/walks");
+					}}
+				>
+					View All
+				</Button>
 			</div>
 			<div className={classes("-body")}>
-				{walks.slice(0, 2).map((walk, index: number) => (
+				{walks.map((walk, index: number) => (
 					<Walk
 						key={index}
 						style={{

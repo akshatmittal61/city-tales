@@ -17,8 +17,9 @@ export const RESPONSE_MESSAGES = {
 
 export const BLOG: any = {
 	TYPE: {
+		SHOWCASE: "showcase",
+		EXPLORATION: "exploration",
 		STORY: "story",
-		WALK: "walk",
 	},
 	STATUS: {
 		DRAFT: "draft",

@@ -90,8 +90,14 @@ export const addBlog = async (req: ApiRequest, res: ApiResponse) => {
 		if (!excerpt)
 			excerpt =
 				content.length > 100 ? content.substring(0, 100) : content;
-		// if type is not one of the allowed types, set it to story
-		if (!Object.values(BLOG.TYPE).includes(type)) type = BLOG.TYPE.STORY;
+		// if type is not provided or not an array, set it to story, else check if all the values are valid
+		if (!type || !Array.isArray(type)) type = [BLOG.TYPE.STORY];
+		else if (
+			!type.every((type: string) =>
+				Object.values(BLOG.TYPE).includes(type)
+			)
+		)
+			type = [BLOG.TYPE.STORY];
 		// if status is not one of the allowed status, set it to draft
 		if (!Object.values(BLOG.STATUS).includes(status))
 			status = BLOG.STATUS.DRAFT;
@@ -292,6 +298,45 @@ export const getBookmarkedBlogs = async (req: ApiRequest, res: ApiResponse) => {
 		const loggedInUser = await User.findById(req.user.id);
 		const blogs = await Blog.find({
 			_id: { $in: loggedInUser.bookmarks },
+		})
+			.populate({
+				path: "user",
+				select: "name email avatar",
+			})
+			.sort({ createdAt: -1 });
+		return res
+			.status(200)
+			.json({ data: blogs, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const getShowcaseBlogs = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const blogs = await Blog.find({ type: { $in: [BLOG.TYPE.SHOWCASE] } })
+			.populate({
+				path: "user",
+				select: "name email avatar",
+			})
+			.sort({ createdAt: -1 });
+		return res
+			.status(200)
+			.json({ data: blogs, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const getExplorationBlogs = async (
+	req: ApiRequest,
+	res: ApiResponse
+) => {
+	try {
+		const blogs = await Blog.find({
+			type: { $in: [BLOG.TYPE.EXPLORATION] },
 		})
 			.populate({
 				path: "user",

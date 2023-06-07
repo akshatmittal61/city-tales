@@ -5,14 +5,14 @@ import Image from "next/image";
 import { illustration1 } from "@/assets/vectors";
 import Link from "next/link";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { Blog } from "@/types/Blog";
 
 const classes = stylesConfig(styles, "home-hero");
 
 const HomeHeroSection: React.FC<{
-	highlights: any[];
+	highlights: Blog[];
 }> = ({ highlights }) => {
 	const [currAccordianItem, setCurrAccordianItem] = useState(0);
-	const [isClient, setIsClient] = useState(false);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -26,13 +26,6 @@ const HomeHeroSection: React.FC<{
 		}, 5000);
 		return () => clearInterval(interval);
 	}, [highlights.length]);
-
-	/* useEffect(() => {
-		setTimeout(() => {
-			setIsClient(true);
-		}, 2000);
-	}, []); */
-
 	return (
 		<section className={classes("")}>
 			{/* {isClient ? ( */}
@@ -40,12 +33,12 @@ const HomeHeroSection: React.FC<{
 				<div
 					className={classes("__accordian__item")}
 					style={{
-						backgroundImage: `url(${highlights[currAccordianItem].image})`,
+						backgroundImage: `url(${highlights[currAccordianItem].coverImage})`,
 					}}
 				>
 					<Link
 						className={classes("__accordian__content")}
-						href={highlights[currAccordianItem].link}
+						href={`/stories/${highlights[currAccordianItem]._id}`}
 					>
 						<h1 className={classes("__accordian__content__title")}>
 							{highlights[currAccordianItem].title}
@@ -55,7 +48,7 @@ const HomeHeroSection: React.FC<{
 								"__accordian__content__description"
 							)}
 						>
-							{highlights[currAccordianItem].description}
+							{highlights[currAccordianItem].excerpt}
 						</p>
 					</Link>
 				</div>
