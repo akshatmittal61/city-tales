@@ -3,8 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./Reviews.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import { AiOutlineStar, AiTwotoneStar } from "react-icons/ai";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import remarkGfm from "remark-gfm";
 import { IoMdClose } from "react-icons/io";
 import { useOnClickOutside } from "@/hooks/mouse-events";
 import { textureBg } from "@/assets/images";
@@ -97,15 +95,10 @@ const ReviewPopup: React.FC<IReviewPopupProps> = ({ review, onClose }) => {
 					)}
 				</div>
 				<h2 className={classes("__title")}>{review.title}</h2>
-				<p className={classes("__content")}>
-					<ReactMarkdown
-						remarkPlugins={[remarkGfm]}
-						className={classes("-content__markdown")}
-						linkTarget={"_blank"}
-					>
-						{review.content}
-					</ReactMarkdown>
-				</p>
+				<p
+					className={classes("__content")}
+					dangerouslySetInnerHTML={{ __html: review.content }}
+				/>
 			</div>
 		</div>
 	);

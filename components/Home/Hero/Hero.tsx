@@ -12,6 +12,8 @@ const HomeHeroSection: React.FC<{
 	highlights: any[];
 }> = ({ highlights }) => {
 	const [currAccordianItem, setCurrAccordianItem] = useState(0);
+	const [isClient, setIsClient] = useState(false);
+
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCurrAccordianItem((prev) => {
@@ -25,8 +27,15 @@ const HomeHeroSection: React.FC<{
 		return () => clearInterval(interval);
 	}, [highlights.length]);
 
+	/* useEffect(() => {
+		setTimeout(() => {
+			setIsClient(true);
+		}, 2000);
+	}, []); */
+
 	return (
 		<section className={classes("")}>
+			{/* {isClient ? ( */}
 			<div className={classes("__accordian")}>
 				<div
 					className={classes("__accordian__item")}
@@ -91,6 +100,7 @@ const HomeHeroSection: React.FC<{
 					))}
 				</div>
 			</div>
+			{/* ) : null} */}
 			<Image
 				src={illustration1.src}
 				alt="Illustration"

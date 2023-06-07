@@ -6,10 +6,9 @@ import { stylesConfig } from "@/utils/functions";
 import { textureBg } from "@/assets/images";
 import { nipDark as nip } from "@/assets/vectors";
 import { AiOutlineStar, AiTwotoneStar } from "react-icons/ai";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
-import remarkGfm from "remark-gfm";
 import ReviewPopup from "./ReviewPopup";
 import moment from "moment";
+import useRender from "@/hooks/render";
 
 const classes = stylesConfig(styles, "reviews-review");
 
@@ -20,6 +19,7 @@ interface ReviewProps extends IReview {
 const Review: React.FC<ReviewProps> = (props) => {
 	const { user, content, style, rating, title } = props;
 	const [openPopup, setOpenPopup] = useState(false);
+	const render = useRender();
 	return (
 		<>
 			<div
@@ -32,15 +32,12 @@ const Review: React.FC<ReviewProps> = (props) => {
 			>
 				<div className={classes("__body")}>
 					<h5 className={classes("__body--title")}>{title}</h5>
-					<p className={classes("__body--content")}>
-						<ReactMarkdown
-							remarkPlugins={[remarkGfm]}
-							className={classes("-content__markdown")}
-							linkTarget={"_blank"}
-						>
-							{content}
-						</ReactMarkdown>
-					</p>
+					{render === "client" ? (
+						<p
+							className={classes("__body--content")}
+							dangerouslySetInnerHTML={{ __html: content }}
+						/>
+					) : null}
 					<div className={classes("__body--rating")}>
 						{[...Array(rating)].map((_, i) =>
 							i < rating ? (
