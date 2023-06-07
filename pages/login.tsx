@@ -1,9 +1,7 @@
 import styles from "@/styles/Auth.module.scss";
 import React, { useState } from "react";
 import { stylesConfig } from "@/utils/functions";
-import { rumiDarwaza } from "@/assets/images";
 import Avatar from "@/components/Avatar/Avatar";
-import { primaryLogo4 } from "@/assets/vectors";
 import Input from "@/library/Input";
 import Button from "@/library/Button";
 import Link from "next/link";
