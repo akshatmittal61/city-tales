@@ -102,7 +102,7 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			tags,
 			type,
 			user: req.user.id,
-			status: WALK.STATUS.DRAFT,
+			status: WALK.STATUS.PUBLISHED,
 			razorpayLink,
 		};
 		if (req.body.map) newWalkBody.map = req.body.map;
@@ -185,6 +185,34 @@ export const getBookedWalks = async (req: ApiRequest, res: ApiResponse) => {
 			data: user.bookedEvents,
 			message: RESPONSE_MESSAGES.SUCCESS,
 		});
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Walk not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const updateWalk = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const walk = await Walk.findById(id);
+		if (!walk) return res.status(404).json({ message: "Walk not found" });
+		if (req.body.title) walk.title = req.body.title;
+		if (req.body.content) walk.content = req.body.content;
+		if (req.body.date) walk.date = req.body.date;
+		if (req.body.location) walk.location = req.body.location;
+		if (req.body.coverImage) walk.coverImage = req.body.coverImage;
+		if (req.body.slots) walk.slots = req.body.slots;
+		if (req.body.price) walk.price = req.body.price;
+		if (req.body.tags) walk.tags = req.body.tags;
+		if (req.body.type) walk.type = req.body.type;
+		if (req.body.map) walk.map = req.body.map;
+		if (req.body.razorpayLink) walk.razorpayLink = req.body.razorpayLink;
+		await walk.save();
+		return res.json({ data: walk, message: RESPONSE_MESSAGES.SUCCESS });
 	} catch (error: any) {
 		console.error(error);
 		if (error.kind === "ObjectId")

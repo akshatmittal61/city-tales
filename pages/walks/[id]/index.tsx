@@ -10,6 +10,7 @@ import useAuth from "@/hooks/auth";
 import moment from "moment";
 import { AiOutlineMoneyCollect } from "react-icons/ai";
 import { toast } from "react-toastify";
+import useRender from "@/hooks/render";
 const classes = stylesConfig(styles, "walk");
 
 const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
@@ -18,7 +19,7 @@ const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
 	const [booked, setBooked] = useState<
 		"null" | "denied" | "pending" | "confirmed"
 	>("null");
-	console.log(props.walk);
+	const render = useRender();
 
 	if (!props.found)
 		return (
@@ -151,10 +152,12 @@ const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
 						</div>
 					</div>
 				) : null}
-				<p
-					className={classes("-left-content")}
-					dangerouslySetInnerHTML={{ __html: content }}
-				/>
+				{render === "client" ? (
+					<p
+						className={classes("-left-content")}
+						dangerouslySetInnerHTML={{ __html: content }}
+					/>
+				) : null}
 				{
 					<div className={classes("-left-blocks")}>
 						{blocks.map((block) => {

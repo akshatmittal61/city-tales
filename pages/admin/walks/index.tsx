@@ -50,6 +50,7 @@ const AdminWalksPage: React.FC = () => {
 							sm={100}
 						>
 							<Walk
+								isAdmin
 								style={{
 									width: "calc(100% - 20px)",
 									margin: "10px 0",

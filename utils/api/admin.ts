@@ -119,3 +119,13 @@ export const postAWalk = async (walk: any) => {
 		return [];
 	}
 };
+
+export const patchWalk = async (id: string, walk: any) => {
+	try {
+		const response = await http.patch(`/walks/${id}`, walk);
+		return Promise.resolve(response.data);
+	} catch (error) {
+		console.error(error);
+		return [];
+	}
+};

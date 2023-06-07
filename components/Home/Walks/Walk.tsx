@@ -6,6 +6,7 @@ import styles from "./Walks.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import { IWalk } from "@/types/Walk";
 import { useRouter } from "next/router";
+import useRender from "@/hooks/render";
 
 const classes = stylesConfig(styles, "home-walks-walk");
 
@@ -16,6 +17,7 @@ interface WalkProps extends IWalk {
 		action: any;
 	};
 	showSlots?: boolean;
+	isAdmin?: boolean;
 }
 
 const Walk: React.FC<WalkProps> = ({
@@ -26,27 +28,32 @@ const Walk: React.FC<WalkProps> = ({
 	style,
 	type,
 	_id,
+	isAdmin = false,
 }) => {
 	const router = useRouter();
+	const render = useRender();
 	return (
 		<div className={classes("")} style={style}>
 			<div className={classes("__content")}>
 				<h1 className={classes("__content--title")}>{title}</h1>
-				<p
-					className={classes("__content--description")}
-					dangerouslySetInnerHTML={{ __html: content }}
-				/>
+				{render === "client" ? (
+					<p
+						className={classes("__content--description")}
+						dangerouslySetInnerHTML={{ __html: content }}
+					/>
+				) : null}
 				<div className={classes("__content--actions")}>
 					<Button
 						variant="outlined"
 						icon={<IoIosArrowForward />}
 						iconPosition="right"
 						onClick={() => {
-							router.push(`/walks/${_id}`);
+							if (isAdmin) router.push(`/admin/walks/${_id}`);
+							else router.push(`/walks/${_id}`);
 						}}
 						size="small"
 					>
-						View Details
+						{isAdmin ? "Edit" : "View Details"}
 					</Button>
 					{type === "upcoming" ? (
 						<span className={classes("__content--actions__slots")}>

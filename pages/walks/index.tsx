@@ -14,68 +14,92 @@ const WalksPage: React.FC<{ walks: IWalk[] }> = ({ walks }) => {
 	const router = useRouter();
 	return (
 		<main className={classes("")}>
-			<div className={classes("-head")}>
-				<h1 className={classes("-head-title")}>Upcoming Walks</h1>
-			</div>
-			<div className={classes("-body")}>
-				<Responsive.Row>
-					{walks
-						.filter((walk) => walk.type === WALK.TYPE.UPCOMING)
-						.map((walk: IWalk) => (
-							<Responsive.Col
-								xlg={50}
-								lg={50}
-								md={100}
-								sm={100}
-								key={[walk.title, randomId(), Date.now()].join(
-									"-"
-								)}
-							>
-								<Walk
-									style={{
-										width: "calc(100% - 20px)",
-										margin: "10px 0",
-									}}
-									{...walk}
-								/>
-							</Responsive.Col>
-						))}
-				</Responsive.Row>
-			</div>
-			<div className={classes("-head")}>
-				<h1 className={classes("-head-title")}>Available Tours</h1>
-			</div>
-			<div className={classes("-body")}>
-				<Responsive.Row>
-					{walks
-						.filter((walk) => walk.type === WALK.TYPE.AVAILABLE)
-						.map((walk: IWalk) => (
-							<Responsive.Col
-								xlg={50}
-								lg={50}
-								md={100}
-								sm={100}
-								key={[walk.title, randomId(), Date.now()].join(
-									"-"
-								)}
-							>
-								<Walk
-									style={{
-										width: "calc(100% - 20px)",
-										margin: "10px 0",
-									}}
-									{...walk}
-									button={{
-										text: "View Details",
-										action: () => {
-											router.push(`/walks/${walk._id}`);
-										},
-									}}
-								/>
-							</Responsive.Col>
-						))}
-				</Responsive.Row>
-			</div>
+			{walks.filter((walk) => walk.type === WALK.TYPE.UPCOMING).length >
+			0 ? (
+				<>
+					<div className={classes("-head")}>
+						<h1 className={classes("-head-title")}>
+							Upcoming Walks
+						</h1>
+					</div>
+					<div className={classes("-body")}>
+						<Responsive.Row>
+							{walks
+								.filter(
+									(walk) => walk.type === WALK.TYPE.UPCOMING
+								)
+								.map((walk: IWalk) => (
+									<Responsive.Col
+										xlg={50}
+										lg={50}
+										md={100}
+										sm={100}
+										key={[
+											walk.title,
+											randomId(),
+											Date.now(),
+										].join("-")}
+									>
+										<Walk
+											style={{
+												width: "calc(100% - 20px)",
+												margin: "10px 0",
+											}}
+											{...walk}
+										/>
+									</Responsive.Col>
+								))}
+						</Responsive.Row>
+					</div>
+				</>
+			) : null}
+			{walks.filter((walk) => walk.type === WALK.TYPE.AVAILABLE).length >
+			0 ? (
+				<>
+					<div className={classes("-head")}>
+						<h1 className={classes("-head-title")}>
+							Available Tours
+						</h1>
+					</div>
+					<div className={classes("-body")}>
+						<Responsive.Row>
+							{walks
+								.filter(
+									(walk) => walk.type === WALK.TYPE.AVAILABLE
+								)
+								.map((walk: IWalk) => (
+									<Responsive.Col
+										xlg={50}
+										lg={50}
+										md={100}
+										sm={100}
+										key={[
+											walk.title,
+											randomId(),
+											Date.now(),
+										].join("-")}
+									>
+										<Walk
+											style={{
+												width: "calc(100% - 20px)",
+												margin: "10px 0",
+											}}
+											{...walk}
+											button={{
+												text: "View Details",
+												action: () => {
+													router.push(
+														`/walks/${walk._id}`
+													);
+												},
+											}}
+										/>
+									</Responsive.Col>
+								))}
+						</Responsive.Row>
+					</div>
+				</>
+			) : null}
 		</main>
 	);
 };

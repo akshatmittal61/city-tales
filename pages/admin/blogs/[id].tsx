@@ -95,7 +95,6 @@ const AdminNewBlogPage: React.FC = () => {
 		try {
 			setIsLoading(true);
 			const id = router.query.id as string;
-			console.log(router);
 			const res = await fetchBlogById(id);
 			return {
 				...res.data,
@@ -122,6 +121,7 @@ const AdminNewBlogPage: React.FC = () => {
 				excerpt: "",
 				location: "",
 			});
+			setIsLoading(false);
 		} else
 			fetchBlog().then((res: any) => {
 				console.log(res);
