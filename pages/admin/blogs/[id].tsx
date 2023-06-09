@@ -222,7 +222,11 @@ const AdminNewBlogPage: React.FC = () => {
 				) : null}
 				<SunEditor
 					placeholder="Cover Image"
-					defaultValue={`<img src="${newBlog.coverImage}" alt="Cover Image" />`}
+					defaultValue={
+						newBlog.coverImage
+							? `<img src="${newBlog.coverImage}" alt="Cover Image" />`
+							: ""
+					}
 					onChange={(image: string) =>
 						setNewBlog((prev) => ({
 							...prev,

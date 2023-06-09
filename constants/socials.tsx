@@ -9,17 +9,17 @@ const socials: {
 }[] = [
 	{
 		name: "Instagram",
-		url: "https://www.instagram.com/akshatmittal61",
+		url: "https://www.instagram.com/_citytales",
 		icon: <AiFillInstagram />,
 	},
 	{
 		name: "WhatsApp",
-		url: "https://wa.me/919456849466",
+		url: "https://wa.me/919654398815",
 		icon: <RiWhatsappFill />,
 	},
 	{
 		name: "Email",
-		url: "mailto:akshatmittal2506@gmail.com",
+		url: "mailto:rameenphoenix@gmail.com",
 		icon: <IoMdMail />,
 	},
 ];

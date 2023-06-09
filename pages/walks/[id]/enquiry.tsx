@@ -89,7 +89,7 @@ const BookATourPage: React.FC<{ walk: IWalk; reviews: any[] }> = ({ walk }) => {
 									return;
 								}
 								window.open(
-									`https://wa.me/+919456849466?text=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
+									`https://wa.me/+919654398815?text=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
 								);
 							}}
 							style={{ width: "50%" }}
@@ -109,7 +109,7 @@ const BookATourPage: React.FC<{ walk: IWalk; reviews: any[] }> = ({ walk }) => {
 									return;
 								}
 								window.open(
-									`mailto:akshatmittal2506@gmail.com?subject=Enquiry for ${walk.title}&body=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
+									`mailto:rameenphoenix@gmail.com?subject=Enquiry for ${walk.title}&body=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
 								);
 							}}
 							style={{ width: "50%" }}
