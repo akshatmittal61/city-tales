@@ -13,14 +13,17 @@ import Table from "@/library/Table";
 import { reviewsTableFields } from "@/constants/admin";
 import ReviewPopup from "@/components/Review/ReviewPopup";
 import Image from "next/image";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const classes = stylesConfig(styles, "admin-reviews");
 
 const AdminReviewsPage: React.FC = () => {
 	const [allReviews, setAllReviews] = useState<any[]>([]);
 	const [popupReview, setPopupReview] = useState<any>(null);
+	const [loading, setLoading] = useState(false);
 
 	const getAllReviews = async () => {
+		setLoading(true);
 		try {
 			const res = await fetchAllReviews();
 			console.log(res.data);
@@ -29,6 +32,8 @@ const AdminReviewsPage: React.FC = () => {
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error.message ?? "Something went wrong");
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -78,8 +83,7 @@ const AdminReviewsPage: React.FC = () => {
 	return (
 		<main className={classes("")}>
 			<h1 className={classes("-head")}>Reviews</h1>
-			{allReviews.length > 0 &&
-			allReviews.some((review: any) => review.selected) ? (
+			{allReviews.some((review: any) => review.selected) ? (
 				<div className={classes("-head__actions")}>
 					<button
 						className={classes(
@@ -114,18 +118,26 @@ const AdminReviewsPage: React.FC = () => {
 				</div>
 			) : null}
 			<div className={classes("-container")}>
-				<Table
-					selectable
-					fields={reviewsTableFields}
-					data={allReviews}
-					updateData={updateTableData}
-					rowEvents={{
-						onClick(review) {
-							console.log(review);
-							setPopupReview(review);
-						},
-					}}
-				/>
+				{loading ? (
+					<div className={classes("-loading")}>
+						<AiOutlineLoading3Quarters
+							className={classes("-loading-icon")}
+						/>
+					</div>
+				) : (
+					<Table
+						selectable
+						fields={reviewsTableFields}
+						data={allReviews}
+						updateData={updateTableData}
+						rowEvents={{
+							onClick(review) {
+								console.log(review);
+								setPopupReview(review);
+							},
+						}}
+					/>
+				)}
 			</div>
 			{popupReview ? (
 				<ReviewPopup

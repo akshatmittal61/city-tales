@@ -15,7 +15,7 @@ const classes = stylesConfig(styles, "home-exploration-block");
 const ExplorationBlock: React.FC<ExplorationItem> = ({
 	_id,
 	title,
-	content,
+	excerpt,
 	coverImage,
 	style,
 }) => {
@@ -33,13 +33,17 @@ const ExplorationBlock: React.FC<ExplorationItem> = ({
 			</div>
 			<div className={classes("__content")}>
 				<h2 className={classes("__content--header")}>
-					<Image src={icons.map} alt="Map" />
+					<Image
+						src={icons.map}
+						alt="Map"
+						onClick={() => router.push(`/stories/${_id}`)}
+					/>
 					<Link href={`/stories/${_id}`}>{title}</Link>
 				</h2>
 				{render === "client" ? (
 					<p
 						className={classes("__content--text")}
-						dangerouslySetInnerHTML={{ __html: content }}
+						dangerouslySetInnerHTML={{ __html: excerpt ?? "" }}
 					/>
 				) : null}
 				<Button

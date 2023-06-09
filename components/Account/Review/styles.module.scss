@@ -66,6 +66,16 @@
 				@include typography(heading, h4);
 			}
 
+			&--content {
+				width: 100%;
+
+				img {
+					object-fit: cover;
+					max-width: 100%;
+					height: auto;
+				}
+			}
+
 			&--rating {
 				width: 100%;
 				display: flex;
@@ -90,6 +100,7 @@
 			align-items: flex-end;
 			flex-flow: column;
 			gap: 24px;
+			margin: 24px 0;
 
 			input {
 				width: 100%;

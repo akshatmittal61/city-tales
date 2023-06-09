@@ -94,7 +94,12 @@ const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
 		<main className={classes("")}>
 			<div className={classes("-left")}>
 				<div className={classes("-left-header")}>
-					<h1 className={classes("-left-header__title")}>{title}</h1>
+					<h1
+						className={classes("-left-header__title")}
+						title={title}
+					>
+						{title}
+					</h1>
 					<div className={classes("-left-header__actions")}>
 						{type === "upcoming" ? (
 							<Button

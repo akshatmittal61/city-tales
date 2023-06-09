@@ -40,6 +40,7 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 		isSubmitted: globalReview?.isSubmitted ?? false,
 		image: globalReview?.image ?? "",
 	});
+	const [loading, setLoading] = useState(false);
 	const [allowEdit, setAllowEdit] = useState(
 		userReview.isSubmitted ? false : true
 	);
@@ -56,6 +57,7 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setLoading(true);
 		try {
 			if (!userReview.content) throw new Error("Please enter a review");
 			if (!userReview.rating)
@@ -76,6 +78,8 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 			if (typeof error === "string") alert(error.toString());
 			else if (error instanceof Error) alert(error.message);
 			else alert("An error occurred");
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -173,6 +177,7 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 						onSubmit={handleSubmit}
 					>
 						<Input
+							label="Title"
 							placeholder="Please enter a title"
 							value={userReview.title}
 							onChange={(e) =>
@@ -241,7 +246,9 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 								)
 							)}
 						</div>
-						<Button type="submit">Submit Review</Button>
+						<Button loading={loading} type="submit">
+							Submit Review
+						</Button>
 					</form>
 				)}
 			</div>

@@ -21,6 +21,7 @@ const AdminNewWalkPage: React.FC = () => {
 	const router = useRouter();
 	const [showPreview, setShowPreview] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+	const [operating, setOperating] = useState(false);
 	const [newWalk, setNewWalk] = useState({
 		title: "",
 		content: "",
@@ -68,6 +69,7 @@ const AdminNewWalkPage: React.FC = () => {
 			)
 				return toast.error("Please fill all the required fields");
 		}
+		setOperating(true);
 		try {
 			let res;
 			if (newWalk.map) {
@@ -95,6 +97,8 @@ const AdminNewWalkPage: React.FC = () => {
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error.message ?? "Something went wrong");
+		} finally {
+			setOperating(false);
 		}
 	};
 
@@ -294,7 +298,7 @@ const AdminNewWalkPage: React.FC = () => {
 					required={newWalk.type === "upcoming"}
 					label="Razorpay Link"
 				/>
-				<Button variant="filled" type="submit">
+				<Button variant="filled" type="submit" loading={operating}>
 					{router.query.id === "new"
 						? "Publish the Walk"
 						: "Update the Walk"}

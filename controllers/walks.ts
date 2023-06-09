@@ -82,11 +82,8 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 		if (
 			!title ||
 			!content ||
-			!date ||
 			!location ||
 			!coverImage ||
-			!slots ||
-			!price ||
 			!type ||
 			!Object.values(WALK.TYPE).includes(type)
 		)

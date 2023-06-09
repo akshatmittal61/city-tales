@@ -2,6 +2,7 @@ import { RESPONSE_MESSAGES } from "@/constants/enum";
 import connectDB from "@/db";
 import { ApiRequest, ApiResponse } from "@/types/api";
 import { getPublishedWalks } from "@/controllers/walks";
+import { apiConfigs } from "@/config";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
@@ -24,3 +25,5 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 };
 
 export default handler;
+
+export const config = apiConfigs;

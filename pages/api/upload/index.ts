@@ -3,6 +3,7 @@ import connectDB from "@/db";
 import { ApiRequest, ApiResponse } from "@/types/api";
 import { uploadFile } from "@/controllers/media";
 import authMiddleware from "@/middleware/auth";
+import { apiConfigs } from "@/config";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
@@ -25,3 +26,5 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 };
 
 export default handler;
+
+export const config = apiConfigs;
