@@ -32,7 +32,11 @@
 		padding: 16px;
 
 		&--title {
+			width: 100%;
 			@include typography(heading, h5);
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 
 		&--excerpt {

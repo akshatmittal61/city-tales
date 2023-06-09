@@ -1,3 +1,4 @@
+import { apiConfigs } from "@/config";
 import { RESPONSE_MESSAGES } from "@/constants/enum";
 import { getBlogById, updateBlog } from "@/controllers/blogs";
 import connectDB from "@/db";
@@ -28,10 +29,4 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 
 export default handler;
 
-export const config = {
-	api: {
-		bodyParser: {
-			sizeLimit: "100mb",
-		},
-	},
-};
+export const config = apiConfigs;

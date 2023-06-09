@@ -1,3 +1,4 @@
+import { apiConfigs } from "@/config";
 import { RESPONSE_MESSAGES } from "@/constants/enum";
 import { updateDetails } from "@/controllers/auth";
 import connectDB from "@/db";
@@ -25,3 +26,5 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 };
 
 export default handler;
+
+export const config = apiConfigs;

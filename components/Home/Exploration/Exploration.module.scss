@@ -69,6 +69,7 @@
 			justify-content: center;
 			align-items: center;
 			overflow: hidden;
+			cursor: pointer;
 
 			@include responsive(phone) {
 				width: 100%;
@@ -101,6 +102,9 @@
 				justify-content: flex-start;
 				align-items: center;
 				gap: 12px;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
 
 				img {
 					width: 32px;
@@ -137,6 +141,7 @@
 			justify-content: center;
 			align-items: center;
 			overflow: hidden;
+			cursor: pointer;
 
 			img {
 				width: 100%;

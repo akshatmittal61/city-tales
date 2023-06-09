@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { fetchStats } from "@/utils/api/admin";
 import _ from "lodash";
 import { textureBg } from "@/assets/images";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const classes = stylesConfig(styles, "admin");
 
@@ -16,15 +17,19 @@ const AdminPage: React.FC = () => {
 	const authState = useAuth();
 	const router = useRouter();
 	const [stats, setStats] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const getSTats = async () => {
+			setLoading(true);
 			try {
 				const globalStats = await fetchStats();
 				setStats(globalStats.data);
 			} catch (error: any) {
 				console.error(error);
 				toast.error(error.message ?? "Something went wrong");
+			} finally {
+				setLoading(false);
 			}
 		};
 		getSTats();
@@ -73,54 +78,62 @@ const AdminPage: React.FC = () => {
 		>
 			<h1 className={classes("-head")}>Admin Panel</h1>
 			<div className={classes("-container")}>
-				{Object.entries(stats ?? {}).map(([key, value], index) => (
-					<div
-						className={classes("-block")}
-						key={index}
-						style={{
-							backgroundImage: `url(${textureBg.src})`,
-						}}
-					>
-						<h1 className={classes("-block-head")}>
-							{_.startCase(key)}
-						</h1>
-						<div className={classes("-block-body")}>
-							<div className={classes("-block-body__stats")}>
-								{Object.entries(value ?? {}).map(
-									([key, value], index) => (
-										<div
-											className={classes(
-												"-block-body__stats-item"
-											)}
-											key={index}
-										>
-											<h3
-												className={classes(
-													"-block-body__stats-item--head"
-												)}
-											>
-												{_.startCase(key)}
-											</h3>
-											<p
-												className={classes(
-													"-block-body__stats-item--value"
-												)}
-											>
-												{value}
-											</p>
-										</div>
-									)
-								)}
-							</div>
-							<Link
-								className={classes("-block-link")}
-								href={`/admin/${key}`}
-							>
-								View All
-							</Link>
-						</div>
+				{loading ? (
+					<div className={classes("-loading")}>
+						<AiOutlineLoading3Quarters
+							className={classes("-loading-icon")}
+						/>
 					</div>
-				))}
+				) : (
+					Object.entries(stats ?? {}).map(([key, value], index) => (
+						<div
+							className={classes("-block")}
+							key={index}
+							style={{
+								backgroundImage: `url(${textureBg.src})`,
+							}}
+						>
+							<h1 className={classes("-block-head")}>
+								{_.startCase(key)}
+							</h1>
+							<div className={classes("-block-body")}>
+								<div className={classes("-block-body__stats")}>
+									{Object.entries(value ?? {}).map(
+										([key, value], index) => (
+											<div
+												className={classes(
+													"-block-body__stats-item"
+												)}
+												key={index}
+											>
+												<h3
+													className={classes(
+														"-block-body__stats-item--head"
+													)}
+												>
+													{_.startCase(key)}
+												</h3>
+												<p
+													className={classes(
+														"-block-body__stats-item--value"
+													)}
+												>
+													{value}
+												</p>
+											</div>
+										)
+									)}
+								</div>
+								<Link
+									className={classes("-block-link")}
+									href={`/admin/${key}`}
+								>
+									View All
+								</Link>
+							</div>
+						</div>
+					))
+				)}
 			</div>
 		</main>
 	);

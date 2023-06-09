@@ -38,7 +38,7 @@ const HomeExplorationSection: React.FC<{
 				variant="outlined"
 				icon={<IoIosArrowForward />}
 				iconPosition="right"
-				onClick={() => router.push("/explorations")}
+				onClick={() => router.push("/stories")}
 			>
 				See All
 			</Button>
