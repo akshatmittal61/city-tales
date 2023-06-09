@@ -8,6 +8,12 @@ import { useDispatch } from "react-redux";
 import { updateUserDetails } from "@/global/helpers/user";
 import regex from "@/constants/regex";
 import Avatar from "@/components/Avatar/Avatar";
+import "suneditor/dist/css/suneditor.min.css";
+import dynamic from "next/dynamic";
+
+const SunEditor = dynamic(() => import("suneditor-react"), {
+	ssr: false,
+});
 
 const classes = stylesConfig(styles, "my-account-personal-info");
 
@@ -102,14 +108,22 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 						errorMessage="A valid Phone number is required"
 						onChange={handleChange}
 					/>
-					<Input
-						name="avatar"
-						value={userDetails.avatar}
-						placeholder="Avatar URL"
-						style={{
+					<SunEditor
+						placeholder="Upload your avatar"
+						defaultValue={`<img src="${userDetails.avatar}" alt="avatar" />`}
+						onChange={(image: string) =>
+							setUserDetails((prev: any) => ({
+								...prev,
+								avatar: image?.match(/src="(.+?)"/)?.[1] ?? "",
+							}))
+						}
+						setOptions={{
 							width: "100%",
+							height: "auto",
+							minHeight: "100px",
+							maxHeight: "100%",
+							buttonList: [["image", "preview"]],
 						}}
-						onChange={handleChange}
 					/>
 					<Button type="submit" loading={loading}>
 						Update Details

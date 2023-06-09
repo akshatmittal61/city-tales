@@ -72,8 +72,12 @@ const SignInPage: React.FC = () => {
 				}}
 			>
 				<div className={classNames("-graphic__text")}>
-					Content for City tales comes here Atleast 3 lines. Content
-					for City tales comes here
+					Travelling
+					<br />
+					It leaves you speechless
+					<br />
+					And turns you into a storyteller
+					<br />
 				</div>
 			</section>
 			<section className={classNames("-content")}>
