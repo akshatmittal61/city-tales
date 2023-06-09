@@ -6,6 +6,7 @@ import Input from "@/library/Input";
 import Button from "@/library/Button";
 import { IWalk } from "@/types/Walk";
 import { MapPin } from "react-feather";
+import { toast } from "react-toastify";
 
 const classes = stylesConfig(styles, "enquiry");
 
@@ -78,8 +79,17 @@ const BookATourPage: React.FC<{ walk: IWalk; reviews: any[] }> = ({ walk }) => {
 						<Button
 							variant="outlined"
 							onClick={() => {
+								if (
+									!userDetails.name ||
+									!userDetails.email ||
+									!userDetails.phone ||
+									!userDetails.visitors
+								) {
+									toast.error("Please fill all the details");
+									return;
+								}
 								window.open(
-									`https://wa.me/+919456849466?text=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
+									`https://wa.me/+919654398815?text=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
 								);
 							}}
 							style={{ width: "50%" }}
@@ -89,8 +99,17 @@ const BookATourPage: React.FC<{ walk: IWalk; reviews: any[] }> = ({ walk }) => {
 						<Button
 							variant="outlined"
 							onClick={() => {
+								if (
+									!userDetails.name ||
+									!userDetails.email ||
+									!userDetails.phone ||
+									!userDetails.visitors
+								) {
+									toast.error("Please fill all the details");
+									return;
+								}
 								window.open(
-									`mailto:akshatmittal2506@gmail.com?subject=Enquiry for ${walk.title}&body=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
+									`mailto:rameenphoenix@gmail.com?subject=Enquiry for ${walk.title}&body=Hi, I am ${userDetails.name} and I am interested in ${walk.title} for a tour with ${userDetails.visitors} people. Please contact me on ${userDetails.email} or ${userDetails.phone} for further details.`
 								);
 							}}
 							style={{ width: "50%" }}

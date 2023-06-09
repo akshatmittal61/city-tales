@@ -10,6 +10,26 @@
 	transition: all 0.2s ease-in-out;
 	flex: 0 0 auto;
 
+	&__container {
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 6px;
+
+		label:has(~ input:required) {
+			&::after {
+				content: "*";
+				color: #f00;
+				margin-left: 5px;
+			}
+		}
+	}
+
+	&__label {
+		@include typography(body, md);
+	}
+
 	&--error {
 		color: var(--color-brand-error);
 		border-bottom-color: var(--color-brand-error);

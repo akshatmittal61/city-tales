@@ -9,6 +9,7 @@
 	flex-flow: column;
 	gap: 40px;
 	padding: 60px;
+	overflow-y: auto;
 
 	@include responsive(phone) {
 		width: 100%;

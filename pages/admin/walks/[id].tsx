@@ -51,6 +51,23 @@ const AdminNewWalkPage: React.FC = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		if (
+			!newWalk.title ||
+			!newWalk.content ||
+			!newWalk.map ||
+			!newWalk.coverImage ||
+			!newWalk.location
+		)
+			return toast.error("Please fill all the required fields");
+		if (newWalk.type === "upcoming") {
+			if (
+				!newWalk.date ||
+				!newWalk.location ||
+				!newWalk.razorpayLink ||
+				!newWalk.price
+			)
+				return toast.error("Please fill all the required fields");
+		}
 		try {
 			let res;
 			if (newWalk.map) {
@@ -136,11 +153,23 @@ const AdminNewWalkPage: React.FC = () => {
 			<h1 className={classes("-head")}>Add a Walk</h1>
 			<form className={classes("-form")} onSubmit={handleSubmit}>
 				<Input
+					type="hidden"
+					name="type"
+					value={newWalk.type}
+					label="Walk Type"
+				/>
+				<select name="type" onChange={handleChange}>
+					<option value="upcoming">Upcoming Walks</option>
+					<option value="available">Available Tours</option>
+				</select>
+				<Input
 					type="text"
 					name="title"
 					value={newWalk.title}
 					onChange={handleChange}
-					placeholder="Title"
+					placeholder="Walk Title"
+					required
+					label="Title"
 				/>
 				<Input
 					type="datetime-local"
@@ -148,6 +177,8 @@ const AdminNewWalkPage: React.FC = () => {
 					value={newWalk.date}
 					onChange={handleChange}
 					placeholder="Date"
+					label="Date - Time"
+					required={newWalk.type === "upcoming"}
 				/>
 				<SunEditor
 					onChange={(content: string) => saveContent(content)}
@@ -209,6 +240,8 @@ const AdminNewWalkPage: React.FC = () => {
 					value={newWalk.location}
 					onChange={handleChange}
 					placeholder="Location"
+					required
+					label="Location"
 				/>
 				<Input
 					type="text"
@@ -216,6 +249,8 @@ const AdminNewWalkPage: React.FC = () => {
 					value={newWalk.map}
 					onChange={handleChange}
 					placeholder="Embed map link"
+					required
+					label="Embed map link"
 				/>
 				<SunEditor
 					placeholder="Cover Image"
@@ -240,6 +275,7 @@ const AdminNewWalkPage: React.FC = () => {
 					value={newWalk.slots}
 					onChange={handleChange}
 					placeholder="Slots"
+					label="No. of Slots"
 				/>
 				<Input
 					type="number"
@@ -247,6 +283,7 @@ const AdminNewWalkPage: React.FC = () => {
 					value={newWalk.price}
 					onChange={handleChange}
 					placeholder="Price"
+					label="Price"
 				/>
 				<Input
 					type="url"
@@ -254,13 +291,13 @@ const AdminNewWalkPage: React.FC = () => {
 					value={newWalk.razorpayLink}
 					onChange={handleChange}
 					placeholder="Razorpay Link"
+					required={newWalk.type === "upcoming"}
+					label="Razorpay Link"
 				/>
-				<select name="type" onChange={handleChange}>
-					<option value="upcoming">Upcoming Walks</option>
-					<option value="available">Available Tours</option>
-				</select>
 				<Button variant="filled" type="submit">
-					Publish the Walk
+					{router.query.id === "new"
+						? "Publish the Walk"
+						: "Update the Walk"}
 				</Button>
 			</form>
 		</main>

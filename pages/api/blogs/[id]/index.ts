@@ -27,3 +27,11 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 };
 
 export default handler;
+
+export const config = {
+	api: {
+		bodyParser: {
+			sizeLimit: "100mb",
+		},
+	},
+};

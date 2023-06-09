@@ -21,6 +21,7 @@ const AdminNewBlogPage: React.FC = () => {
 	const router = useRouter();
 	const [showPreview, setShowPreview] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+	const [operating, setOperating] = useState(false);
 	const [newBlog, setNewBlog] = useState({
 		title: "",
 		content: "",
@@ -62,6 +63,7 @@ const AdminNewBlogPage: React.FC = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		setOperating(true);
 		try {
 			let res;
 			if (router.query.id === "new") {
@@ -88,6 +90,8 @@ const AdminNewBlogPage: React.FC = () => {
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error.message ?? "Something went wrong");
+		} finally {
+			setOperating(false);
 		}
 	};
 
@@ -218,7 +222,11 @@ const AdminNewBlogPage: React.FC = () => {
 				) : null}
 				<SunEditor
 					placeholder="Cover Image"
-					defaultValue={`<img src="${newBlog.coverImage}" alt="Cover Image" />`}
+					defaultValue={
+						newBlog.coverImage
+							? `<img src="${newBlog.coverImage}" alt="Cover Image" />`
+							: ""
+					}
 					onChange={(image: string) =>
 						setNewBlog((prev) => ({
 							...prev,
@@ -294,6 +302,7 @@ const AdminNewBlogPage: React.FC = () => {
 					style={{
 						width: "fit-content",
 					}}
+					loading={operating}
 				>
 					{router.query.id === "new" ? "Add Blog" : "Update Blog"}
 				</Button>
