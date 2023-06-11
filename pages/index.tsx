@@ -12,6 +12,9 @@ import { WALK } from "@/constants/enum";
 import { Blog } from "@/types/Blog";
 import { IReview } from "@/types/Review";
 import { IWalk } from "@/types/Walk";
+import Placeholder from "@/components/Placeholder";
+import { openLink } from "@/utils/functions";
+import socials from "@/constants/socials";
 
 const HomePage: React.FC<{
 	highlights: Blog[];
@@ -19,8 +22,22 @@ const HomePage: React.FC<{
 	walks: IWalk[];
 	reviews: IReview[];
 }> = ({ highlights, reviews, walks, explorations }) => {
-	console.log(highlights, explorations, walks, reviews);
-	return (
+	return highlights.length === 0 &&
+		explorations.length === 0 &&
+		walks.length === 0 &&
+		reviews.length === 0 ? (
+		<Placeholder
+			title="Site Under Maintenance"
+			button={{
+				text: "Explore our Heritage",
+				onClick: () =>
+					openLink(
+						socials.find((s) => s.name === "Instagram")
+							?.url as string
+					),
+			}}
+		/>
+	) : (
 		<main className="home">
 			{highlights.length > 0 ? (
 				<HeroSection highlights={highlights} />
