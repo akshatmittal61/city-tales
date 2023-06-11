@@ -1,7 +1,7 @@
 import React from "react";
 import Placeholder from "@/components/Placeholder";
-import { openLink } from "@/utils/functions";
 import socials from "@/constants/socials";
+import { openLink } from "@/utils/functions";
 
 const HomePage: React.FC = () => {
 	return (
