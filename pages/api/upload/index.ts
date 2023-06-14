@@ -1,9 +1,9 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
 import connectDB from "@/db";
 import { ApiRequest, ApiResponse } from "@/types/api";
-import { uploadFile } from "@/controllers/media";
 import authMiddleware from "@/middleware/auth";
 import { apiConfigs } from "@/config";
+import { uploadImage } from "@/controllers/media";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
@@ -12,7 +12,7 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 
 		switch (method) {
 			case "POST":
-				return authMiddleware(uploadFile)(req, res);
+				return authMiddleware(uploadImage)(req, res);
 			default:
 				res.setHeader("Allow", ["POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);

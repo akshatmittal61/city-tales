@@ -99,7 +99,9 @@ export const getAuthenicatedUser = async (
 export const updateDetails = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const { name, phone, avatar } = req.body;
-		const user = await User.findById(req.user.id).select("-password");
+		const user: IUser = await User.findById(req.user.id).select(
+			"-password"
+		);
 		if (!user) return res.status(404).json({ message: "User not found" });
 		if (!name && !phone && !avatar)
 			return res.status(400).json({ message: "Invalid request" });

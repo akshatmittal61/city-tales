@@ -1,27 +1,27 @@
-import { ApiResponse } from "@/types/api";
-import fs from "fs";
+import { RESPONSE_MESSAGES } from "@/constants/enum";
+import { uploadImageToS3 } from "@/services/files";
+import { ApiRequest, ApiResponse } from "@/types/api";
+import { v4 as uuidv4 } from "uuid";
 
-export const uploadFile = async (req: any, res: ApiResponse) => {
+export const uploadImage = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		// console.log(JSON.stringify(req.body));
-		// console.log("%j", req.body);
-		const formDataObject = Object.fromEntries(
-			new URLSearchParams(req.body)
-		);
-		console.log(formDataObject);
-		// write the file in local data folder using fs
-		// const { file } = req.files;
-		const file = req.body;
-		fs.writeFileSync(`${process.cwd()}/data/${file.name}`, file, {
-			flag: "a+",
-			encoding: "binary",
-		});
-		/* const { name } = file;
-		await file.mv(`${process.cwd()}/data/${name}`);
-		const newPath = `${process.cwd()}/data/${name}`; */
-		return res.status(200).json({ message: "File uploaded" });
+		const imageDataUrl = req.body.url;
+		const category = req.body.category;
+		if (!imageDataUrl || !category)
+			return res
+				.status(400)
+				.json({ message: "Image data or category is missing" });
+		const base64Data = imageDataUrl.split(";base64,").pop();
+		const imageBuffer = Buffer.from(base64Data, "base64");
+		const fileName = `${category}/${Date.now()}-${uuidv4()}.png`;
+		const imageUrl = await uploadImageToS3(imageBuffer, fileName);
+		return res
+			.status(200)
+			.json({ message: RESPONSE_MESSAGES.SUCCESS, data: imageUrl });
 	} catch (error: any) {
 		console.error(error);
-		return res.status(500).json({ message: "Server error" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
 	}
 };

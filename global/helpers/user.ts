@@ -56,6 +56,7 @@ export const updateUserDetails = createAsyncThunk(
 		user: {
 			name?: string;
 			phone?: string;
+			avatar?: string;
 		},
 		{ rejectWithValue }
 	) => {
