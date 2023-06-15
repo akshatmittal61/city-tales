@@ -8,15 +8,9 @@ import { useDispatch } from "react-redux";
 import { updateUserDetails } from "@/global/helpers/user";
 import regex from "@/constants/regex";
 import Avatar from "@/components/Avatar/Avatar";
-import "suneditor/dist/css/suneditor.min.css";
-import dynamic from "next/dynamic";
 import { uploadImage } from "@/utils/api/utils";
 import { toast } from "react-toastify";
 import { unwrapResult } from "@reduxjs/toolkit";
-
-const SunEditor = dynamic(() => import("suneditor-react"), {
-	ssr: false,
-});
 
 const classes = stylesConfig(styles, "my-account-personal-info");
 

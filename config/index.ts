@@ -11,6 +11,9 @@ export const awsSecretAccessKey = process.env
 
 export const apiConfigs = {
 	api: {
+		bodyParser: {
+			sizeLimit: "100mb",
+		},
 		responseLimit: false,
 	},
 };
