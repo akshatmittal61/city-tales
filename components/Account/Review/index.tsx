@@ -13,6 +13,7 @@ import Avatar from "@/components/Avatar/Avatar";
 import Input from "@/library/Input";
 import "suneditor/dist/css/suneditor.min.css";
 import dynamic from "next/dynamic";
+import { uploadImage } from "@/utils/api/utils";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -45,13 +46,53 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 		userReview.isSubmitted ? false : true
 	);
 
-	const saveContent = (content: string) => {
+	const handleImageUpload = async (file: any) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		setLoading(true);
+		const imageDataURL = await new Promise((resolve, reject) => {
+			reader.onloadend = () => {
+				resolve(reader.result);
+			};
+			reader.onerror = reject;
+		});
+		const res = await uploadImage(imageDataURL, "reviews");
+		setLoading(false);
+		return res?.data;
+	};
+
+	const replaceAllBlobImages = async (content: string) => {
+		const regex = /<img src="(.+?)"/g;
+		const images = content.match(regex);
+		if (images) {
+			let newContent = content;
+			for (const image of images) {
+				const initialImageUrl = image.match(/<img src="(.+?)"/)?.[1];
+				let imgUrlAfterUpload = initialImageUrl;
+				if (
+					(initialImageUrl && initialImageUrl.startsWith("blob")) ||
+					(initialImageUrl && initialImageUrl.startsWith("data:"))
+				) {
+					const imgFile = await fetch(initialImageUrl).then((res) =>
+						res.blob()
+					);
+					imgUrlAfterUpload = await handleImageUpload(imgFile);
+				}
+				newContent = newContent.replace(
+					image,
+					`<img src="${imgUrlAfterUpload}"`
+				);
+			}
+			return newContent;
+		}
+		return content;
+	};
+
+	const saveContent = async (content: string) => {
+		const newContent = await replaceAllBlobImages(content);
 		setUserReview((prev) => ({
 			...prev,
-			content,
-			image: content.includes("<img src=")
-				? content.match(/src="(.+?)"/)?.[1]
-				: userReview.image ?? "",
+			content: newContent,
 		}));
 	};
 

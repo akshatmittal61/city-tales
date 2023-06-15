@@ -66,7 +66,6 @@ export const getWalkById = async (req: ApiRequest, res: ApiResponse) => {
 
 export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		console.log(req.body);
 		let {
 			title,
 			content,

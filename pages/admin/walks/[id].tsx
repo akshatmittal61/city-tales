@@ -10,6 +10,7 @@ import "suneditor/dist/css/suneditor.min.css";
 import dynamic from "next/dynamic";
 import { fetchWalkById } from "@/utils/api/walks";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { uploadImage } from "@/utils/api/utils";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -43,10 +44,53 @@ const AdminNewWalkPage: React.FC = () => {
 		}));
 	};
 
-	const saveContent = (content: string) => {
+	const handleImageUpload = async (file: any) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		setOperating(true);
+		const imageDataURL = await new Promise((resolve, reject) => {
+			reader.onloadend = () => {
+				resolve(reader.result);
+			};
+			reader.onerror = reject;
+		});
+		const res = await uploadImage(imageDataURL, "walks");
+		setOperating(false);
+		return res?.data;
+	};
+
+	const replaceAllBlobImages = async (content: string) => {
+		const regex = /<img src="(.+?)"/g;
+		const images = content.match(regex);
+		if (images) {
+			let newContent = content;
+			for (const image of images) {
+				const initialImageUrl = image.match(/<img src="(.+?)"/)?.[1];
+				let imgUrlAfterUpload = initialImageUrl;
+				if (
+					(initialImageUrl && initialImageUrl.startsWith("blob")) ||
+					(initialImageUrl && initialImageUrl.startsWith("data:"))
+				) {
+					const imgFile = await fetch(initialImageUrl).then((res) =>
+						res.blob()
+					);
+					imgUrlAfterUpload = await handleImageUpload(imgFile);
+				}
+				newContent = newContent.replace(
+					image,
+					`<img src="${imgUrlAfterUpload}"`
+				);
+			}
+			return newContent;
+		}
+		return content;
+	};
+
+	const saveContent = async (content: string) => {
+		const newContent = await replaceAllBlobImages(content);
 		setNewWalk((prev) => ({
 			...prev,
-			content,
+			content: newContent,
 		}));
 	};
 
@@ -139,7 +183,6 @@ const AdminNewWalkPage: React.FC = () => {
 			setIsLoading(false);
 		} else
 			fetchWalk().then((res: any) => {
-				console.log(res);
 				setNewWalk((prev) => ({
 					...prev,
 					...res,
@@ -256,22 +299,20 @@ const AdminNewWalkPage: React.FC = () => {
 					required
 					label="Embed map link"
 				/>
-				<SunEditor
-					placeholder="Cover Image"
-					defaultValue={newWalk.coverImage}
-					onChange={(image: string) =>
+				<Input
+					type="file"
+					name="coverImage"
+					onChange={async (e) => {
+						const file = e.target.files?.[0];
+						setOperating(true);
+						const imgUrl = await handleImageUpload(file);
 						setNewWalk((prev) => ({
 							...prev,
-							coverImage: image?.match(/src="(.+?)"/)?.[1] ?? "",
-						}))
-					}
-					setOptions={{
-						width: "100%",
-						height: "auto",
-						minHeight: "100px",
-						maxHeight: "100%",
-						buttonList: [["image", "preview"]],
+							coverImage: imgUrl,
+						}));
+						setOperating(false);
 					}}
+					label="Cover Image"
 				/>
 				<Input
 					type="number"

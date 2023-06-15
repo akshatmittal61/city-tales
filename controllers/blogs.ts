@@ -210,7 +210,6 @@ export const toggleBlogLike = async (req: ApiRequest, res: ApiResponse) => {
 
 export const addCommentToBlog = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		console.log(req.body);
 		const { id } = req.query;
 		const { content } = req.body;
 		if (!content)
@@ -264,7 +263,6 @@ export const addReplyToComment = async (req: ApiRequest, res: ApiResponse) => {
 			path: "user",
 			select: "name email avatar",
 		});
-		console.log(newComment);
 		return res
 			.status(201)
 			.json({ data: newComment, message: RESPONSE_MESSAGES.SUCCESS });

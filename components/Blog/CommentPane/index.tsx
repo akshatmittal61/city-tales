@@ -36,7 +36,6 @@ const BlogCommentPane: React.FC<BlogCommentPaneProps> = ({
 			const newComment = await postComment(blogId, {
 				content: myComment,
 			});
-			console.log(newComment);
 			setComments([...comments, newComment.data]);
 		} catch (error: any) {
 			console.error(error);

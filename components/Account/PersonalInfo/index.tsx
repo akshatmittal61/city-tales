@@ -8,12 +8,9 @@ import { useDispatch } from "react-redux";
 import { updateUserDetails } from "@/global/helpers/user";
 import regex from "@/constants/regex";
 import Avatar from "@/components/Avatar/Avatar";
-import "suneditor/dist/css/suneditor.min.css";
-import dynamic from "next/dynamic";
-
-const SunEditor = dynamic(() => import("suneditor-react"), {
-	ssr: false,
-});
+import { uploadImage } from "@/utils/api/utils";
+import { toast } from "react-toastify";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const classes = stylesConfig(styles, "my-account-personal-info");
 
@@ -32,10 +29,28 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 		phone: user?.phone ?? "",
 		avatar: user?.avatar ?? "",
 	});
+	const [avatar, setAvatar] = useState<any>(user?.avatar ?? "");
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setUserDetails((prev: any) => ({ ...prev, [name]: value }));
+	};
+
+	const handleImageUpload = async (file: any) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		const imageDataURL = await new Promise((resolve, reject) => {
+			reader.onloadend = () => {
+				resolve(reader.result);
+			};
+			reader.onerror = reject;
+		});
+		const res = await uploadImage(imageDataURL, "profile-images");
+		setUserDetails((prev: any) => ({
+			...prev,
+			avatar: res?.data,
+		}));
+		return res?.data;
 	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,9 +64,37 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 		}
 		setLoading(true);
 		try {
-			await dispatch(updateUserDetails(userDetails));
-		} catch (error) {
+			let newAvatarUrl = userDetails.avatar;
+			if (avatar && typeof avatar === "object") {
+				newAvatarUrl = await handleImageUpload(avatar);
+			}
+			const userDetailsToUpdate: Partial<IUser> = {
+				name: userDetails.name,
+				avatar: newAvatarUrl,
+			};
+			if (userDetails.phone !== user.phone) {
+				userDetailsToUpdate.phone = userDetails.phone;
+			}
+			if (Object.keys(userDetailsToUpdate).length > 0) {
+				await dispatch(
+					updateUserDetails({
+						...userDetailsToUpdate,
+						avatar: newAvatarUrl,
+					})
+				)
+					.then(unwrapResult)
+					.then(() => {
+						toast.success("Details updated successfully");
+					})
+					.catch((err: any) => {
+						throw err;
+					});
+			} else {
+				toast.success("Details updated successfully");
+			}
+		} catch (error: any) {
 			console.error(error);
+			toast.error(error?.message ?? "Error updating details");
 		} finally {
 			setLoading(false);
 		}
@@ -108,22 +151,16 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 						errorMessage="A valid Phone number is required"
 						onChange={handleChange}
 					/>
-					<SunEditor
-						placeholder="Upload your avatar"
-						defaultValue={`<img src="${userDetails.avatar}" alt="avatar" />`}
-						onChange={(image: string) =>
-							setUserDetails((prev: any) => ({
-								...prev,
-								avatar: image?.match(/src="(.+?)"/)?.[1] ?? "",
-							}))
-						}
-						setOptions={{
+					<Input
+						name="avatar"
+						label="Upload Avatar"
+						type="file"
+						accept="image/*"
+						placeholder="Avatar URL"
+						style={{
 							width: "100%",
-							height: "auto",
-							minHeight: "100px",
-							maxHeight: "100%",
-							buttonList: [["image", "preview"]],
 						}}
+						onChange={(e) => setAvatar(e.target.files?.[0])}
 					/>
 					<Button type="submit" loading={loading}>
 						Update Details
@@ -132,7 +169,11 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 				<div className={classes("-avatar")}>
 					{user && regex.avatar.test(userDetails.avatar) ? (
 						<Avatar
-							src={userDetails.avatar}
+							src={
+								avatar && typeof avatar === "object"
+									? URL.createObjectURL(avatar)
+									: userDetails.avatar
+							}
 							size="large"
 							alt={userDetails.name}
 						/>

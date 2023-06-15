@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import Button from "@/library/Button";
 import { BLOG } from "@/constants/enum";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { uploadImage } from "@/utils/api/utils";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -54,10 +55,53 @@ const AdminNewBlogPage: React.FC = () => {
 		}
 	};
 
-	const saveContent = (content: string) => {
+	const handleImageUpload = async (file: any) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		setOperating(true);
+		const imageDataURL = await new Promise((resolve, reject) => {
+			reader.onloadend = () => {
+				resolve(reader.result);
+			};
+			reader.onerror = reject;
+		});
+		const res = await uploadImage(imageDataURL, "blogs");
+		setOperating(false);
+		return res?.data;
+	};
+
+	const replaceAllBlobImages = async (content: string) => {
+		const regex = /<img src="(.+?)"/g;
+		const images = content.match(regex);
+		if (images) {
+			let newContent = content;
+			for (const image of images) {
+				const initialImageUrl = image.match(/<img src="(.+?)"/)?.[1];
+				let imgUrlAfterUpload = initialImageUrl;
+				if (
+					(initialImageUrl && initialImageUrl.startsWith("blob")) ||
+					(initialImageUrl && initialImageUrl.startsWith("data:"))
+				) {
+					const imgFile = await fetch(initialImageUrl).then((res) =>
+						res.blob()
+					);
+					imgUrlAfterUpload = await handleImageUpload(imgFile);
+				}
+				newContent = newContent.replace(
+					image,
+					`<img src="${imgUrlAfterUpload}"`
+				);
+			}
+			return newContent;
+		}
+		return content;
+	};
+
+	const saveContent = async (content: string) => {
+		const newContent = await replaceAllBlobImages(content);
 		setNewBlog((prev) => ({
 			...prev,
-			content,
+			content: newContent,
 		}));
 	};
 
@@ -128,7 +172,6 @@ const AdminNewBlogPage: React.FC = () => {
 			setIsLoading(false);
 		} else
 			fetchBlog().then((res: any) => {
-				console.log(res);
 				setNewBlog((prev) => ({
 					...prev,
 					...res,
@@ -220,26 +263,21 @@ const AdminNewBlogPage: React.FC = () => {
 						dangerouslySetInnerHTML={{ __html: newBlog.content }}
 					/>
 				) : null}
-				<SunEditor
-					placeholder="Cover Image"
-					defaultValue={
-						newBlog.coverImage
-							? `<img src="${newBlog.coverImage}" alt="Cover Image" />`
-							: ""
-					}
-					onChange={(image: string) =>
+				<Input
+					type="file"
+					label="Cover Image"
+					name="coverImage"
+					onChange={async (e: any) => {
+						const file = e.target.files[0];
+						setOperating(true);
+						const imgUrl = await handleImageUpload(file);
+						setOperating(false);
 						setNewBlog((prev) => ({
 							...prev,
-							coverImage: image?.match(/src="(.+?)"/)?.[1] ?? "",
-						}))
-					}
-					setOptions={{
-						width: "100%",
-						height: "auto",
-						minHeight: "100px",
-						maxHeight: "100%",
-						buttonList: [["image", "preview"]],
+							coverImage: imgUrl,
+						}));
 					}}
+					style={{ width: "100%" }}
 				/>
 				<Input
 					type="text"

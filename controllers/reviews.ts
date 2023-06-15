@@ -95,7 +95,6 @@ export const addUserReview = async (req: ApiRequest, res: ApiResponse) => {
 			path: "user",
 			select: "name email avatar",
 		});
-		console.log(newReview);
 		return res
 			.status(200)
 			.json({ data: newReview, message: RESPONSE_MESSAGES.SUCCESS });
