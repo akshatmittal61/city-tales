@@ -127,10 +127,11 @@ const AdminNewBlogPage: React.FC = () => {
 						.map((tag: string) => tag.trim()),
 				});
 			}
-			router.push({
-				pathname: "/stories/[id]",
-				query: { id: res.data._id },
-			});
+			if (newBlog.status === BLOG.STATUS.PUBLISHED)
+				router.push({
+					pathname: "/stories/[id]",
+					query: { id: res.data._id },
+				});
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error.message ?? "Something went wrong");
@@ -331,6 +332,43 @@ const AdminNewBlogPage: React.FC = () => {
 								}}
 							/>
 							Showcase
+						</label>
+					</div>
+				</div>
+				<div className={classes("-type")}>
+					<label htmlFor="type">Status</label>
+					<div className={classes("-type__checkboxes")}>
+						<label htmlFor="status-draft">
+							<input
+								type="radio"
+								name="type"
+								checked={newBlog.status === BLOG.STATUS.DRAFT}
+								id="status-draft"
+								onChange={() => {
+									setNewBlog((prev) => ({
+										...prev,
+										status: BLOG.STATUS.DRAFT,
+									}));
+								}}
+							/>
+							Save as Draft
+						</label>
+						<label htmlFor="status-published">
+							<input
+								type="radio"
+								name="type"
+								checked={
+									newBlog.status === BLOG.STATUS.PUBLISHED
+								}
+								id="status-published"
+								onChange={() => {
+									setNewBlog((prev) => ({
+										...prev,
+										status: BLOG.STATUS.PUBLISHED,
+									}));
+								}}
+							/>
+							Publish
 						</label>
 					</div>
 				</div>

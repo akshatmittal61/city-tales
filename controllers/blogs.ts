@@ -4,6 +4,25 @@ import Comment from "@/models/Comment";
 import User from "@/models/User";
 import { ApiRequest, ApiResponse } from "@/types/api";
 
+export const getBlogs = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const blogs: any = await Blog.find({ status: BLOG.STATUS.PUBLISHED })
+			.populate({
+				path: "user",
+				select: "name email avatar",
+			})
+			.sort({ createdAt: -1 });
+		return res
+			.status(200)
+			.json({ data: blogs, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
 export const getAllBlogs = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const blogs: any = await Blog.find()

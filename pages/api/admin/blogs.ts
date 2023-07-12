@@ -1,5 +1,5 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { addBlog, getBlogs } from "@/controllers/blogs";
+import { addBlog, getAllBlogs } from "@/controllers/blogs";
 import connectDB from "@/db";
 import { ApiRequest, ApiResponse } from "@/types/api";
 import { isAdmin } from "@/middleware/roles";
@@ -12,7 +12,7 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 
 		switch (method) {
 			case "GET":
-				return getBlogs(req, res);
+				return getAllBlogs(req, res);
 			case "POST":
 				return isAdmin(addBlog)(req, res);
 			default:
