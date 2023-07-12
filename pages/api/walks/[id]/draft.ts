@@ -1,7 +1,7 @@
 import { RESPONSE_MESSAGES } from "@/constants/enum";
-import { addBlog, getBlogs } from "@/controllers/blogs";
 import connectDB from "@/db";
 import { ApiRequest, ApiResponse } from "@/types/api";
+import { draftWalk } from "@/controllers/walks";
 import { isAdmin } from "@/middleware/roles";
 import { apiConfigs } from "@/config";
 
@@ -11,12 +11,10 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 		const { method } = req;
 
 		switch (method) {
-			case "GET":
-				return getBlogs(req, res);
-			case "POST":
-				return isAdmin(addBlog)(req, res);
+			case "PATCH":
+				return isAdmin(draftWalk)(req, res);
 			default:
-				res.setHeader("Allow", ["GET", "POST"]);
+				res.setHeader("Allow", ["PATCH"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);
 		}
 	} catch (error: any) {

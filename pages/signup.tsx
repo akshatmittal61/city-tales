@@ -42,6 +42,10 @@ const SignInPage: React.FC = () => {
 				.then(unwrapResult)
 				.then(() => {
 					router.push("/login");
+				})
+				.catch((err: any) => {
+					console.error(err);
+					alert(err.message);
 				});
 		} catch (error: any) {
 			console.error(error);

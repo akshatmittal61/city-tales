@@ -54,6 +54,10 @@ const SignInPage: React.FC = () => {
 					if (router.query.redirect)
 						router.push(router.query.redirect as string);
 					else router.push("/");
+				})
+				.catch((err: any) => {
+					console.error(err);
+					alert(err.message);
 				});
 		} catch (error: any) {
 			console.error(error);

@@ -11,6 +11,7 @@ import dynamic from "next/dynamic";
 import { fetchWalkById } from "@/utils/api/walks";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { uploadImage } from "@/utils/api/utils";
+import { WALK } from "@/constants/enum";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -35,6 +36,7 @@ const AdminNewWalkPage: React.FC = () => {
 		price: "",
 		type: "upcoming",
 		razorpayLink: "",
+		status: WALK.STATUS.PUBLISHED,
 	});
 
 	const handleChange = (e: any) => {
@@ -179,6 +181,7 @@ const AdminNewWalkPage: React.FC = () => {
 				price: "",
 				type: "upcoming",
 				razorpayLink: "",
+				status: WALK.STATUS.PUBLISHED,
 			});
 			setIsLoading(false);
 		} else
@@ -339,6 +342,40 @@ const AdminNewWalkPage: React.FC = () => {
 					required={newWalk.type === "upcoming"}
 					label="Razorpay Link"
 				/>
+				<div className={classes("-form-group")}>
+					<label htmlFor="status">
+						<input
+							type="radio"
+							name="status"
+							value={WALK.STATUS.PUBLISHED}
+							onChange={() => {
+								setNewWalk((prev) => ({
+									...prev,
+									status: WALK.STATUS.PUBLISHED,
+								}));
+							}}
+							checked={newWalk.status === WALK.STATUS.PUBLISHED}
+							required
+						/>
+						Published
+					</label>
+					<label htmlFor="status">
+						<input
+							type="radio"
+							name="status"
+							value={WALK.STATUS.DRAFT}
+							onChange={() => {
+								setNewWalk((prev) => ({
+									...prev,
+									status: WALK.STATUS.DRAFT,
+								}));
+							}}
+							checked={newWalk.status === WALK.STATUS.DRAFT}
+							required
+						/>
+						Draft
+					</label>
+				</div>
 				<Button variant="filled" type="submit" loading={operating}>
 					{router.query.id === "new"
 						? "Publish the Walk"

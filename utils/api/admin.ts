@@ -22,7 +22,7 @@ export const fetchAllUsers = async () => {
 
 export const fetchAllBlogs = async () => {
 	try {
-		const res = await http.get("/blogs");
+		const res = await http.get("/admin/blogs");
 		return Promise.resolve(res.data);
 	} catch (error) {
 		console.error(error);

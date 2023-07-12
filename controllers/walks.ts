@@ -131,6 +131,24 @@ export const publishWalk = async (req: ApiRequest, res: ApiResponse) => {
 	}
 };
 
+export const draftWalk = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const walk = await Walk.findById(id);
+		if (!walk) return res.status(404).json({ message: "Walk not found" });
+		walk.status = WALK.STATUS.DRAFT;
+		await walk.save();
+		return res.json({ data: walk, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Walk not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
 export const archiveWalk = async (req: ApiRequest, res: ApiResponse) => {
 	try {
 		const { id } = req.query;
@@ -207,6 +225,7 @@ export const updateWalk = async (req: ApiRequest, res: ApiResponse) => {
 		if (req.body.type) walk.type = req.body.type;
 		if (req.body.map) walk.map = req.body.map;
 		if (req.body.razorpayLink) walk.razorpayLink = req.body.razorpayLink;
+		if (req.body.status) walk.status = req.body.status;
 		await walk.save();
 		return res.json({ data: walk, message: RESPONSE_MESSAGES.SUCCESS });
 	} catch (error: any) {
