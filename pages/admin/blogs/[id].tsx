@@ -3,7 +3,7 @@ import styles from "@/styles/admin/Blogs.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import Input from "@/library/Input";
 import { toast } from "react-toastify";
-import { fetchBlogById, patchBlog, postBlog } from "@/utils/api/blogs";
+import { fetchBlogById, patchBlog } from "@/utils/api/blogs";
 import { useRouter } from "next/router";
 import "suneditor/dist/css/suneditor.min.css";
 import dynamic from "next/dynamic";
@@ -11,6 +11,7 @@ import Button from "@/library/Button";
 import { BLOG } from "@/constants/enum";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { uploadImage } from "@/utils/api/utils";
+import { createUpdatelog as validateUpdateBlog } from "@/validations/blogs";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -109,24 +110,14 @@ const AdminNewBlogPage: React.FC = () => {
 		e.preventDefault();
 		setOperating(true);
 		try {
-			let res;
-			if (router.query.id === "new") {
-				res = await postBlog({
-					...newBlog,
-					tags: newBlog.tags
-						.trim()
-						.split(",")
-						.map((tag: string) => tag.trim()),
-				});
-			} else {
-				res = await patchBlog(router.query.id as string, {
-					...newBlog,
-					tags: newBlog.tags
-						.trim()
-						.split(",")
-						.map((tag: string) => tag.trim()),
-				});
-			}
+			await validateUpdateBlog(newBlog);
+			let res = await patchBlog(router.query.id as string, {
+				...newBlog,
+				tags: newBlog.tags
+					.trim()
+					.split(",")
+					.map((tag: string) => tag.trim()),
+			});
 			if (newBlog.status === BLOG.STATUS.PUBLISHED)
 				router.push({
 					pathname: "/stories/[id]",
@@ -159,25 +150,12 @@ const AdminNewBlogPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		if (router.query.id === "new") {
-			setNewBlog({
-				title: "",
-				content: "",
-				type: [BLOG.TYPE.STORY],
-				status: BLOG.STATUS.PUBLISHED,
-				tags: "",
-				coverImage: "",
-				excerpt: "",
-				location: "",
-			});
-			setIsLoading(false);
-		} else
-			fetchBlog().then((res: any) => {
-				setNewBlog((prev) => ({
-					...prev,
-					...res,
-				}));
-			});
+		fetchBlog().then((res: any) => {
+			setNewBlog((prev) => ({
+				...prev,
+				...res,
+			}));
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query.id]);
 
@@ -187,9 +165,7 @@ const AdminNewBlogPage: React.FC = () => {
 		</div>
 	) : (
 		<main className={classes("")}>
-			<h1 className={classes("-head")}>
-				{router.query.id === "new" ? "Add" : "Update"} Blog
-			</h1>
+			<h1 className={classes("-head")}>Update Blog</h1>
 			<form className={classes("-form")} onSubmit={handleSubmit}>
 				<Input
 					type="text"
@@ -380,7 +356,7 @@ const AdminNewBlogPage: React.FC = () => {
 					}}
 					loading={operating}
 				>
-					{router.query.id === "new" ? "Add Blog" : "Update Blog"}
+					Update Blog
 				</Button>
 			</form>
 		</main>

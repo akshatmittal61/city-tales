@@ -105,10 +105,11 @@ export const addBlog = async (req: ApiRequest, res: ApiResponse) => {
 		} = req.body;
 		if (!title || !content || !type || !status || !coverImage)
 			return res.status(400).json({ message: "Invalid request" });
-		// if excerpt is not provided, set it to first 100 characters of content
-		if (!excerpt)
-			excerpt =
-				content.length > 100 ? content.substring(0, 100) : content;
+		// if excerpt is not provided, set it to first 100 characters of content, content is in html format, remove all the tags
+		if (!excerpt) {
+			const regex = /(<([^>]+)>)/gi;
+			excerpt = content.replace(regex, "").substring(0, 100);
+		}
 		// if type is not provided or not an array, set it to story, else check if all the values are valid
 		if (!type || !Array.isArray(type)) type = [BLOG.TYPE.STORY];
 		else if (
@@ -151,9 +152,10 @@ export const updateBlog = async (req: ApiRequest, res: ApiResponse) => {
 		if (!title || !content || !type || !status || !coverImage)
 			return res.status(400).json({ message: "Invalid request" });
 		// if excerpt is not provided, set it to first 100 characters of content
-		if (!excerpt)
-			excerpt =
-				content.length > 100 ? content.substring(0, 100) : content;
+		if (!excerpt) {
+			const regex = /(<([^>]+)>)/gi;
+			excerpt = content.replace(regex, "").substring(0, 100);
+		}
 		// if type is not provided or not an array, set it to story, else check if all the values are valid
 		if (!type || !Array.isArray(type)) type = [BLOG.TYPE.STORY];
 		else if (
@@ -422,6 +424,11 @@ export const deleteBlog = async (req: ApiRequest, res: ApiResponse) => {
 		const blog = await Blog.findById(id);
 		if (!blog) return res.status(404).json({ message: "Blog not found" });
 		await Blog.deleteOne({ _id: id });
+		await User.updateMany(
+			{ bookmarks: { $in: [id] } },
+			{ $pull: { bookmarks: id } }
+		);
+		await Comment.deleteMany({ blog: id });
 		return res
 			.status(200)
 			.json({ data: blog, message: RESPONSE_MESSAGES.SUCCESS });

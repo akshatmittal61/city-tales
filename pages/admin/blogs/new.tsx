@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import Button from "@/library/Button";
 import { BLOG } from "@/constants/enum";
 import { uploadImage } from "@/utils/api/utils";
+import { createUpdatelog as validateCreateBlog } from "@/validations/blogs";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -107,6 +108,7 @@ const AdminNewBlogPage: React.FC = () => {
 		e.preventDefault();
 		setOperating(true);
 		try {
+			await validateCreateBlog(newBlog);
 			let res = await postBlog({
 				...newBlog,
 				tags: newBlog.tags
@@ -122,7 +124,7 @@ const AdminNewBlogPage: React.FC = () => {
 			else router.push("/admin/blogs");
 		} catch (error: any) {
 			console.error(error);
-			toast.error(error.message ?? "Something went wrong");
+			toast.error(error?.message ?? "Something went wrong");
 		} finally {
 			setOperating(false);
 		}
