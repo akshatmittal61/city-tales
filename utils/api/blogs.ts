@@ -46,7 +46,7 @@ export const deleteBlog = async (id: string) => {
 		return Promise.resolve(response.data);
 	} catch (error) {
 		console.error(error);
-		return [];
+		return Promise.reject(error);
 	}
 };
 

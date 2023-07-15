@@ -375,7 +375,10 @@ export const getBookmarkedBlogs = async (req: ApiRequest, res: ApiResponse) => {
 
 export const getShowcaseBlogs = async (req: ApiRequest, res: ApiResponse) => {
 	try {
-		const blogs = await Blog.find({ type: { $in: [BLOG.TYPE.SHOWCASE] } })
+		const blogs = await Blog.find({
+			type: { $in: [BLOG.TYPE.SHOWCASE] },
+			status: BLOG.STATUS.PUBLISHED,
+		})
 			.populate({
 				path: "user",
 				select: "name email avatar",
@@ -397,6 +400,7 @@ export const getExplorationBlogs = async (
 	try {
 		const blogs = await Blog.find({
 			type: { $in: [BLOG.TYPE.EXPLORATION] },
+			status: BLOG.STATUS.PUBLISHED,
 		})
 			.populate({
 				path: "user",
@@ -408,6 +412,23 @@ export const getExplorationBlogs = async (
 			.json({ data: blogs, message: RESPONSE_MESSAGES.SUCCESS });
 	} catch (error: any) {
 		console.error(error);
+		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const deleteBlog = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const blog = await Blog.findById(id);
+		if (!blog) return res.status(404).json({ message: "Blog not found" });
+		await Blog.deleteOne({ _id: id });
+		return res
+			.status(200)
+			.json({ data: blog, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Blog not found" });
 		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
 	}
 };

@@ -49,7 +49,17 @@ const AdminBlogsPage: React.FC = () => {
 							md={50}
 							sm={100}
 						>
-							<Blog isAdmin {...blog} />
+							<Blog
+								isAdmin
+								{...blog}
+								onDelete={(blogId: string) => {
+									setBlogs((prev) =>
+										prev.filter(
+											(b: any) => b._id !== blogId
+										)
+									);
+								}}
+							/>
 						</Responsive.Col>
 					))}
 				</Responsive.Row>
