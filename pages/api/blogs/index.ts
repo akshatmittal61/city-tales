@@ -3,7 +3,6 @@ import { addBlog, getBlogs } from "@/controllers/blogs";
 import connectDB from "@/db";
 import { ApiRequest, ApiResponse } from "@/types/api";
 import { isAdmin } from "@/middleware/roles";
-import { apiConfigs } from "@/config";
 
 const handler = async (req: ApiRequest, res: ApiResponse) => {
 	try {
@@ -29,4 +28,11 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 
 export default handler;
 
-export const config = apiConfigs;
+export const config = {
+	api: {
+		bodyParser: {
+			sizeLimit: "100mb",
+		},
+		responseLimit: false,
+	},
+};

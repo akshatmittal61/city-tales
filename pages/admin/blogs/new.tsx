@@ -11,6 +11,7 @@ import Button from "@/library/Button";
 import { BLOG } from "@/constants/enum";
 import { uploadImage } from "@/utils/api/utils";
 import { createUpdatelog as validateCreateBlog } from "@/validations/blogs";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -22,6 +23,7 @@ const AdminNewBlogPage: React.FC = () => {
 	const router = useRouter();
 	const [showPreview, setShowPreview] = useState(false);
 	const [operating, setOperating] = useState(false);
+	const [uploadingToS3, setUploadingToS3] = useState(false);
 	const [newBlog, setNewBlog] = useState({
 		title: "",
 		content: "",
@@ -55,18 +57,24 @@ const AdminNewBlogPage: React.FC = () => {
 	};
 
 	const handleImageUpload = async (file: any) => {
-		const reader = new FileReader();
-		reader.readAsDataURL(file);
-		setOperating(true);
-		const imageDataURL = await new Promise((resolve, reject) => {
-			reader.onloadend = () => {
-				resolve(reader.result);
-			};
-			reader.onerror = reject;
-		});
-		const res = await uploadImage(imageDataURL, "blogs");
-		setOperating(false);
-		return res?.data;
+		try {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			setOperating(true);
+			const imageDataURL = await new Promise((resolve, reject) => {
+				reader.onloadend = () => {
+					resolve(reader.result);
+				};
+				reader.onerror = reject;
+			});
+			const res = await uploadImage(imageDataURL, "blogs");
+			setOperating(false);
+			return Promise.resolve(res?.data);
+		} catch (error: any) {
+			console.error(error);
+			toast.error(error?.message ?? "Something went wrong");
+			return Promise.reject(error);
+		}
 	};
 
 	const replaceAllBlobImages = async (content: string) => {
@@ -81,9 +89,9 @@ const AdminNewBlogPage: React.FC = () => {
 					(initialImageUrl && initialImageUrl.startsWith("blob")) ||
 					(initialImageUrl && initialImageUrl.startsWith("data:"))
 				) {
-					const imgFile = await fetch(initialImageUrl).then((res) =>
-						res.blob()
-					);
+					const imgFile = await fetch(initialImageUrl)
+						.then((res) => res.blob())
+						.catch(() => null);
 					imgUrlAfterUpload = await handleImageUpload(imgFile);
 				}
 				newContent = newContent.replace(
@@ -97,11 +105,19 @@ const AdminNewBlogPage: React.FC = () => {
 	};
 
 	const saveContent = async (content: string) => {
-		const newContent = await replaceAllBlobImages(content);
-		setNewBlog((prev) => ({
-			...prev,
-			content: newContent,
-		}));
+		try {
+			setUploadingToS3(true);
+			const newContent = await replaceAllBlobImages(content);
+			setNewBlog((prev) => ({
+				...prev,
+				content: newContent,
+			}));
+		} catch (error: any) {
+			console.error(error);
+			toast.error(error?.message ?? "Something went wrong");
+		} finally {
+			setUploadingToS3(false);
+		}
 	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -151,38 +167,49 @@ const AdminNewBlogPage: React.FC = () => {
 					placeholder="Excerpt"
 					style={{ width: "100%" }}
 				/>
-				<SunEditor
-					placeholder="Content"
-					defaultValue={newBlog.content}
-					onChange={saveContent}
-					setOptions={{
-						width: "100%",
-						height: "auto",
-						minHeight: "400px",
-						maxHeight: "100%",
-						buttonList: [
-							["font", "fontSize", "formatBlock"],
-							[
-								"bold",
-								"underline",
-								"italic",
-								"strike",
-								"subscript",
-								"superscript",
-								"link",
+				{uploadingToS3 ? (
+					<div className={classes("-loading")}>
+						<AiOutlineLoading3Quarters
+							className={classes("-loading-icon")}
+						/>
+						<p className={classes("-loading-text")}>
+							Uploading Images...
+						</p>
+					</div>
+				) : (
+					<SunEditor
+						placeholder="Content"
+						defaultValue={newBlog.content}
+						onChange={saveContent}
+						setOptions={{
+							width: "100%",
+							height: "auto",
+							minHeight: "400px",
+							maxHeight: "100%",
+							buttonList: [
+								["font", "fontSize", "formatBlock"],
+								[
+									"bold",
+									"underline",
+									"italic",
+									"strike",
+									"subscript",
+									"superscript",
+									"link",
+								],
+								["image", "fontColor", "align", "list"],
+								[
+									"undo",
+									"redo",
+									"removeFormat",
+									"preview",
+									"print",
+									"save",
+								],
 							],
-							["image", "fontColor", "align", "list"],
-							[
-								"undo",
-								"redo",
-								"removeFormat",
-								"preview",
-								"print",
-								"save",
-							],
-						],
-					}}
-				/>
+						}}
+					/>
+				)}
 				{newBlog.content ? (
 					<div className={classes("-form__actions")}>
 						<Button
@@ -323,7 +350,7 @@ const AdminNewBlogPage: React.FC = () => {
 					}}
 					loading={operating}
 				>
-					{router.query.id === "new" ? "Add Blog" : "Update Blog"}
+					Add Blog
 				</Button>
 			</form>
 		</main>
