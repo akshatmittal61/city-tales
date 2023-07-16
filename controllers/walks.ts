@@ -77,6 +77,7 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			tags,
 			type,
 			razorpayLink,
+			status,
 		} = req.body;
 		if (
 			!title ||
@@ -84,7 +85,9 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			!location ||
 			!coverImage ||
 			!type ||
-			!Object.values(WALK.TYPE).includes(type)
+			!Object.values(WALK.TYPE).includes(type) ||
+			!status ||
+			!Object.values(WALK.STATUS).includes(status)
 		)
 			return res.status(400).json({ message: "Invalid request" });
 		const newWalkBody: any = {
@@ -98,7 +101,7 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			tags,
 			type,
 			user: req.user.id,
-			status: WALK.STATUS.PUBLISHED,
+			status,
 			razorpayLink,
 		};
 		if (req.body.map) newWalkBody.map = req.body.map;
