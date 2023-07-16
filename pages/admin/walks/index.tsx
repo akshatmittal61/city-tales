@@ -43,7 +43,7 @@ const AdminWalksPage: React.FC = () => {
 					</Responsive.Col>
 					{allWalks.map((walk: any, index: number) => (
 						<Responsive.Col
-							key={walk.id + index}
+							key={walk._id + index}
 							xlg={50}
 							lg={50}
 							md={100}
@@ -56,6 +56,13 @@ const AdminWalksPage: React.FC = () => {
 									margin: "10px 0",
 								}}
 								{...walk}
+								onDelete={(walkId: string) => {
+									setAllWalks((prev) =>
+										prev.filter(
+											(w: any) => w._id !== walkId
+										)
+									);
+								}}
 							/>
 						</Responsive.Col>
 					))}

@@ -423,7 +423,7 @@ export const deleteBlog = async (req: ApiRequest, res: ApiResponse) => {
 		const { id } = req.query;
 		const blog = await Blog.findById(id);
 		if (!blog) return res.status(404).json({ message: "Blog not found" });
-		await Blog.deleteOne({ _id: id });
+		await Blog.findByIdAndDelete(id);
 		await User.updateMany(
 			{ bookmarks: { $in: [id] } },
 			{ $pull: { bookmarks: id } }

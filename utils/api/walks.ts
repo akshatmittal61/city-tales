@@ -49,3 +49,13 @@ export const fetchBookedWalks = async () => {
 		return [];
 	}
 };
+
+export const deleteWalk = async (id: string) => {
+	try {
+		const response = await http.delete(`/walks/${id}`);
+		return Promise.resolve(response.data);
+	} catch (error) {
+		console.error(error);
+		return [];
+	}
+};

@@ -240,3 +240,24 @@ export const updateWalk = async (req: ApiRequest, res: ApiResponse) => {
 			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
 	}
 };
+
+export const deleteWalk = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const walk = await Walk.findById(id);
+		if (!walk) return res.status(404).json({ message: "Walk not found" });
+		await Walk.findByIdAndDelete(id);
+		await User.updateMany(
+			{ bookedEvents: { $in: [id] } },
+			{ $pull: { bookedEvents: id } }
+		);
+		return res.json({ data: walk, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Walk not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
