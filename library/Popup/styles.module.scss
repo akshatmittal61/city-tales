@@ -1,0 +1,49 @@
+@import "@/styles/config/mixins";
+
+.popup {
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	&-container {
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-flow: column;
+		gap: 24px;
+		width: 60%;
+		height: 60%;
+		background-color: #fff;
+		border-radius: 12px;
+		overflow: hidden;
+		overflow-y: scroll;
+		position: relative;
+		z-index: 120;
+		padding: 16px;
+		@include hide-scrollbar;
+		@include typography(body, md);
+	}
+
+	&-header {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		h3 {
+			@include typography(heading, h5);
+		}
+
+		button {
+			@include init-button;
+			font-size: 24px;
+		}
+	}
+}

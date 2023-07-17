@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "@/styles/admin/Blogs.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import Input from "@/library/Input";
 import { toast } from "react-toastify";
-import { fetchBlogById, patchBlog } from "@/utils/api/blogs";
+import { postBlog } from "@/utils/api/blogs";
 import { useRouter } from "next/router";
 import "suneditor/dist/css/suneditor.min.css";
 import dynamic from "next/dynamic";
 import Button from "@/library/Button";
 import { BLOG } from "@/constants/enum";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { uploadImage } from "@/utils/api/utils";
-import { createUpdatelog as validateUpdateBlog } from "@/validations/blogs";
+import { createUpdatelog as validateCreateBlog } from "@/validations/blogs";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -22,7 +22,6 @@ const classes = stylesConfig(styles, "admin-blog-new");
 const AdminNewBlogPage: React.FC = () => {
 	const router = useRouter();
 	const [showPreview, setShowPreview] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
 	const [operating, setOperating] = useState(false);
 	const [uploadingToS3, setUploadingToS3] = useState(false);
 	const [newBlog, setNewBlog] = useState({
@@ -125,8 +124,8 @@ const AdminNewBlogPage: React.FC = () => {
 		e.preventDefault();
 		setOperating(true);
 		try {
-			await validateUpdateBlog(newBlog);
-			let res = await patchBlog(router.query.id as string, {
+			await validateCreateBlog(newBlog);
+			let res = await postBlog({
 				...newBlog,
 				tags: newBlog.tags
 					.trim()
@@ -138,49 +137,18 @@ const AdminNewBlogPage: React.FC = () => {
 					pathname: "/stories/[id]",
 					query: { id: res.data._id },
 				});
+			else router.push("/admin/blogs");
 		} catch (error: any) {
 			console.error(error);
-			toast.error(error.message ?? "Something went wrong");
+			toast.error(error?.message ?? "Something went wrong");
 		} finally {
 			setOperating(false);
 		}
 	};
 
-	const fetchBlog = async () => {
-		try {
-			setIsLoading(true);
-			const id = router.query.id as string;
-			const res = await fetchBlogById(id);
-			return {
-				...res.data,
-				tags: res.data.tags?.join(","),
-			};
-		} catch (error: any) {
-			console.error(error);
-			toast.error(error.message ?? "Something went wrong");
-			return null;
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		fetchBlog().then((res: any) => {
-			setNewBlog((prev) => ({
-				...prev,
-				...res,
-			}));
-		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query.id]);
-
-	return isLoading ? (
-		<div className={classes("-loading")}>
-			<AiOutlineLoading3Quarters className={classes("-loading-icon")} />
-		</div>
-	) : (
+	return (
 		<main className={classes("")}>
-			<h1 className={classes("-head")}>Update Blog</h1>
+			<h1 className={classes("-head")}>Add Blog</h1>
 			<form className={classes("-form")} onSubmit={handleSubmit}>
 				<Input
 					type="text"
@@ -199,7 +167,6 @@ const AdminNewBlogPage: React.FC = () => {
 					placeholder="Excerpt"
 					style={{ width: "100%" }}
 				/>
-
 				{uploadingToS3 ? (
 					<div className={classes("-loading")}>
 						<AiOutlineLoading3Quarters
@@ -383,7 +350,7 @@ const AdminNewBlogPage: React.FC = () => {
 					}}
 					loading={operating}
 				>
-					Update Blog
+					Add Blog
 				</Button>
 			</form>
 		</main>

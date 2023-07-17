@@ -3,15 +3,15 @@ import styles from "@/styles/admin/Walks.module.scss";
 import { stylesConfig } from "@/utils/functions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { patchWalk } from "@/utils/api/admin";
+import { postAWalk } from "@/utils/api/admin";
 import Input from "@/library/Input";
 import Button from "@/library/Button";
 import "suneditor/dist/css/suneditor.min.css";
 import dynamic from "next/dynamic";
-import { fetchWalkById } from "@/utils/api/walks";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { uploadImage } from "@/utils/api/utils";
 import { WALK } from "@/constants/enum";
+import { createUpdateWalk as validateCreateWalk } from "@/validations/walks";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -22,7 +22,6 @@ const classes = stylesConfig(styles, "admin-walk-new");
 const AdminNewWalkPage: React.FC = () => {
 	const router = useRouter();
 	const [showPreview, setShowPreview] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
 	const [operating, setOperating] = useState(false);
 	const [uploadingToS3, setUploadingToS3] = useState(false);
 	const [newWalk, setNewWalk] = useState({
@@ -107,25 +106,9 @@ const AdminNewWalkPage: React.FC = () => {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (
-			!newWalk.title ||
-			!newWalk.content ||
-			!newWalk.map ||
-			!newWalk.coverImage ||
-			!newWalk.location
-		)
-			return toast.error("Please fill all the required fields");
-		if (newWalk.type === "upcoming") {
-			if (
-				!newWalk.date ||
-				!newWalk.location ||
-				!newWalk.razorpayLink ||
-				!newWalk.price
-			)
-				return toast.error("Please fill all the required fields");
-		}
 		setOperating(true);
 		try {
+			await validateCreateWalk(newWalk);
 			if (newWalk.map) {
 				const regex = /src="(.+?)"/;
 				const mapSrc = newWalk.map.match(regex);
@@ -140,8 +123,9 @@ const AdminNewWalkPage: React.FC = () => {
 					newWalk.coverImage = coverImageSrc[1];
 				}
 			}
-			const res = await patchWalk(router.query.id as string, newWalk);
+			const res = await postAWalk(newWalk);
 			window.open(`/walks/${res.data._id}`, "_blank");
+			router.push("/admin/walks");
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error.message ?? "Something went wrong");
@@ -150,42 +134,27 @@ const AdminNewWalkPage: React.FC = () => {
 		}
 	};
 
-	const fetchWalk = async () => {
-		try {
-			setIsLoading(true);
-			const id = router.query.id as string;
-			const res = await fetchWalkById(id);
-			return {
-				...res.data,
-				coverImage: `<img src="${res.data.coverImage}" />`,
-				map: `<iframe src="${res.data.map}" />`,
-			};
-		} catch (error: any) {
-			console.error(error);
-			toast.error(error.message ?? "Something went wrong");
-			return null;
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
 	useEffect(() => {
-		fetchWalk().then((res: any) => {
-			setNewWalk((prev) => ({
-				...prev,
-				...res,
-			}));
+		setNewWalk({
+			title: "",
+			content: "",
+			date: "",
+			excerpt: "",
+			location: "",
+			map: "",
+			coverImage: "",
+			slots: "",
+			price: "",
+			type: "upcoming",
+			razorpayLink: "",
+			status: WALK.STATUS.PUBLISHED,
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query.id]);
 
-	return isLoading ? (
-		<div className={classes("-loading")}>
-			<AiOutlineLoading3Quarters className={classes("-loading-icon")} />
-		</div>
-	) : (
+	return (
 		<main className={classes("")}>
-			<h1 className={classes("-head")}>Update Walk</h1>
+			<h1 className={classes("-head")}>Add a Walk</h1>
 			<form className={classes("-form")} onSubmit={handleSubmit}>
 				<Input
 					type="hidden"
@@ -379,7 +348,7 @@ const AdminNewWalkPage: React.FC = () => {
 					</label>
 				</div>
 				<Button variant="filled" type="submit" loading={operating}>
-					Update the Walk
+					Create Walk
 				</Button>
 			</form>
 		</main>

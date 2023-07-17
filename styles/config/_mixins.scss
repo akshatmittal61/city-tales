@@ -214,6 +214,19 @@
 	}
 }
 
+@mixin hide-scrollbar {
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+
+		&-thumb {
+			background: transparent !important;
+		}
+	}
+}
+
 @mixin markdown-styles() {
 	h1 {
 		@include typography(heading, h1);

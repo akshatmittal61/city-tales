@@ -77,6 +77,7 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			tags,
 			type,
 			razorpayLink,
+			status,
 		} = req.body;
 		if (
 			!title ||
@@ -84,7 +85,9 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			!location ||
 			!coverImage ||
 			!type ||
-			!Object.values(WALK.TYPE).includes(type)
+			!Object.values(WALK.TYPE).includes(type) ||
+			!status ||
+			!Object.values(WALK.STATUS).includes(status)
 		)
 			return res.status(400).json({ message: "Invalid request" });
 		const newWalkBody: any = {
@@ -98,7 +101,7 @@ export const addWalk = async (req: ApiRequest, res: ApiResponse) => {
 			tags,
 			type,
 			user: req.user.id,
-			status: WALK.STATUS.PUBLISHED,
+			status,
 			razorpayLink,
 		};
 		if (req.body.map) newWalkBody.map = req.body.map;
@@ -227,6 +230,27 @@ export const updateWalk = async (req: ApiRequest, res: ApiResponse) => {
 		if (req.body.razorpayLink) walk.razorpayLink = req.body.razorpayLink;
 		if (req.body.status) walk.status = req.body.status;
 		await walk.save();
+		return res.json({ data: walk, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Walk not found" });
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const deleteWalk = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id } = req.query;
+		const walk = await Walk.findById(id);
+		if (!walk) return res.status(404).json({ message: "Walk not found" });
+		await Walk.findByIdAndDelete(id);
+		await User.updateMany(
+			{ bookedEvents: { $in: [id] } },
+			{ $pull: { bookedEvents: id } }
+		);
 		return res.json({ data: walk, message: RESPONSE_MESSAGES.SUCCESS });
 	} catch (error: any) {
 		console.error(error);
