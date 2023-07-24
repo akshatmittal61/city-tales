@@ -9,16 +9,21 @@ interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	errorMessage?: string;
 	className?: string;
 	label?: string;
+	styles?: {
+		box?: React.CSSProperties;
+		input?: React.CSSProperties;
+	};
 }
 
 export const Input: React.FC<IInputProps> = ({
 	error,
 	errorMessage,
 	className,
+	styles,
 	...props
 }) => {
 	return (
-		<div className={classNames("input__container")}>
+		<div className={classNames("input__container")} style={styles?.box}>
 			{props.label ? (
 				<label
 					className={classNames("input__label")}
@@ -42,6 +47,10 @@ export const Input: React.FC<IInputProps> = ({
 					e.currentTarget.setCustomValidity("");
 				}}
 				title={error ? errorMessage : ""}
+				style={{
+					...styles?.input,
+					...props.style,
+				}}
 				{...props}
 			/>
 		</div>
