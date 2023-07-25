@@ -34,6 +34,10 @@ const UserSchema = new mongoose.Schema(
 			default: USER_ROLES.USER,
 			enum: Object.values(USER_ROLES),
 		},
+		location: {
+			type: String,
+			default: "",
+		},
 		bookmarks: {
 			type: [
 				{

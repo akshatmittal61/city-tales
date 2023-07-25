@@ -32,6 +32,8 @@ const SignInPage: React.FC = () => {
 		email: "",
 		password: "",
 		confirmPassword: "",
+		phone: "",
+		location: "",
 	});
 	const [otp, setOtp] = useState(Array(6).fill(""));
 	const [showOTPBox, setShowOTPBox] = useState(false);
@@ -326,6 +328,7 @@ const SignInPage: React.FC = () => {
 									name="password"
 									placeholder="Password"
 									value={inputCred.password}
+									required
 									onChange={handleInputChange}
 									error={
 										inputCred.password.length > 0 &&
@@ -353,6 +356,7 @@ const SignInPage: React.FC = () => {
 									name="confirmPassword"
 									placeholder="Confirm Password"
 									value={inputCred.confirmPassword}
+									required
 									onChange={handleInputChange}
 									error={
 										typeof inputCred.confirmPassword ===
@@ -377,6 +381,40 @@ const SignInPage: React.FC = () => {
 											/>
 										)
 									}
+								/>
+							</div>
+							<div className={classNames("-content-form-group")}>
+								<Input
+									type="tel"
+									name="phone"
+									placeholder="Phone Number"
+									error={
+										inputCred.phone &&
+										inputCred.phone?.length > 0 &&
+										!regex.phone.test(inputCred.phone ?? "")
+											? true
+											: false
+									}
+									errorMessage="Phone number is not valid"
+									value={inputCred.phone}
+									onChange={handleInputChange}
+								/>
+								<Input
+									type="text"
+									name="location"
+									placeholder="City of Residence"
+									error={
+										inputCred.phone &&
+										inputCred.phone?.length > 0 &&
+										!regex.location.test(
+											inputCred.location ?? ""
+										)
+											? true
+											: false
+									}
+									errorMessage="Location should be between 2 and 50 characters"
+									value={inputCred.location}
+									onChange={handleInputChange}
 								/>
 							</div>
 							<Button

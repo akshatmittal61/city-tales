@@ -55,6 +55,12 @@ export const registerValidator = async (values: RegisterValues) => {
 		errors.confirmPassword = "Passwords do not match";
 	}
 
+	if (values.phone) {
+		if (!regex.phone.test(values.phone)) {
+			errors.phone = "Invalid phone number";
+		}
+	}
+
 	return Object.keys(errors).length === 0
 		? Promise.resolve()
 		: Promise.reject(getErrorArray(errors));
