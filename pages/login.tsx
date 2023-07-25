@@ -1,5 +1,5 @@
 import styles from "@/styles/Auth.module.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { stylesConfig } from "@/utils/functions";
 import { rumiDarwaza } from "@/assets/images";
 import Avatar from "@/components/Avatar/Avatar";
@@ -14,18 +14,23 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { getAuthenticatedUser, loginUser } from "@/global/helpers/user";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import useAuth from "@/hooks/auth";
+import { BiHide, BiShow } from "react-icons/bi";
 
 const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
 	const dispatch = useDispatch<any>();
+	const authState = useAuth();
 
 	const [inputCred, setInputCred] = useState<LoginValues>({
 		email: "",
 		password: "",
 	});
 	const [loading, setLoading] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -57,15 +62,20 @@ const SignInPage: React.FC = () => {
 				})
 				.catch((err: any) => {
 					console.error(err);
-					alert(err.message);
+					toast.error(err.message);
 				});
 		} catch (error: any) {
 			console.error(error);
-			alert(error.message);
+			toast.error(error.message);
 		} finally {
 			setLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		if (!authState?.loading && authState?.loggedIn)
+			router.push(router.query.redirect?.toString() ?? "/");
+	}, [authState, router]);
 
 	return (
 		<main className={classNames("")}>
@@ -117,11 +127,20 @@ const SignInPage: React.FC = () => {
 						errorMessage="Email is not valid"
 					/>
 					<Input
-						type="password"
+						type={showPassword ? "text" : "password"}
 						name="password"
 						placeholder="Password"
 						value={inputCred.password}
 						onChange={handleInputChange}
+						icon={
+							showPassword ? (
+								<BiHide
+									onClick={() => setShowPassword(false)}
+								/>
+							) : (
+								<BiShow onClick={() => setShowPassword(true)} />
+							)
+						}
 					/>
 					<Button type="submit" variant="outlined" loading={loading}>
 						Login
@@ -129,7 +148,26 @@ const SignInPage: React.FC = () => {
 				</form>
 				<div className={classNames("-content-footer")}>
 					<p className={classNames("-content-footer__text")}>
-						Dont have an account? <Link href="/signup">Signup</Link>
+						Dont have an account?{" "}
+						<Link
+							href={{
+								pathname: "/signup",
+								query: router.query,
+							}}
+						>
+							Signup
+						</Link>
+					</p>
+					<p className={classNames("-content-footer__text")}>
+						Forgot Password?{" "}
+						<Link
+							href={{
+								pathname: "/reset-password",
+								query: router.query,
+							}}
+						>
+							Reset Password
+						</Link>
 					</p>
 				</div>
 			</section>

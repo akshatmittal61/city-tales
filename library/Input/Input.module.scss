@@ -17,6 +17,7 @@
 		align-items: flex-start;
 		flex-flow: column;
 		gap: 6px;
+		position: relative;
 
 		label:has(~ input:required) {
 			&::after {
@@ -29,6 +30,18 @@
 
 	&__label {
 		@include typography(body, md);
+	}
+
+	&__icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		bottom: 6px;
+		right: 4px;
+		z-index: 5;
+		cursor: pointer;
+		user-select: none;
 	}
 
 	&--error {

@@ -20,7 +20,7 @@ const AdminPage: React.FC = () => {
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		const getSTats = async () => {
+		const getStats = async () => {
 			setLoading(true);
 			try {
 				const globalStats = await fetchStats();
@@ -32,8 +32,8 @@ const AdminPage: React.FC = () => {
 				setLoading(false);
 			}
 		};
-		getSTats();
-	}, []);
+		if (authState.role === USER_ROLES.ADMIN) getStats();
+	}, [authState.role]);
 
 	useEffect(() => {
 		if (!authState.loading) {

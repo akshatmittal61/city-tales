@@ -59,7 +59,7 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 			!regex.name.test(userDetails.name) ||
 			(!regex.phone.test(userDetails.phone) && userDetails.phone !== "")
 		) {
-			alert("Please enter valid details");
+			toast.error("Please enter valid details");
 			return;
 		}
 		setLoading(true);

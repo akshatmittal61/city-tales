@@ -1,6 +1,6 @@
 import { IWalk } from "@/types/Walk";
 import { bookWalk, fetchWalkById } from "@/utils/api/walks";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/walks/Walk.module.scss";
 import { openLink, stylesConfig } from "@/utils/functions";
 import Button from "@/library/Button";
@@ -11,6 +11,7 @@ import moment from "moment";
 import { AiOutlineMoneyCollect } from "react-icons/ai";
 import { toast } from "react-toastify";
 import useRender from "@/hooks/render";
+import { USER_ROLES, WALK } from "@/constants/enum";
 const classes = stylesConfig(styles, "walk");
 
 const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
@@ -20,6 +21,14 @@ const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
 		"null" | "denied" | "pending" | "confirmed"
 	>("null");
 	const render = useRender();
+
+	useEffect(() => {
+		if (
+			props.walk.status !== WALK.STATUS.PUBLISHED &&
+			authState.role !== USER_ROLES.ADMIN
+		)
+			router.push("/walks");
+	}, [authState.role, props.walk.status, router]);
 
 	if (!props.found)
 		return (

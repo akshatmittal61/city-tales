@@ -7,11 +7,14 @@ import Responsive from "@/layouts/Responsive";
 import { useRouter } from "next/router";
 import { AiOutlineEdit } from "react-icons/ai";
 import Walk from "@/components/Home/Walks/Walk";
+import { USER_ROLES } from "@/constants/enum";
+import useAuth from "@/hooks/auth";
 
 const classes = stylesConfig(styles, "admin-walks");
 
 const AdminWalksPage: React.FC = () => {
 	const router = useRouter();
+	const authState = useAuth();
 	const [allWalks, setAllWalks] = useState([]);
 
 	useEffect(() => {
@@ -24,8 +27,8 @@ const AdminWalksPage: React.FC = () => {
 				toast.error(error.message ?? "Something went wrong");
 			}
 		};
-		getAllWalks();
-	}, []);
+		if (authState.role === USER_ROLES.ADMIN) getAllWalks();
+	}, [authState.role]);
 
 	return (
 		<main className={classes("")}>

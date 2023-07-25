@@ -8,14 +8,15 @@ import Input from "@/library/Input";
 import Button from "@/library/Button";
 import Link from "next/link";
 import regex from "@/constants/regex";
-import { registerValidator } from "@/validations/auth";
-import { RegisterValues } from "@/types/auth";
+import { ResetPasswordValues } from "@/types/auth";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-import { registerUser } from "@/global/helpers/user";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { getRegistraionOtp, verifyRegistrationOtp } from "@/utils/api/auth";
+import {
+	getResetPasswordOtp,
+	resetPassword,
+	verifyResetPasswordOtp,
+} from "@/utils/api/auth";
+import { resetPasswordValidator } from "@/validations/auth";
 import useAuth from "@/hooks/auth";
 import { BiHide, BiShow } from "react-icons/bi";
 
@@ -23,16 +24,15 @@ const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
-	const dispatch = useDispatch<any>();
 	const authState = useAuth();
 	const [showPassword, setShowPassword] = useState(false);
 
-	const [inputCred, setInputCred] = useState<RegisterValues>({
-		name: "",
+	const [inputCred, setInputCred] = useState<ResetPasswordValues>({
 		email: "",
 		password: "",
 		confirmPassword: "",
 	});
+
 	const [otp, setOtp] = useState(Array(6).fill(""));
 	const [showOTPBox, setShowOTPBox] = useState(false);
 	const [isOtpValid, setIsOtpValid] = useState(false);
@@ -41,7 +41,7 @@ const SignInPage: React.FC = () => {
 	const [requestingOtp, setRequestingOtp] = useState(false);
 	const [otpSent, setOtpSent] = useState(false);
 	const [verifyingOtp, setVerifyingOtp] = useState(false);
-	const [registering, setRegistering] = useState(false);
+	const [updating, setUpdating] = useState(false);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -52,7 +52,7 @@ const SignInPage: React.FC = () => {
 		e?.preventDefault();
 		try {
 			setRequestingOtp(true);
-			await getRegistraionOtp(inputCred.email);
+			await getResetPasswordOtp(inputCred.email);
 			toast.success("OTP sent to your email. It will expire in 1 minute");
 			setShowOTPBox(true);
 			setResendOTPTimeout(60);
@@ -68,19 +68,11 @@ const SignInPage: React.FC = () => {
 	};
 
 	const verifyOTP = async (otp: number[] | string[]) => {
-		if (
-			otp.join("").length !== 6 ||
-			(otp.join("").length === 6 && otp.some((n: any) => isNaN(n)))
-		) {
-			toast.error("Invalid OTP entered");
-			requestOTP();
-			return;
-		}
 		try {
 			setVerifyingOtp(true);
-			await verifyRegistrationOtp(inputCred.email, otp.join(""));
-			toast.success("OTP verified successfully");
+			await verifyResetPasswordOtp(inputCred.email, otp.join(""));
 			setIsOtpValid(true);
+			toast.success("OTP verified");
 		} catch (error: any) {
 			console.error(error);
 			toast.error(
@@ -99,27 +91,27 @@ const SignInPage: React.FC = () => {
 			return;
 		}
 		try {
-			await registerValidator(inputCred).catch((err) => {
+			await resetPasswordValidator(inputCred).catch((err) => {
 				throw err.map((err: any) => err.message).join(", ");
 			});
-			setRegistering(true);
-			await dispatch(registerUser(inputCred))
-				.then(unwrapResult)
-				.then(() => {
-					router.push({
-						pathname: "/login",
-						query: router.query,
-					});
-				})
-				.catch((err: any) => {
-					console.error(err);
-					toast.error(err.message);
-				});
+			setUpdating(true);
+			await resetPassword(
+				inputCred.email,
+				otp.join(""),
+				inputCred.password
+			);
+			toast.success("Password reset successfully");
+			router.push({
+				pathname: "/login",
+				query: router.query,
+			});
 		} catch (error: any) {
 			console.error(error);
-			toast.error(error.message ?? error.toString());
+			toast.error(
+				error.message ?? error.toString() ?? "Something went wrong"
+			);
 		} finally {
-			setRegistering(false);
+			setUpdating(false);
 		}
 	};
 
@@ -164,10 +156,10 @@ const SignInPage: React.FC = () => {
 						/>
 					</h1>
 					<h1 className={classNames("-content-head__title")}>
-						Create an Account
+						Reset Password
 					</h1>
 					<h3 className={classNames("-content-head__subtitle")}>
-						Let&apos;s get you started
+						Enter your email to reset your password
 					</h3>
 				</div>
 				<form
@@ -175,21 +167,10 @@ const SignInPage: React.FC = () => {
 					onSubmit={handleSubmit}
 				>
 					<Input
-						type="text"
-						name="name"
-						placeholder="Name"
-						value={inputCred.name}
-						onChange={handleInputChange}
-						error={
-							inputCred.name.length > 0 &&
-							!regex.name.test(inputCred.name)
-						}
-						errorMessage="Name must be atleast 3 characters"
-					/>
-					<Input
 						type="email"
 						name="email"
 						placeholder="Email"
+						label="Enter your email"
 						value={inputCred.email}
 						onChange={handleInputChange}
 						disabled={isOtpValid}
@@ -382,17 +363,16 @@ const SignInPage: React.FC = () => {
 							<Button
 								type="submit"
 								variant="outlined"
-								loading={registering}
+								loading={updating}
 							>
-								Create Account
+								Reset Password
 							</Button>
 						</>
 					) : null}
 				</form>
 				<div className={classNames("-content-footer")}>
 					<p className={classNames("-content-footer__text")}>
-						Already have an account?{" "}
-						<Link href="/login">Login</Link>
+						Dont have an account? <Link href="/signup">Signup</Link>
 					</p>
 				</div>
 			</section>

@@ -11,7 +11,8 @@ import dynamic from "next/dynamic";
 import { fetchWalkById } from "@/utils/api/walks";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { uploadImage } from "@/utils/api/utils";
-import { WALK } from "@/constants/enum";
+import { USER_ROLES, WALK } from "@/constants/enum";
+import useAuth from "@/hooks/auth";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -21,7 +22,7 @@ const classes = stylesConfig(styles, "admin-walk-new");
 
 const AdminNewWalkPage: React.FC = () => {
 	const router = useRouter();
-	const [showPreview, setShowPreview] = useState(false);
+	const authState = useAuth();
 	const [isLoading, setIsLoading] = useState(true);
 	const [operating, setOperating] = useState(false);
 	const [uploadingToS3, setUploadingToS3] = useState(false);
@@ -170,12 +171,13 @@ const AdminNewWalkPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		fetchWalk().then((res: any) => {
-			setNewWalk((prev) => ({
-				...prev,
-				...res,
-			}));
-		});
+		if (authState.role === USER_ROLES.ADMIN)
+			fetchWalk().then((res: any) => {
+				setNewWalk((prev) => ({
+					...prev,
+					...res,
+				}));
+			});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query.id]);
 
@@ -256,30 +258,6 @@ const AdminNewWalkPage: React.FC = () => {
 						}}
 					/>
 				)}
-				{newWalk.content ? (
-					<div className={classes("-form__actions")}>
-						<Button
-							variant="outlined"
-							size="small"
-							onClick={(e) => {
-								e.preventDefault();
-								setShowPreview((prev) => !prev);
-							}}
-							style={{
-								width: "fit-content",
-							}}
-						>
-							{showPreview ? "Hide Preview" : "Show Preview"}
-						</Button>
-					</div>
-				) : null}
-				{showPreview ? (
-					<div
-						className={classes("-form__preview")}
-						style={{ display: showPreview ? "block" : "none" }}
-						dangerouslySetInnerHTML={{ __html: newWalk.content }}
-					/>
-				) : null}
 				<Input
 					type="text"
 					name="location"

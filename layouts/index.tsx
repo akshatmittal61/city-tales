@@ -6,14 +6,21 @@ import { frontendBaseUrl } from "@/constants/variables";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useAuth from "@/hooks/auth";
+import { USER_ROLES } from "@/constants/enum";
 
 const Layout: React.FC<any> = ({ children }) => {
 	const router = useRouter();
+	const authState = useAuth();
 	const [showNav, setShowNav] = useState(false);
 	const [showFooter, setShowFooter] = useState(false);
 
 	useEffect(() => {
-		if (router.pathname === "/login" || router.pathname === "/signup") {
+		if (
+			router.pathname === "/login" ||
+			router.pathname === "/signup" ||
+			router.pathname === "/reset-password"
+		) {
 			setShowNav(false);
 			setShowFooter(false);
 		} else {
@@ -21,6 +28,23 @@ const Layout: React.FC<any> = ({ children }) => {
 			setShowFooter(true);
 		}
 	}, [router.pathname]);
+
+	useEffect(() => {
+		if (router.pathname.split("/")[1] === "admin") {
+			if (!authState.loading) {
+				if (!authState.loggedIn) {
+					router.push({
+						pathname: "/login",
+						query: {
+							redirect: router.pathname,
+						},
+					});
+				} else {
+					if (authState.role !== USER_ROLES.ADMIN) router.push("/");
+				}
+			}
+		}
+	}, [authState, router]);
 
 	return (
 		<>

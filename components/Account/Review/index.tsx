@@ -14,6 +14,7 @@ import Input from "@/library/Input";
 import "suneditor/dist/css/suneditor.min.css";
 import dynamic from "next/dynamic";
 import { uploadImage } from "@/utils/api/utils";
+import { toast } from "react-toastify";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -116,9 +117,9 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 				});
 		} catch (error: any) {
 			console.error(error);
-			if (typeof error === "string") alert(error.toString());
-			else if (error instanceof Error) alert(error.message);
-			else alert("An error occurred");
+			if (typeof error === "string") toast.error(error.toString());
+			else if (error instanceof Error) toast.error(error.message);
+			else toast.error("An error occurred");
 		} finally {
 			setLoading(false);
 		}

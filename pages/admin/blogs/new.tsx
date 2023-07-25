@@ -21,7 +21,6 @@ const classes = stylesConfig(styles, "admin-blog-new");
 
 const AdminNewBlogPage: React.FC = () => {
 	const router = useRouter();
-	const [showPreview, setShowPreview] = useState(false);
 	const [operating, setOperating] = useState(false);
 	const [uploadingToS3, setUploadingToS3] = useState(false);
 	const [newBlog, setNewBlog] = useState({
@@ -210,30 +209,6 @@ const AdminNewBlogPage: React.FC = () => {
 						}}
 					/>
 				)}
-				{newBlog.content ? (
-					<div className={classes("-form__actions")}>
-						<Button
-							variant="outlined"
-							size="small"
-							onClick={(e: any) => {
-								e?.preventDefault();
-								setShowPreview((prev) => !prev);
-							}}
-							style={{
-								width: "fit-content",
-							}}
-						>
-							{showPreview ? "Hide Preview" : "Show Preview"}
-						</Button>
-					</div>
-				) : null}
-				{showPreview ? (
-					<div
-						className={classes("-form__preview")}
-						style={{ display: showPreview ? "block" : "none" }}
-						dangerouslySetInnerHTML={{ __html: newBlog.content }}
-					/>
-				) : null}
 				<Input
 					type="file"
 					label="Cover Image"

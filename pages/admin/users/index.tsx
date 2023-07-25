@@ -12,6 +12,8 @@ import {
 } from "react-icons/ai";
 import moment from "moment";
 import Responsive from "@/layouts/Responsive";
+import { USER_ROLES } from "@/constants/enum";
+import useAuth from "@/hooks/auth";
 
 const classes = stylesConfig(styles, "admin-users");
 
@@ -55,6 +57,7 @@ const AdminUsersPageUser: React.FC<Partial<IUser>> = (props) => {
 
 const AdminUsersPage: React.FC = () => {
 	const [allUsers, setAllUsers] = useState([]);
+	const authState = useAuth();
 
 	useEffect(() => {
 		const getAllUsers = async () => {
@@ -66,8 +69,8 @@ const AdminUsersPage: React.FC = () => {
 				toast.error(error.message ?? "Something went wrong");
 			}
 		};
-		getAllUsers();
-	}, []);
+		if (authState.role === USER_ROLES.ADMIN) getAllUsers();
+	}, [authState.role]);
 
 	return (
 		<main className={classes("")}>

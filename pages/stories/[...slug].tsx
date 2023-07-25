@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Blog, BlogComment } from "@/types/Blog";
 import styles from "@/styles/Blog.module.scss";
 import { stylesConfig } from "@/utils/functions";
@@ -16,6 +16,7 @@ import {
 	toggleBookmark,
 	toggleLikeBlog,
 } from "@/utils/api/blogs";
+import { USER_ROLES, WALK } from "@/constants/enum";
 
 const classes = stylesConfig(styles, "blog");
 
@@ -117,6 +118,14 @@ const BlogPage: React.FC<Blog> = (props) => {
 			}
 		}
 	};
+
+	useEffect(() => {
+		if (
+			currentStory.status !== WALK.STATUS.PUBLISHED &&
+			authState.role !== USER_ROLES.ADMIN
+		)
+			router.push("/stories");
+	}, [authState.role, currentStory.status, router]);
 
 	return (
 		<div className={classes("")}>

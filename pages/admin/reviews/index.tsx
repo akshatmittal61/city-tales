@@ -14,10 +14,13 @@ import { reviewsTableFields } from "@/constants/admin";
 import ReviewPopup from "@/components/Review/ReviewPopup";
 import Image from "next/image";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { USER_ROLES } from "@/constants/enum";
+import useAuth from "@/hooks/auth";
 
 const classes = stylesConfig(styles, "admin-reviews");
 
 const AdminReviewsPage: React.FC = () => {
+	const authState = useAuth();
 	const [allReviews, setAllReviews] = useState<any[]>([]);
 	const [popupReview, setPopupReview] = useState<any>(null);
 	const [loading, setLoading] = useState(false);
@@ -77,8 +80,8 @@ const AdminReviewsPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		getAllReviews();
-	}, []);
+		if (authState.role === USER_ROLES.ADMIN) getAllReviews();
+	}, [authState.role]);
 
 	return (
 		<main className={classes("")}>

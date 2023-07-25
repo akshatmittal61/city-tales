@@ -31,7 +31,7 @@
 		justify-content: center;
 		align-items: flex-start;
 		flex-flow: column;
-		gap: 60px;
+		gap: 50px;
 		padding: 0 60px;
 
 		@include responsive(phone) {
@@ -67,6 +67,18 @@
 			input,
 			button {
 				width: 100%;
+			}
+
+			button {
+				flex: 0 1 auto;
+			}
+
+			&-group {
+				width: 100%;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				gap: 12px;
 			}
 		}
 

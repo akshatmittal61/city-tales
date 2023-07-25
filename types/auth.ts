@@ -13,6 +13,10 @@ export interface RegisterValues {
 	confirmPassword?: string;
 }
 
+export interface ResetPasswordValues extends LoginValues {
+	confirmPassword: string;
+}
+
 export type USER_ROLES = "admin" | "user" | "guest";
 
 export interface IUser {

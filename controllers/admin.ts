@@ -20,7 +20,7 @@ export const getStats = async (req: ApiRequest, res: ApiResponse) => {
 		const walks = await Walk.countDocuments();
 		const availableTours = await Walk.countDocuments({
 			status: WALK.STATUS.PUBLISHED,
-			type: WALK.STATUS.AVAILABLE,
+			type: WALK.TYPE.AVAILABLE,
 		});
 		return res.status(200).json({
 			data: {
