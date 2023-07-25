@@ -44,3 +44,26 @@ export const patchUserDetails = async (user: {
 		return Promise.reject(error.response.data);
 	}
 };
+
+export const getRegistraionOtp = async (email: string) => {
+	try {
+		const response = await http.post("/auth/register/otp", { email });
+		return Promise.resolve(response.data);
+	} catch (error: any) {
+		console.error(error);
+		return Promise.reject(error.response.data);
+	}
+};
+
+export const verifyRegistrationOtp = async (email: string, otp: string) => {
+	try {
+		const response = await http.post("/auth/register/otp/verify", {
+			email,
+			otp,
+		});
+		return Promise.resolve(response.data);
+	} catch (error: any) {
+		console.error(error);
+		return Promise.reject(error.response.data);
+	}
+};

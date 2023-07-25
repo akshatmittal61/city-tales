@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { getAuthenticatedUser, loginUser } from "@/global/helpers/user";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 const classNames = stylesConfig(styles, "auth");
 
@@ -57,11 +58,11 @@ const SignInPage: React.FC = () => {
 				})
 				.catch((err: any) => {
 					console.error(err);
-					alert(err.message);
+					toast.error(err.message);
 				});
 		} catch (error: any) {
 			console.error(error);
-			alert(error.message);
+			toast.error(error.message);
 		} finally {
 			setLoading(false);
 		}

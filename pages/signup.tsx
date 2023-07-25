@@ -14,6 +14,8 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { registerUser } from "@/global/helpers/user";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { getRegistraionOtp, verifyRegistrationOtp } from "@/utils/api/auth";
 
 const classNames = stylesConfig(styles, "auth");
 
@@ -31,6 +33,11 @@ const SignInPage: React.FC = () => {
 	const [isOtpValid, setIsOtpValid] = useState(false);
 	const [resendOTPTimeout, setResendOTPTimeout] = useState(60);
 
+	const [requestingOtp, setRequestingOtp] = useState(false);
+	const [otpSent, setOtpSent] = useState(false);
+	const [verifyingOtp, setVerifyingOtp] = useState(false);
+	const [registering, setRegistering] = useState(false);
+
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setInputCred((prev) => ({ ...prev, [name]: value }));
@@ -38,8 +45,21 @@ const SignInPage: React.FC = () => {
 
 	const requestOTP = async (e?: any) => {
 		e?.preventDefault();
-		setShowOTPBox(true);
-		setResendOTPTimeout(60);
+		try {
+			setRequestingOtp(true);
+			await getRegistraionOtp(inputCred.email);
+			toast.success("OTP sent to your email. It will expire in 1 minute");
+			setShowOTPBox(true);
+			setResendOTPTimeout(60);
+			setOtpSent(true);
+		} catch (error: any) {
+			console.error(error);
+			toast.error(
+				error.message ?? error.toString() ?? "Something went wrong"
+			);
+		} finally {
+			setRequestingOtp(false);
+		}
 	};
 
 	const verifyOTP = async (otp: number[] | string[]) => {
@@ -47,17 +67,29 @@ const SignInPage: React.FC = () => {
 			otp.join("").length !== 6 ||
 			(otp.join("").length === 6 && otp.some((n: any) => isNaN(n)))
 		) {
-			alert("Invalid OTP entered");
+			toast.error("Invalid OTP entered");
 			requestOTP();
 			return;
 		}
-		setIsOtpValid(true);
+		try {
+			setVerifyingOtp(true);
+			await verifyRegistrationOtp(inputCred.email, otp.join(""));
+			toast.success("OTP verified successfully");
+			setIsOtpValid(true);
+		} catch (error: any) {
+			console.error(error);
+			toast.error(
+				error.message ?? error.toString() ?? "Something went wrong"
+			);
+		} finally {
+			setVerifyingOtp(false);
+		}
 	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!isOtpValid) {
-			alert("OTP is not verified");
+			toast.error("OTP is not verified");
 			verifyOTP(otp);
 			return;
 		}
@@ -65,6 +97,7 @@ const SignInPage: React.FC = () => {
 			await registerValidator(inputCred).catch((err) => {
 				throw err.map((err: any) => err.message).join(", ");
 			});
+			setRegistering(true);
 			await dispatch(registerUser(inputCred))
 				.then(unwrapResult)
 				.then(() => {
@@ -72,11 +105,13 @@ const SignInPage: React.FC = () => {
 				})
 				.catch((err: any) => {
 					console.error(err);
-					alert(err.message);
+					toast.error(err.message);
 				});
 		} catch (error: any) {
 			console.error(error);
-			alert(error.message ?? error.toString());
+			toast.error(error.message ?? error.toString());
+		} finally {
+			setRegistering(false);
 		}
 	};
 
@@ -151,6 +186,82 @@ const SignInPage: React.FC = () => {
 						}
 						errorMessage="Email is not valid"
 					/>
+
+					{showOTPBox && !isOtpValid ? (
+						<div
+							className={classNames("-content-form-group")}
+							style={{
+								justifyContent: "space-between",
+								flexFlow: "row nowrap",
+								gap: "0",
+							}}
+						>
+							{otp.map((data, index) => (
+								<Input
+									key={index}
+									type="text"
+									name={`otp${index}`}
+									maxLength={1}
+									autoFocus={index === 0}
+									value={data}
+									style={{
+										width: "3rem",
+										textAlign: "center",
+									}}
+									styles={{
+										box: { alignItems: "center" },
+									}}
+									onKeyUp={(e: any) => {
+										if (e.target.value.length === 1) {
+											if (
+												e.target.value >= 0 &&
+												e.target.value <= 9
+											) {
+												if (e.target.name === "otp5") {
+													e.target.blur();
+												} else {
+													document
+														.getElementsByName(
+															"otp" +
+																(+e.target.name[
+																	e.target
+																		.name
+																		.length -
+																		1
+																] +
+																	1)
+														)[0]
+														.focus();
+												}
+											} else {
+												e.target.value = "";
+											}
+										}
+									}}
+									onChange={(e) => {
+										if (
+											e.target.value === "" ||
+											regex.otp.test(e.target.value)
+										) {
+											const otpArray = [...otp];
+											otpArray[index] = e.target.value;
+											setOtp(otpArray);
+											/* if (
+												otpArray.join("").length ===
+													6 &&
+												otpArray.every((n) => !isNaN(n))
+											) {
+												verifyOTP(otpArray);
+											} else {
+												setIsOtpValid(false);
+											} */
+										}
+									}}
+									onFocus={(e) => e.target.select()}
+								/>
+							))}
+						</div>
+					) : null}
 					{!isOtpValid && regex.email.test(inputCred.email) ? (
 						<div className={classNames("-content-form-group")}>
 							{showOTPBox ? (
@@ -169,18 +280,37 @@ const SignInPage: React.FC = () => {
 										: "Resend OTP"}
 								</Button>
 							) : null}
-							<Button
-								variant="filled"
-								type="button"
-								disabled={
-									showOTPBox ||
-									!inputCred.email.length ||
-									!regex.email.test(inputCred.email)
-								}
-								onClick={requestOTP}
-							>
-								Request OTP
-							</Button>
+							{otpSent ? (
+								<Button
+									variant="filled"
+									type="button"
+									disabled={
+										!inputCred.email.length ||
+										!regex.email.test(inputCred.email) ||
+										requestingOtp ||
+										!regex.otp.test(otp.join(""))
+									}
+									onClick={() => verifyOTP(otp)}
+									loading={verifyingOtp}
+								>
+									Verify OTP
+								</Button>
+							) : (
+								<Button
+									variant="filled"
+									type="button"
+									disabled={
+										showOTPBox ||
+										!inputCred.email.length ||
+										!regex.email.test(inputCred.email) ||
+										requestingOtp
+									}
+									onClick={requestOTP}
+									loading={requestingOtp}
+								>
+									Request OTP
+								</Button>
+							)}
 						</div>
 					) : null}
 					{isOtpValid ? (
@@ -214,83 +344,16 @@ const SignInPage: React.FC = () => {
 									errorMessage="Passwords do not match"
 								/>
 							</div>
-							<Button type="submit" variant="outlined">
+							<Button
+								type="submit"
+								variant="outlined"
+								loading={registering}
+							>
 								Create Account
 							</Button>
 						</>
 					) : null}
 				</form>
-				{showOTPBox && !isOtpValid ? (
-					<form
-						className={classNames("-content-form")}
-						style={{
-							justifyContent: "space-between",
-							flexFlow: "row nowrap",
-							gap: "0",
-						}}
-					>
-						{otp.map((data, index) => (
-							<Input
-								key={index}
-								type="text"
-								name={`otp${index}`}
-								maxLength={1}
-								autoFocus={index === 0}
-								value={data}
-								style={{
-									width: "3rem",
-								}}
-								styles={{
-									box: { alignItems: "center" },
-								}}
-								onKeyUp={(e: any) => {
-									if (e.target.value.length === 1) {
-										if (
-											e.target.value >= 0 &&
-											e.target.value <= 9
-										) {
-											if (e.target.name === "otp5") {
-												e.target.blur();
-											} else {
-												document
-													.getElementsByName(
-														"otp" +
-															(+e.target.name[
-																e.target.name
-																	.length - 1
-															] +
-																1)
-													)[0]
-													.focus();
-											}
-										} else {
-											e.target.value = "";
-										}
-									}
-								}}
-								onChange={(e) => {
-									if (
-										e.target.value === "" ||
-										regex.otp.test(e.target.value)
-									) {
-										const otpArray = [...otp];
-										otpArray[index] = e.target.value;
-										setOtp(otpArray);
-										if (
-											otpArray.join("").length === 6 &&
-											otpArray.every((n) => !isNaN(n))
-										) {
-											verifyOTP(otpArray);
-										} else {
-											setIsOtpValid(false);
-										}
-									}
-								}}
-								onFocus={(e) => e.target.select()}
-							/>
-						))}
-					</form>
-				) : null}
 				<div className={classNames("-content-footer")}>
 					<p className={classNames("-content-footer__text")}>
 						Already have an account?{" "}
