@@ -8,7 +8,7 @@ import { ApiRequest, ApiResponse } from "@/types/api";
 import regex from "@/constants/regex";
 import { IUser } from "@/types/auth";
 import otpGenerator from "otp-generator";
-import { sendRegistrationOtp } from "@/utils/emails";
+import { sendPasswordResetOtp, sendRegistrationOtp } from "@/utils/emails";
 import Otp from "@/models/otp";
 
 export const register = async (req: ApiRequest, res: ApiResponse) => {
@@ -218,9 +218,135 @@ export const verifyRegistrationOtp = async (
 	}
 };
 
-/* const logout = async (req: ApiRequest, res: ApiResponse) => {};
+export const getForgotPasswordOtp = async (
+	req: ApiRequest,
+	res: ApiResponse
+) => {
+	try {
+		const { email } = req.body;
+		if (!email)
+			return res.status(400).json({ message: "Email is required" });
+		if (!regex.email.test(email))
+			return res.status(400).json({ message: "Invalid email provided" });
 
-const forgotPassword = async (req: ApiRequest, res: ApiResponse) => {};
+		const user = await User.findOne({ email });
+		if (!user)
+			return res.status(403).json({ message: "You are not registered" });
+
+		const foundOtp = await Otp.findOne({
+			email,
+			type: OTP_TYPES.RESET_PASSWORD,
+		});
+		const otp = otpGenerator.generate(6, {
+			upperCaseAlphabets: false,
+			lowerCaseAlphabets: false,
+			specialChars: false,
+			digits: true,
+		});
+		await sendPasswordResetOtp(email, otp);
+		if (foundOtp) {
+			await Otp.updateOne(
+				{ email, type: OTP_TYPES.RESET_PASSWORD },
+				{ otp, verified: false, date: new Date() }
+			);
+		} else {
+			await Otp.create({ email, otp, type: OTP_TYPES.RESET_PASSWORD });
+		}
+		return res.status(200).json({ message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error) {
+		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const verifyForgotPasswordOtp = async (
+	req: ApiRequest,
+	res: ApiResponse
+) => {
+	try {
+		const { email, otp } = req.body;
+		if (!email)
+			return res.status(400).json({ message: "Please provide email" });
+		if (!otp)
+			return res.status(400).json({ message: "Please provide OTP" });
+		if (!regex.email.test(email))
+			return res.status(400).json({ message: "Invalid email provided" });
+		if (!regex.otp.test(otp))
+			return res.status(400).json({ message: "Invalid OTP provided" });
+		const foundOtp = await Otp.findOne({
+			email,
+			otp,
+			type: OTP_TYPES.RESET_PASSWORD,
+		});
+		if (!foundOtp)
+			return res.status(400).json({ message: "Invalid OTP provided" });
+		if (foundOtp.verified)
+			return res.status(400).json({ message: "OTP already verified" });
+		if (foundOtp.date.getTime() + 5 * 60 * 1000 < Date.now())
+			return res.status(400).json({ message: "OTP expired" });
+		if (foundOtp.otp !== otp)
+			return res.status(400).json({ message: "Invalid OTP provided" });
+		await Otp.updateOne(
+			{ email, otp, type: OTP_TYPES.RESET_PASSWORD },
+			{ verified: true }
+		);
+		return res.status(200).json({ message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error) {
+		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const resetPassword = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { email, otp, password } = req.body;
+		if (!email)
+			return res.status(400).json({ message: "Please provide email" });
+		if (!otp)
+			return res.status(400).json({ message: "Please provide OTP" });
+		if (!password)
+			return res.status(400).json({ message: "Please provide password" });
+		if (!regex.email.test(email))
+			return res.status(400).json({ message: "Invalid email provided" });
+		if (!regex.otp.test(otp))
+			return res.status(400).json({ message: "Invalid OTP provided" });
+		if (!regex.password.test(password))
+			return res
+				.status(400)
+				.json({ message: "Invalid password provided" });
+		const foundOtp = await Otp.findOne({
+			email,
+			otp,
+			type: OTP_TYPES.RESET_PASSWORD,
+		});
+		if (!foundOtp)
+			return res.status(400).json({ message: "Invalid OTP provided" });
+		if (!foundOtp.verified)
+			return res.status(400).json({ message: "OTP not verified" });
+		if (foundOtp.date.getTime() + 5 * 60 * 1000 < Date.now())
+			return res.status(400).json({ message: "OTP expired" });
+		if (foundOtp.otp !== otp)
+			return res.status(400).json({ message: "Invalid OTP provided" });
+		const passwordHash = await bcrypt.hash(password, 10);
+		await User.updateOne({ email }, { password: passwordHash });
+		await Otp.updateOne(
+			{ email, otp, type: OTP_TYPES.RESET_PASSWORD },
+			{ verified: false }
+		);
+		return res.status(200).json({ message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error) {
+		console.error(error);
+		return res
+			.status(500)
+			.json({ message: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+/* const logout = async (req: ApiRequest, res: ApiResponse) => {};
 
 const resetPassword = async (req: ApiRequest, res: ApiResponse) => {};
 
