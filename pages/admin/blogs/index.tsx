@@ -7,11 +7,14 @@ import { fetchAllBlogs } from "@/utils/api/admin";
 import Blog from "@/components/Blogs/BlogCard";
 import { AiOutlineEdit } from "react-icons/ai";
 import { useRouter } from "next/router";
+import { USER_ROLES } from "@/constants/enum";
+import useAuth from "@/hooks/auth";
 
 const classes = stylesConfig(styles, "admin-blogs");
 
 const AdminBlogsPage: React.FC = () => {
 	const router = useRouter();
+	const authState = useAuth();
 	const [blogs, setBlogs] = useState([]);
 
 	useEffect(() => {
@@ -24,8 +27,8 @@ const AdminBlogsPage: React.FC = () => {
 				toast.error(error.message ?? "Something went wrong");
 			}
 		};
-		getAllBlogs();
-	}, []);
+		if (authState.role === USER_ROLES.ADMIN) getAllBlogs();
+	}, [authState.role]);
 
 	return (
 		<main className={classes("")}>

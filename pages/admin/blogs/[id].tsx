@@ -8,10 +8,11 @@ import { useRouter } from "next/router";
 import "suneditor/dist/css/suneditor.min.css";
 import dynamic from "next/dynamic";
 import Button from "@/library/Button";
-import { BLOG } from "@/constants/enum";
+import { BLOG, USER_ROLES } from "@/constants/enum";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { uploadImage } from "@/utils/api/utils";
 import { createUpdatelog as validateUpdateBlog } from "@/validations/blogs";
+import useAuth from "@/hooks/auth";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -21,6 +22,7 @@ const classes = stylesConfig(styles, "admin-blog-new");
 
 const AdminNewBlogPage: React.FC = () => {
 	const router = useRouter();
+	const authState = useAuth();
 	const [showPreview, setShowPreview] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [operating, setOperating] = useState(false);
@@ -165,14 +167,15 @@ const AdminNewBlogPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		fetchBlog().then((res: any) => {
-			setNewBlog((prev) => ({
-				...prev,
-				...res,
-			}));
-		});
+		if (authState.role === USER_ROLES.ADMIN)
+			fetchBlog().then((res: any) => {
+				setNewBlog((prev) => ({
+					...prev,
+					...res,
+				}));
+			});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query.id]);
+	}, [router.query.id, authState.role]);
 
 	return isLoading ? (
 		<div className={classes("-loading")}>

@@ -11,7 +11,8 @@ import dynamic from "next/dynamic";
 import { fetchWalkById } from "@/utils/api/walks";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { uploadImage } from "@/utils/api/utils";
-import { WALK } from "@/constants/enum";
+import { USER_ROLES, WALK } from "@/constants/enum";
+import useAuth from "@/hooks/auth";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
 	ssr: false,
@@ -21,6 +22,7 @@ const classes = stylesConfig(styles, "admin-walk-new");
 
 const AdminNewWalkPage: React.FC = () => {
 	const router = useRouter();
+	const authState = useAuth();
 	const [showPreview, setShowPreview] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [operating, setOperating] = useState(false);
@@ -170,12 +172,13 @@ const AdminNewWalkPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		fetchWalk().then((res: any) => {
-			setNewWalk((prev) => ({
-				...prev,
-				...res,
-			}));
-		});
+		if (authState.role === USER_ROLES.ADMIN)
+			fetchWalk().then((res: any) => {
+				setNewWalk((prev) => ({
+					...prev,
+					...res,
+				}));
+			});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.query.id]);
 
