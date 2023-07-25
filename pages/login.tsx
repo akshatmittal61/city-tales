@@ -16,6 +16,7 @@ import { getAuthenticatedUser, loginUser } from "@/global/helpers/user";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import useAuth from "@/hooks/auth";
+import { BiHide, BiShow } from "react-icons/bi";
 
 const classNames = stylesConfig(styles, "auth");
 
@@ -29,6 +30,7 @@ const SignInPage: React.FC = () => {
 		password: "",
 	});
 	const [loading, setLoading] = useState(false);
+	const [showPassword, setShowPassword] = useState(false);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -125,11 +127,20 @@ const SignInPage: React.FC = () => {
 						errorMessage="Email is not valid"
 					/>
 					<Input
-						type="password"
+						type={showPassword ? "text" : "password"}
 						name="password"
 						placeholder="Password"
 						value={inputCred.password}
 						onChange={handleInputChange}
+						icon={
+							showPassword ? (
+								<BiHide
+									onClick={() => setShowPassword(false)}
+								/>
+							) : (
+								<BiShow onClick={() => setShowPassword(true)} />
+							)
+						}
 					/>
 					<Button type="submit" variant="outlined" loading={loading}>
 						Login

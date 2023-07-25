@@ -17,6 +17,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { getRegistraionOtp, verifyRegistrationOtp } from "@/utils/api/auth";
 import useAuth from "@/hooks/auth";
+import { BiHide, BiShow } from "react-icons/bi";
 
 const classNames = stylesConfig(styles, "auth");
 
@@ -24,6 +25,7 @@ const SignInPage: React.FC = () => {
 	const router = useRouter();
 	const dispatch = useDispatch<any>();
 	const authState = useAuth();
+	const [showPassword, setShowPassword] = useState(false);
 
 	const [inputCred, setInputCred] = useState<RegisterValues>({
 		name: "",
@@ -320,7 +322,7 @@ const SignInPage: React.FC = () => {
 						<>
 							<div className={classNames("-content-form-group")}>
 								<Input
-									type="password"
+									type={showPassword ? "text" : "password"}
 									name="password"
 									placeholder="Password"
 									value={inputCred.password}
@@ -330,9 +332,24 @@ const SignInPage: React.FC = () => {
 										!regex.password.test(inputCred.password)
 									}
 									errorMessage="Password must be atleast 8 characters and must contain atleast one uppercase, one lowercase, one number and one special character"
+									icon={
+										showPassword ? (
+											<BiHide
+												onClick={() =>
+													setShowPassword(false)
+												}
+											/>
+										) : (
+											<BiShow
+												onClick={() =>
+													setShowPassword(true)
+												}
+											/>
+										)
+									}
 								/>
 								<Input
-									type="password"
+									type={showPassword ? "text" : "password"}
 									name="confirmPassword"
 									placeholder="Confirm Password"
 									value={inputCred.confirmPassword}
@@ -345,6 +362,21 @@ const SignInPage: React.FC = () => {
 											inputCred.password
 									}
 									errorMessage="Passwords do not match"
+									icon={
+										showPassword ? (
+											<BiHide
+												onClick={() =>
+													setShowPassword(false)
+												}
+											/>
+										) : (
+											<BiShow
+												onClick={() =>
+													setShowPassword(true)
+												}
+											/>
+										)
+									}
 								/>
 							</div>
 							<Button

@@ -13,6 +13,7 @@ interface IInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 		box?: React.CSSProperties;
 		input?: React.CSSProperties;
 	};
+	icon?: any;
 }
 
 export const Input: React.FC<IInputProps> = ({
@@ -20,6 +21,7 @@ export const Input: React.FC<IInputProps> = ({
 	errorMessage,
 	className,
 	styles,
+	icon,
 	...props
 }) => {
 	return (
@@ -53,6 +55,9 @@ export const Input: React.FC<IInputProps> = ({
 				}}
 				{...props}
 			/>
+			{icon ? (
+				<div className={classNames("input__icon")}>{icon}</div>
+			) : null}
 		</div>
 	);
 };
