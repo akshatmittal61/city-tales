@@ -15,7 +15,7 @@ export const RESPONSE_MESSAGES = {
 	SERVER_ERROR: "Internal Server Error",
 };
 
-export const BLOG: any = {
+export const BLOG = {
 	TYPE: {
 		SHOWCASE: "showcase",
 		EXPLORATION: "exploration",
@@ -28,14 +28,14 @@ export const BLOG: any = {
 	},
 };
 
-export const SLOT: any = {
+export const SLOT = {
 	STATUS: {
 		AVAILABLE: "available",
 		BOOKED: "booked",
 	},
 };
 
-export const WALK: any = {
+export const WALK = {
 	STATUS: {
 		DRAFT: "draft",
 		PUBLISHED: "published",

@@ -23,7 +23,6 @@ const classes = stylesConfig(styles, "admin-walk-new");
 const AdminNewWalkPage: React.FC = () => {
 	const router = useRouter();
 	const authState = useAuth();
-	const [showPreview, setShowPreview] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [operating, setOperating] = useState(false);
 	const [uploadingToS3, setUploadingToS3] = useState(false);
@@ -259,30 +258,6 @@ const AdminNewWalkPage: React.FC = () => {
 						}}
 					/>
 				)}
-				{newWalk.content ? (
-					<div className={classes("-form__actions")}>
-						<Button
-							variant="outlined"
-							size="small"
-							onClick={(e) => {
-								e.preventDefault();
-								setShowPreview((prev) => !prev);
-							}}
-							style={{
-								width: "fit-content",
-							}}
-						>
-							{showPreview ? "Hide Preview" : "Show Preview"}
-						</Button>
-					</div>
-				) : null}
-				{showPreview ? (
-					<div
-						className={classes("-form__preview")}
-						style={{ display: showPreview ? "block" : "none" }}
-						dangerouslySetInnerHTML={{ __html: newWalk.content }}
-					/>
-				) : null}
 				<Input
 					type="text"
 					name="location"
