@@ -38,6 +38,20 @@ export const register = async (req: ApiRequest, res: ApiResponse) => {
 			return res.status(400).json({ message: "Verify your email first" });
 		user = new User({ name, email, password });
 		user.password = await bcrypt.hash(password, 10);
+		if (req.body.phone) {
+			if (!regex.phone.test(req.body.phone))
+				return res
+					.status(400)
+					.json({ message: "Invalid phone number provided" });
+			else user.phone = req.body.phone;
+		}
+		if (req.body.location) {
+			if (!regex.location.test(req.body.location))
+				return res
+					.status(400)
+					.json({ message: "Invalid location provided" });
+			else user.location = req.body.location;
+		}
 		await user.save();
 		const payload = {
 			user: {
@@ -116,14 +130,20 @@ export const updateDetails = async (req: ApiRequest, res: ApiResponse) => {
 		if (!name && !phone && !avatar)
 			return res.status(400).json({ message: "Invalid request" });
 		const updateDetails: Partial<IUser> = {};
-		type KeysToUpdate = "name" | "phone" | "avatar";
-		const keysToUpdate: KeysToUpdate[] = ["name", "phone", "avatar"];
+		type KeysToUpdate = "name" | "phone" | "avatar" | "location";
+		const keysToUpdate: KeysToUpdate[] = [
+			"name",
+			"phone",
+			"avatar",
+			"location",
+		];
 		keysToUpdate.forEach((key: KeysToUpdate) => {
 			if (key in req.body) {
-				if (!regex[key].test(req.body[key]))
+				if (!regex[key].test(req.body[key])) {
 					return res
 						.status(400)
 						.json({ message: `Invalid ${key} provided` });
+				}
 				updateDetails[key] = req.body[key];
 			}
 		});

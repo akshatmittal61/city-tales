@@ -28,6 +28,7 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 		email: user?.email ?? "",
 		phone: user?.phone ?? "",
 		avatar: user?.avatar ?? "",
+		location: user?.location ?? "",
 	});
 	const [avatar, setAvatar] = useState<any>(user?.avatar ?? "");
 
@@ -71,6 +72,7 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 			const userDetailsToUpdate: Partial<IUser> = {
 				name: userDetails.name,
 				avatar: newAvatarUrl,
+				location: userDetails.location,
 			};
 			if (userDetails.phone !== user.phone) {
 				userDetailsToUpdate.phone = userDetails.phone;
@@ -106,6 +108,7 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 			email: user?.email ?? "",
 			phone: user?.phone ?? "",
 			avatar: user?.avatar ?? "",
+			location: user?.location ?? "",
 		});
 	}, [user]);
 
@@ -149,6 +152,15 @@ const MyAccountPersonalInfo: React.FC<MyAccountPersonalInfoProps> = ({
 							userDetails.phone !== ""
 						}
 						errorMessage="A valid Phone number is required"
+						onChange={handleChange}
+					/>
+					<Input
+						name="location"
+						value={userDetails.location}
+						placeholder="Enter your location"
+						style={{
+							width: "100%",
+						}}
 						onChange={handleChange}
 					/>
 					<Input

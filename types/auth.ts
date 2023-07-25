@@ -11,6 +11,8 @@ export interface RegisterValues {
 	email: string;
 	password: string;
 	confirmPassword?: string;
+	location?: string;
+	phone?: string;
 }
 
 export interface ResetPasswordValues extends LoginValues {
@@ -24,6 +26,7 @@ export interface IUser {
 	name: string;
 	email: string;
 	phone?: string;
+	location?: string;
 	avatar?: string;
 	bookmarks?: Blog[];
 	bookedEvents?: IWalk[];
