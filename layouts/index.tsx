@@ -13,7 +13,11 @@ const Layout: React.FC<any> = ({ children }) => {
 	const [showFooter, setShowFooter] = useState(false);
 
 	useEffect(() => {
-		if (router.pathname === "/login" || router.pathname === "/signup") {
+		if (
+			router.pathname === "/login" ||
+			router.pathname === "/signup" ||
+			router.pathname === "/reset-password"
+		) {
 			setShowNav(false);
 			setShowFooter(false);
 		} else {

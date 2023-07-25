@@ -130,7 +130,26 @@ const SignInPage: React.FC = () => {
 				</form>
 				<div className={classNames("-content-footer")}>
 					<p className={classNames("-content-footer__text")}>
-						Dont have an account? <Link href="/signup">Signup</Link>
+						Dont have an account?{" "}
+						<Link
+							href={{
+								pathname: "/signup",
+								query: router.query,
+							}}
+						>
+							Signup
+						</Link>
+					</p>
+					<p className={classNames("-content-footer__text")}>
+						Forgot Password?{" "}
+						<Link
+							href={{
+								pathname: "/reset-password",
+								query: router.query,
+							}}
+						>
+							Reset Password
+						</Link>
 					</p>
 				</div>
 			</section>

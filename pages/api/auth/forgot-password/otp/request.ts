@@ -10,10 +10,10 @@ const handler = async (req: ApiRequest, res: ApiResponse) => {
 		const { method } = req;
 
 		switch (method) {
-			case "PATCH":
+			case "POST":
 				return getForgotPasswordOtp(req, res);
 			default:
-				res.setHeader("Allow", ["PATCH"]);
+				res.setHeader("Allow", ["POST"]);
 				return res.status(405).end(`Method ${method} Not Allowed`);
 		}
 	} catch (error: any) {

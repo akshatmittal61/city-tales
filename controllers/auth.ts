@@ -318,6 +318,12 @@ export const resetPassword = async (req: ApiRequest, res: ApiResponse) => {
 			return res
 				.status(400)
 				.json({ message: "Invalid password provided" });
+
+		const foundUser = await User.findOne({ email });
+
+		if (!foundUser)
+			return res.status(404).json({ message: "User not registered" });
+
 		const foundOtp = await Otp.findOne({
 			email,
 			otp,
