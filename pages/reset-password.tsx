@@ -17,11 +17,13 @@ import {
 	verifyResetPasswordOtp,
 } from "@/utils/api/auth";
 import { resetPasswordValidator } from "@/validations/auth";
+import useAuth from "@/hooks/auth";
 
 const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
+	const authState = useAuth();
 
 	const [inputCred, setInputCred] = useState<ResetPasswordValues>({
 		email: "",
@@ -119,6 +121,11 @@ const SignInPage: React.FC = () => {
 			return () => clearTimeout(timer);
 		}
 	}, [resendOTPTimeout]);
+
+	useEffect(() => {
+		if (!authState?.loading && authState?.loggedIn)
+			router.push(router.query.redirect?.toString() ?? "/");
+	}, [authState, router]);
 
 	return (
 		<main className={classNames("")}>

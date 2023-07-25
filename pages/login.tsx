@@ -1,5 +1,5 @@
 import styles from "@/styles/Auth.module.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { stylesConfig } from "@/utils/functions";
 import { rumiDarwaza } from "@/assets/images";
 import Avatar from "@/components/Avatar/Avatar";
@@ -15,12 +15,14 @@ import { useDispatch } from "react-redux";
 import { getAuthenticatedUser, loginUser } from "@/global/helpers/user";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+import useAuth from "@/hooks/auth";
 
 const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
 	const dispatch = useDispatch<any>();
+	const authState = useAuth();
 
 	const [inputCred, setInputCred] = useState<LoginValues>({
 		email: "",
@@ -67,6 +69,11 @@ const SignInPage: React.FC = () => {
 			setLoading(false);
 		}
 	};
+
+	useEffect(() => {
+		if (!authState?.loading && authState?.loggedIn)
+			router.push(router.query.redirect?.toString() ?? "/");
+	}, [authState, router]);
 
 	return (
 		<main className={classNames("")}>

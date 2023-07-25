@@ -16,12 +16,15 @@ import { registerUser } from "@/global/helpers/user";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import { getRegistraionOtp, verifyRegistrationOtp } from "@/utils/api/auth";
+import useAuth from "@/hooks/auth";
 
 const classNames = stylesConfig(styles, "auth");
 
 const SignInPage: React.FC = () => {
 	const router = useRouter();
 	const dispatch = useDispatch<any>();
+	const authState = useAuth();
+
 	const [inputCred, setInputCred] = useState<RegisterValues>({
 		name: "",
 		email: "",
@@ -126,6 +129,11 @@ const SignInPage: React.FC = () => {
 			return () => clearTimeout(timer);
 		}
 	}, [resendOTPTimeout]);
+
+	useEffect(() => {
+		if (!authState?.loading && authState?.loggedIn)
+			router.push(router.query.redirect?.toString() ?? "/");
+	}, [authState, router]);
 
 	return (
 		<main className={classNames("")}>
