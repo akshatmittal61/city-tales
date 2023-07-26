@@ -67,12 +67,13 @@ const AdminNewBlogPage: React.FC = () => {
 				reader.onerror = reject;
 			});
 			const res = await uploadImage(imageDataURL, "blogs");
-			setOperating(false);
 			return Promise.resolve(res?.data);
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error?.message ?? "Something went wrong");
 			return Promise.reject(error);
+		} finally {
+			setOperating(false);
 		}
 	};
 

@@ -5,7 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { reviewSelector, userSelector } from "@/global/slices/user";
 import { IReview } from "@/types/Review";
 import Button from "@/library/Button";
-import { AiOutlineEdit, AiOutlineStar, AiTwotoneStar } from "react-icons/ai";
+import {
+	AiOutlineEdit,
+	AiOutlineLoading3Quarters,
+	AiOutlineStar,
+	AiTwotoneStar,
+} from "react-icons/ai";
 import { addReview, getUserReview } from "@/global/helpers/user";
 import { unwrapResult } from "@reduxjs/toolkit";
 import moment from "moment";
@@ -43,23 +48,31 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 		image: globalReview?.image ?? "",
 	});
 	const [loading, setLoading] = useState(false);
+	const [uploadingToS3, setUploadingToS3] = useState(false);
 	const [allowEdit, setAllowEdit] = useState(
 		userReview.isSubmitted ? false : true
 	);
 
 	const handleImageUpload = async (file: any) => {
-		const reader = new FileReader();
-		reader.readAsDataURL(file);
-		setLoading(true);
-		const imageDataURL = await new Promise((resolve, reject) => {
-			reader.onloadend = () => {
-				resolve(reader.result);
-			};
-			reader.onerror = reject;
-		});
-		const res = await uploadImage(imageDataURL, "reviews");
-		setLoading(false);
-		return res?.data;
+		try {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			setLoading(true);
+			const imageDataURL = await new Promise((resolve, reject) => {
+				reader.onloadend = () => {
+					resolve(reader.result);
+				};
+				reader.onerror = reject;
+			});
+			const res = await uploadImage(imageDataURL, "reviews");
+			return Promise.resolve(res?.data);
+		} catch (error: any) {
+			console.error(error);
+			toast.error(error?.message ?? "Something went wrong");
+			return Promise.reject(error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const replaceAllBlobImages = async (content: string) => {
@@ -90,18 +103,27 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 	};
 
 	const saveContent = async (content: string) => {
-		const newContent = await replaceAllBlobImages(content);
-		setUserReview((prev) => ({
-			...prev,
-			content: newContent,
-		}));
+		try {
+			setUploadingToS3(true);
+			const newContent = await replaceAllBlobImages(content);
+			setUserReview((prev) => ({
+				...prev,
+				content: newContent,
+			}));
+		} catch (error: any) {
+			console.error(error);
+			toast.error(error?.message ?? "Something went wrong");
+		} finally {
+			setUploadingToS3(false);
+		}
 	};
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setLoading(true);
 		try {
-			if (!userReview.content) throw new Error("Please enter a review");
+			if (!userReview.content)
+				throw new Error("Please enter some review content");
 			if (!userReview.rating)
 				throw new Error("Please enter a valid rating (1-5)");
 			if (userReview.rating < 1 || userReview.rating > 5)
@@ -229,36 +251,49 @@ const MyAccountReview: React.FC<MyAccountReviewProps> = () => {
 								}))
 							}
 						/>
-						<SunEditor
-							onChange={(content: string) => saveContent(content)}
-							defaultValue={userReview.content}
-							setOptions={{
-								width: "100%",
-								height: "auto",
-								minHeight: "100px",
-								maxHeight: "100%",
-								buttonList: [
-									["font", "fontSize", "formatBlock"],
-									[
-										"bold",
-										"underline",
-										"italic",
-										"strike",
-										"subscript",
-										"superscript",
-										"link",
+						{uploadingToS3 ? (
+							<div className={classes("-loading")}>
+								<AiOutlineLoading3Quarters
+									className={classes("-loading-icon")}
+								/>
+								<p className={classes("-loading-text")}>
+									Uploading Images...
+								</p>
+							</div>
+						) : (
+							<SunEditor
+								onChange={(content: string) =>
+									saveContent(content)
+								}
+								defaultValue={userReview.content}
+								setOptions={{
+									width: "100%",
+									height: "auto",
+									minHeight: "100px",
+									maxHeight: "100%",
+									buttonList: [
+										["font", "fontSize", "formatBlock"],
+										[
+											"bold",
+											"underline",
+											"italic",
+											"strike",
+											"subscript",
+											"superscript",
+											"link",
+										],
+										["image", "fontColor", "align", "list"],
+										[
+											"undo",
+											"redo",
+											"removeFormat",
+											"preview",
+											"print",
+										],
 									],
-									["image", "fontColor", "align", "list"],
-									[
-										"undo",
-										"redo",
-										"removeFormat",
-										"preview",
-										"print",
-									],
-								],
-							}}
-						/>
+								}}
+							/>
+						)}
 						<div className={classes("-container__form--rating")}>
 							{Array.from({ length: 5 }, (_, i) =>
 								i < userReview.rating ? (
