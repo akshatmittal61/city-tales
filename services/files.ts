@@ -4,6 +4,7 @@ import { awsAccessKeyId, awsBucketName, awsSecretAccessKey } from "@/config";
 const s3 = new aws.S3({
 	accessKeyId: awsAccessKeyId,
 	secretAccessKey: awsSecretAccessKey,
+	signatureVersion: "v4",
 });
 
 export const uploadImageToS3 = async (fileBuffer: Buffer, fileName: string) => {
