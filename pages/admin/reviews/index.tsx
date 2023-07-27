@@ -80,8 +80,8 @@ const AdminReviewsPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		if (authState.role === USER_ROLES.ADMIN) getAllReviews();
-	}, [authState.role]);
+		if (authState.user?.role === USER_ROLES.ADMIN) getAllReviews();
+	}, [authState.user?.role]);
 
 	return (
 		<main className={classes("")}>

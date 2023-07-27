@@ -37,6 +37,7 @@ const BlogCommentPane: React.FC<BlogCommentPaneProps> = ({
 				content: myComment,
 			});
 			setComments([...comments, newComment.data]);
+			setMyComment("");
 		} catch (error: any) {
 			console.error(error);
 			toast.error(error.message ?? "An error occurred");
@@ -97,11 +98,7 @@ const BlogCommentPane: React.FC<BlogCommentPaneProps> = ({
 								? "300/300 words"
 								: `${myComment.split(" ").length}/300 words`}
 						</span>
-						<Button
-							variant="outlined"
-							size="small"
-							onClick={handlePostComment}
-						>
+						<Button variant="outlined" size="small" type="submit">
 							Post
 						</Button>
 					</div>
@@ -127,9 +124,15 @@ const BlogCommentPane: React.FC<BlogCommentPaneProps> = ({
 			<div className={classes("-comments")}>
 				{comments.map((comment, index) => (
 					<BlogCommentPaneComment
+						blogId={blogId}
 						comment={comment}
 						key={index}
 						enableReply={true}
+						onDelete={(id: string) => {
+							setComments(
+								comments.filter((comment) => comment._id !== id)
+							);
+						}}
 					/>
 				))}
 			</div>

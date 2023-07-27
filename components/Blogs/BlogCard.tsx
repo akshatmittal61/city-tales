@@ -8,6 +8,7 @@ import Image from "next/image";
 import { bookmark, nipLight } from "@/assets/vectors";
 import { useRouter } from "next/router";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { FiExternalLink } from "react-icons/fi";
 import { deleteBlog as deleteBlogApi } from "@/utils/api/blogs";
 import { toast } from "react-toastify";
 import { useConfirmationModal } from "../Confirmation";
@@ -93,8 +94,26 @@ const Blog: React.FC<BlogProps> = ({
 								<Button
 									className={classes("__buttons--button")}
 									variant="outlined"
+									icon={<FiExternalLink />}
+									iconPosition="left"
+									size="small"
+									onClick={() => {
+										router.push(
+											"/stories/[...slug]",
+											`/stories/${
+												id ?? _id
+											}/${convertToSlug(title)}`
+										);
+									}}
+								>
+									View
+								</Button>
+								<Button
+									className={classes("__buttons--button")}
+									variant="outlined"
 									icon={<AiOutlineEdit />}
 									iconPosition="left"
+									size="small"
 									onClick={() => {
 										router.push(
 											`/admin/blogs/${id ?? _id}`
@@ -108,6 +127,7 @@ const Blog: React.FC<BlogProps> = ({
 									variant="outlined"
 									icon={<AiOutlineDelete />}
 									iconPosition="left"
+									size="small"
 									loading={deleting}
 									onClick={() => {
 										deleteBlogConfirmation.openPopup();

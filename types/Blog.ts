@@ -3,6 +3,7 @@ import { IUser } from "./auth";
 export interface BlogComment {
 	_id: string;
 	user: {
+		_id: string;
 		id: string;
 		name: string;
 		avatar: string;

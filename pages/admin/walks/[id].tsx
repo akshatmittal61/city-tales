@@ -171,7 +171,7 @@ const AdminNewWalkPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		if (authState.role === USER_ROLES.ADMIN)
+		if (authState.user?.role === USER_ROLES.ADMIN)
 			fetchWalk().then((res: any) => {
 				setNewWalk((prev) => ({
 					...prev,

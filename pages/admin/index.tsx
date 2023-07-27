@@ -32,8 +32,8 @@ const AdminPage: React.FC = () => {
 				setLoading(false);
 			}
 		};
-		if (authState.role === USER_ROLES.ADMIN) getStats();
-	}, [authState.role]);
+		if (authState.user?.role === USER_ROLES.ADMIN) getStats();
+	}, [authState.user?.role]);
 
 	useEffect(() => {
 		if (!authState.loading) {
@@ -45,7 +45,7 @@ const AdminPage: React.FC = () => {
 					},
 				});
 			} else {
-				if (authState.role !== USER_ROLES.ADMIN) router.push("/");
+				if (authState.user?.role !== USER_ROLES.ADMIN) router.push("/");
 			}
 		}
 	}, [authState, router]);

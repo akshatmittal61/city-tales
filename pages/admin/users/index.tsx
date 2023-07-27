@@ -14,6 +14,7 @@ import moment from "moment";
 import Responsive from "@/layouts/Responsive";
 import { USER_ROLES } from "@/constants/enum";
 import useAuth from "@/hooks/auth";
+import { BiMapPin } from "react-icons/bi";
 
 const classes = stylesConfig(styles, "admin-users");
 
@@ -45,6 +46,14 @@ const AdminUsersPageUser: React.FC<Partial<IUser>> = (props) => {
 					</a>
 				</div>
 			) : null}
+			{props.location ? (
+				<div className={classes("-location")}>
+					<BiMapPin />
+					<span className={classes("-location-text")}>
+						{props.location}
+					</span>
+				</div>
+			) : null}
 			<div className={classes("-date")}>
 				<AiOutlineCalendar />
 				<span className={classes("-date-text")}>
@@ -69,8 +78,8 @@ const AdminUsersPage: React.FC = () => {
 				toast.error(error.message ?? "Something went wrong");
 			}
 		};
-		if (authState.role === USER_ROLES.ADMIN) getAllUsers();
-	}, [authState.role]);
+		if (authState.user?.role === USER_ROLES.ADMIN) getAllUsers();
+	}, [authState.user?.role]);
 
 	return (
 		<main className={classes("")}>

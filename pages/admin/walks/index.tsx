@@ -27,8 +27,8 @@ const AdminWalksPage: React.FC = () => {
 				toast.error(error.message ?? "Something went wrong");
 			}
 		};
-		if (authState.role === USER_ROLES.ADMIN) getAllWalks();
-	}, [authState.role]);
+		if (authState.user?.role === USER_ROLES.ADMIN) getAllWalks();
+	}, [authState.user?.role]);
 
 	return (
 		<main className={classes("")}>

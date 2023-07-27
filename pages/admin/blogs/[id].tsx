@@ -166,7 +166,7 @@ const AdminNewBlogPage: React.FC = () => {
 	};
 
 	useEffect(() => {
-		if (authState.role === USER_ROLES.ADMIN)
+		if (authState.user?.role === USER_ROLES.ADMIN)
 			fetchBlog().then((res: any) => {
 				setNewBlog((prev) => ({
 					...prev,
@@ -174,7 +174,7 @@ const AdminNewBlogPage: React.FC = () => {
 				}));
 			});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.query.id, authState.role]);
+	}, [router.query.id, authState.user?.role]);
 
 	return isLoading ? (
 		<div className={classes("-loading")}>
