@@ -1,10 +1,12 @@
 import Walk from "@/components/Home/Walks/Walk";
+import Placeholder from "@/components/Placeholder";
 import { WALK } from "@/constants/enum";
+import socials from "@/constants/socials";
 import Responsive from "@/layouts/Responsive";
 import styles from "@/styles/Walks.module.scss";
 import { IWalk } from "@/types/Walk";
 import { fetchPublishedWalks } from "@/utils/api/walks";
-import { randomId, stylesConfig } from "@/utils/functions";
+import { openLink, randomId, stylesConfig } from "@/utils/functions";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -12,7 +14,19 @@ const classes = stylesConfig(styles, "walks");
 
 const WalksPage: React.FC<{ walks: IWalk[] }> = ({ walks }) => {
 	const router = useRouter();
-	return (
+	return walks.length === 0 ? (
+		<Placeholder
+			title="No Walks scheduled yet!"
+			button={{
+				text: "Explore our Heritage",
+				onClick: () =>
+					openLink(
+						socials.find((s) => s.name === "Instagram")
+							?.url as string
+					),
+			}}
+		/>
+	) : (
 		<main className={classes("")}>
 			{walks.filter((walk) => walk.type === WALK.TYPE.UPCOMING).length >
 			0 ? (

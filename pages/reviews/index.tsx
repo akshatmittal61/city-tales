@@ -5,11 +5,29 @@ import { randomId, stylesConfig } from "@/utils/functions";
 import React from "react";
 import { fetchApprovedReviews } from "@/utils/api/review";
 import { IReview } from "@/types/Review";
+import Placeholder from "@/components/Placeholder";
+import { useRouter } from "next/router";
 
 const classes = stylesConfig(styles, "reviews");
 
 const ReviewsPage: React.FC<{ reviews: IReview[] }> = ({ reviews }) => {
-	return (
+	const router = useRouter();
+	return reviews.length === 0 ? (
+		<Placeholder
+			title="No Reviews written yet!"
+			button={{
+				text: "Be the first to write a review",
+				onClick: () => {
+					router.push({
+						pathname: "/account",
+						query: {
+							tab: "my-review",
+						},
+					});
+				},
+			}}
+		/>
+	) : (
 		<main className={classes("")}>
 			<div className={classes("-head")}>
 				<h1 className={classes("-head-title")}>Reviews</h1>
