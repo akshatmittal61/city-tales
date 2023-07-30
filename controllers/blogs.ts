@@ -1,4 +1,4 @@
-import { BLOG, RESPONSE_MESSAGES } from "@/constants/enum";
+import { BLOG, RESPONSE_MESSAGES, USER_ROLES } from "@/constants/enum";
 import Blog from "@/models/Blog";
 import Comment from "@/models/Comment";
 import User from "@/models/User";
@@ -436,6 +436,40 @@ export const deleteBlog = async (req: ApiRequest, res: ApiResponse) => {
 		console.error(error);
 		if (error.kind === "ObjectId")
 			return res.status(404).json({ message: "Blog not found" });
+		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
+	}
+};
+
+export const deleteComment = async (req: ApiRequest, res: ApiResponse) => {
+	try {
+		const { id, commentId } = req.query;
+		const blog = await Blog.findById(id);
+		if (!blog) return res.status(404).json({ message: "Blog not found" });
+		const comment = await Comment.findById(commentId);
+		if (!comment)
+			return res.status(404).json({ message: "Comment not found" });
+		// if logged in user is not the owner of the comment or the admin, return unauthorized
+		const user = await User.findById(req.user.id);
+		if (
+			comment.user.toString() !== req.user.id &&
+			user.role !== USER_ROLES.ADMIN
+		)
+			return res
+				.status(401)
+				.json({ message: "You cannot delete this comment" });
+		// delete all replies of the comment
+		await Comment.deleteMany({ _id: { $in: comment.replies } });
+		// delete comment from blog
+		await Blog.updateOne({ _id: id }, { $pull: { comments: commentId } });
+		// delete comment
+		await Comment.findByIdAndDelete(commentId);
+		return res
+			.status(200)
+			.json({ data: comment, message: RESPONSE_MESSAGES.SUCCESS });
+	} catch (error: any) {
+		console.error(error);
+		if (error.kind === "ObjectId")
+			return res.status(404).json({ message: "Comment not found" });
 		return res.status(500).json({ error: RESPONSE_MESSAGES.SERVER_ERROR });
 	}
 };

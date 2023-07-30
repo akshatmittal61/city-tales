@@ -93,7 +93,7 @@ const Navbar: React.FC = () => {
 							</Link>
 						</li>
 					))}
-					{authState.role === USER_ROLES.ADMIN ? (
+					{authState.user?.role === USER_ROLES.ADMIN ? (
 						<li>
 							<Link href="/admin" className={classNames("-link")}>
 								Admin panel
@@ -105,8 +105,8 @@ const Navbar: React.FC = () => {
 					<div className={classNames("-avatar")}>
 						<Avatar
 							src={
-								authState.user.avatar
-									? authState.user.avatar
+								authState.user?.avatar
+									? authState.user?.avatar
 									: "/vectors/favicon.svg"
 							}
 							alt="Avatar"

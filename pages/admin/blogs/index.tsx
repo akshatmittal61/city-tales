@@ -27,8 +27,8 @@ const AdminBlogsPage: React.FC = () => {
 				toast.error(error.message ?? "Something went wrong");
 			}
 		};
-		if (authState.role === USER_ROLES.ADMIN) getAllBlogs();
-	}, [authState.role]);
+		if (authState.user?.role === USER_ROLES.ADMIN) getAllBlogs();
+	}, [authState.user?.role]);
 
 	return (
 		<main className={classes("")}>

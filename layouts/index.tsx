@@ -40,7 +40,8 @@ const Layout: React.FC<any> = ({ children }) => {
 						},
 					});
 				} else {
-					if (authState.role !== USER_ROLES.ADMIN) router.push("/");
+					if (authState.user?.role !== USER_ROLES.ADMIN)
+						router.push("/");
 				}
 			}
 		}

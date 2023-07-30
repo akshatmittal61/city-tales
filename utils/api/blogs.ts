@@ -100,6 +100,16 @@ export const postReplyToComment = async (id: string, reply: any) => {
 	}
 };
 
+export const deleteComment = async (id: string, commentId: string) => {
+	try {
+		const response = await http.delete(`/blogs/${id}/comment/${commentId}`);
+		return Promise.resolve(response.data);
+	} catch (error) {
+		console.error(error);
+		return Promise.reject(error);
+	}
+};
+
 export const fetchShowcaseBlogs = async () => {
 	try {
 		const response = await http.get("/blogs/showcase");

@@ -21,7 +21,10 @@ export const sendEmail = async (to: string, subject: string, html: string) => {
 		};
 		const smtpTransport = createTransport(transportOptions);
 		const mailOptions = {
-			from: googleEmail,
+			from: {
+				name: "City Tales",
+				address: googleEmail,
+			},
 			to,
 			subject,
 			html,

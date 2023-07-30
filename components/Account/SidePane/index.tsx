@@ -57,7 +57,7 @@ const MyAcocuntSidePane: React.FC<MyAcocuntSidePaneProps> = ({
 						</span>
 					</li>
 				))}
-				{authState.role === USER_ROLES.ADMIN ? (
+				{authState.user?.role === USER_ROLES.ADMIN ? (
 					<li
 						className={classes("-list__item")}
 						onClick={() => router.push("/admin")}

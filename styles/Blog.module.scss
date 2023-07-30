@@ -58,24 +58,17 @@
 			display: flex;
 			justify-content: flex-end;
 			align-items: center;
-			gap: 12px;
+			gap: 24px;
 			padding-right: 16px;
 
 			&__button {
-				all: unset;
-				box-sizing: border-box;
-				display: inline-flex;
-				justify-content: center;
-				align-items: center;
-				width: 32px;
-				height: 32px;
-				cursor: pointer;
-				user-select: none;
+				@include init-button();
+				gap: 6px;
 
 				img,
 				svg {
-					width: 75%;
-					height: 75%;
+					width: 24px;
+					height: 24px;
 				}
 
 				&__loading {

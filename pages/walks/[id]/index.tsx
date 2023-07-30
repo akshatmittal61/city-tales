@@ -25,10 +25,10 @@ const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
 	useEffect(() => {
 		if (
 			props.walk.status !== WALK.STATUS.PUBLISHED &&
-			authState.role !== USER_ROLES.ADMIN
+			authState.user?.role !== USER_ROLES.ADMIN
 		)
 			router.push("/walks");
-	}, [authState.role, props.walk.status, router]);
+	}, [authState.user?.role, props.walk.status, router]);
 
 	if (!props.found)
 		return (
