@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { BlogCard as Blog } from "@/components/Blogs";
 import Filters from "@/library/Filter/Filters";
 import styles from "@/styles/Stories.module.scss";
-import { convertToSlug, stylesConfig } from "@/utils/functions";
+import { convertToSlug, openLink, stylesConfig } from "@/utils/functions";
 import Responsive from "@/layouts/Responsive";
 import { fetchAllBlogs } from "@/utils/api/blogs";
+import socials from "@/constants/socials";
+import Placeholder from "@/components/Placeholder";
 
 const classes = stylesConfig(styles, "blogs");
 
@@ -24,7 +26,19 @@ const BlogsPage: React.FC<{ blogs: any[] }> = ({ blogs }) => {
 		);
 	}, [blogs]);
 
-	return (
+	return blogs.length === 0 ? (
+		<Placeholder
+			title="No Stories written yet!"
+			button={{
+				text: "Explore our Heritage",
+				onClick: () =>
+					openLink(
+						socials.find((s) => s.name === "Instagram")
+							?.url as string
+					),
+			}}
+		/>
+	) : (
 		<main className={classes("")}>
 			<div className={classes("-head")}>
 				<h1 className={classes("-head-title")}>Read the Stories</h1>

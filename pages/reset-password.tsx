@@ -195,7 +195,6 @@ const SignInPage: React.FC = () => {
 									key={index}
 									type="text"
 									name={`otp${index}`}
-									maxLength={1}
 									autoFocus={index === 0}
 									value={data}
 									style={{
@@ -234,11 +233,35 @@ const SignInPage: React.FC = () => {
 									}}
 									onChange={(e) => {
 										if (
+											e.target.value.length === 6 &&
+											index === 0 &&
+											e.target.value
+												.split("")
+												.every(
+													(val: any) =>
+														val >= 0 && val <= 9
+												)
+										) {
+											const otpArray =
+												e.target.value.split("");
+											setOtp(otpArray);
+											document
+												.getElementsByName("otp5")[0]
+												.focus();
+											return;
+										} else if (
 											e.target.value === "" ||
 											regex.otp.test(e.target.value)
 										) {
 											const otpArray = [...otp];
-											otpArray[index] = e.target.value;
+											if (e.target.value === "")
+												otpArray[index] = "";
+											else if (
+												+e.target.value >= 0 &&
+												+e.target.value <= 9
+											)
+												otpArray[index] =
+													e.target.value;
 											setOtp(otpArray);
 										}
 									}}
