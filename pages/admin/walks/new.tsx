@@ -248,7 +248,12 @@ const AdminNewWalkPage: React.FC = () => {
 					onChange={async (e) => {
 						const file = e.target.files?.[0];
 						setOperating(true);
-						const imgUrl = await handleImageUpload(file);
+						const imgUrl = await handleImageUpload(file).catch(
+							(err) => {
+								setOperating(false);
+								throw err;
+							}
+						);
 						setNewWalk((prev) => ({
 							...prev,
 							coverImage: imgUrl,

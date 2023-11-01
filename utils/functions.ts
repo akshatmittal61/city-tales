@@ -70,7 +70,21 @@ export const convertToSentence = (text: string) => {
 		.replace(/_/g, " ");
 };
 
-// function to convert a slug (kebab case) text to running case sentence
+// function to convert a HTML string to a string
+export const htmlToString = (html: string) => {
+	return html
+		?.replace(/(<([^>]+)>)/gi, " ")
+		?.replace(/&nbsp;/g, " ")
+		?.replace(/&amp;/g, "&")
+		?.replace(/&quot;/g, "'")
+		?.replace(/&apos;/g, "'")
+		?.replace(/&lt;/g, " ")
+		?.replace(/&gt;/g, " ")
+		?.replace(/\s\s+/g, " ")
+		?.substring(0, 200)
+		?.concat("...");
+};
+
 export const stylesConfig =
 	(styles: any, prefix: string = "") =>
 	(...args: any[]) => {
