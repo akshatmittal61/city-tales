@@ -55,11 +55,9 @@ const WalkSchema = new mongoose.Schema(
 		},
 		slots: {
 			type: Number,
-			required: true,
 		},
 		price: {
 			type: Number,
-			required: true,
 		},
 		razorpayLink: {
 			type: String,

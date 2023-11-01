@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styles from "@/styles/Enquiry.module.scss";
-import { stylesConfig } from "@/utils/functions";
+import { htmlToString, stylesConfig } from "@/utils/functions";
 import { fetchWalkById } from "@/utils/api/walks";
 import Input from "@/library/Input";
 import Button from "@/library/Button";
 import { IWalk } from "@/types/Walk";
 import { MapPin } from "react-feather";
 import { toast } from "react-toastify";
+import Seo from "@/layouts/Seo";
 
 const classes = stylesConfig(styles, "enquiry");
 
@@ -32,6 +33,10 @@ const BookATourPage: React.FC<{ walk: IWalk; reviews: any[] }> = ({ walk }) => {
 
 	return (
 		<main className={classes("")}>
+			<Seo
+				title={walk.title}
+				description={htmlToString(walk.content).slice(0, 200)}
+			/>
 			<article className={classes("-details")}>
 				<div className={classes("-details-header")}>
 					<h1 className={classes("-details-header__title")}>

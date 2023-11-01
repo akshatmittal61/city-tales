@@ -76,6 +76,10 @@
 			}
 		}
 
+		&-content {
+			@include markdown-styles();
+		}
+
 		&-confirmation {
 			width: 100%;
 			display: flex;

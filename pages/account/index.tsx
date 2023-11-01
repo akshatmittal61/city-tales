@@ -14,6 +14,7 @@ import {
 } from "@/types/MyAccount";
 import useAuth from "@/hooks/auth";
 import { useRouter } from "next/router";
+import Seo from "@/layouts/Seo";
 
 const classes = stylesConfig(styles, "my-account");
 
@@ -52,6 +53,7 @@ const MyAccountPage: React.FC = () => {
 
 	return (
 		<main className={classes("")}>
+			<Seo title="My Account | City Tales" />
 			<SidePane
 				activeTab={activeTab}
 				onClick={handleTabClick}

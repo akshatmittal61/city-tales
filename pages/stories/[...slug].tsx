@@ -18,6 +18,7 @@ import {
 } from "@/utils/api/blogs";
 import { USER_ROLES, WALK } from "@/constants/enum";
 import _ from "lodash";
+import Seo from "@/layouts/Seo";
 
 const classes = stylesConfig(styles, "blog");
 
@@ -130,6 +131,20 @@ const BlogPage: React.FC<Blog> = (props) => {
 
 	return (
 		<>
+			<Seo
+				title={currentStory.title}
+				description={currentStory.excerpt}
+				image={currentStory.coverImage}
+				icons={["icon", "shortcut icon", "apple-touch-icon"].map(
+					(item) => {
+						return {
+							rel: item,
+							href: "/favicon.ico",
+							type: "icon/ico",
+						};
+					}
+				)}
+			/>
 			<div className={classes("")}>
 				<div
 					className={classes("-cover")}

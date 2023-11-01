@@ -2,7 +2,7 @@ import { IWalk } from "@/types/Walk";
 import { bookWalk, fetchWalkById } from "@/utils/api/walks";
 import React, { useEffect, useState } from "react";
 import styles from "@/styles/walks/Walk.module.scss";
-import { openLink, stylesConfig } from "@/utils/functions";
+import { htmlToString, openLink, stylesConfig } from "@/utils/functions";
 import Button from "@/library/Button";
 import { ArrowLeft, Calendar, Clock, MapPin } from "react-feather";
 import { useRouter } from "next/router";
@@ -12,6 +12,7 @@ import { AiOutlineMoneyCollect } from "react-icons/ai";
 import { toast } from "react-toastify";
 import useRender from "@/hooks/render";
 import { USER_ROLES, WALK } from "@/constants/enum";
+import Seo from "@/layouts/Seo";
 const classes = stylesConfig(styles, "walk");
 
 const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
@@ -101,6 +102,10 @@ const WalkDetailsPage: React.FC<{ walk: IWalk; found: boolean }> = (props) => {
 
 	return (
 		<main className={classes("")}>
+			<Seo
+				title={title}
+				description={htmlToString(content).slice(0, 200)}
+			/>
 			<div className={classes("-left")}>
 				<div className={classes("-left-header")}>
 					<h1

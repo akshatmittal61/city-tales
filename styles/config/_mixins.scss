@@ -259,15 +259,15 @@
 	}
 
 	p {
-		@include typography(body, lg);
+		@include typography(body, md);
 	}
 
 	a {
-		@include typography(body, lg);
+		@include typography(body, md);
 	}
 
 	ul {
-		@include typography(body, lg);
+		@include typography(body, md);
 	}
 
 	img {

@@ -7,6 +7,7 @@ import { fetchApprovedReviews } from "@/utils/api/review";
 import { IReview } from "@/types/Review";
 import Placeholder from "@/components/Placeholder";
 import { useRouter } from "next/router";
+import Seo from "@/layouts/Seo";
 
 const classes = stylesConfig(styles, "reviews");
 
@@ -29,6 +30,7 @@ const ReviewsPage: React.FC<{ reviews: IReview[] }> = ({ reviews }) => {
 		/>
 	) : (
 		<main className={classes("")}>
+			<Seo title="Reviews | City Tales" />
 			<div className={classes("-head")}>
 				<h1 className={classes("-head-title")}>Reviews</h1>
 			</div>
