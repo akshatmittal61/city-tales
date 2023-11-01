@@ -4,6 +4,7 @@ import { stylesConfig } from "@/utils/functions";
 import styles from "./styles.module.scss";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import Button from "@/library/Button";
+import Seo from "@/layouts/Seo";
 
 interface PlaceholderProps {
 	title: string;
@@ -32,6 +33,7 @@ const Placeholder: React.FC<PlaceholderProps> = ({
 				...style,
 			}}
 		>
+			<Seo title={title} />
 			<span>{title}</span>
 			<Button
 				variant="filled"

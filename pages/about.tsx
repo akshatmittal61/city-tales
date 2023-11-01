@@ -4,12 +4,14 @@ import { stylesConfig } from "@/utils/functions";
 import { aboutPoster } from "@/assets/images";
 import { frame } from "@/assets/vectors";
 import Image from "next/image";
+import Seo from "@/layouts/Seo";
 
 const classes = stylesConfig(styles, "about");
 
 const AbouPage: React.FC = () => {
 	return (
 		<main className={classes("")}>
+			<Seo title="About City tales" />
 			<section className={classes("-hero")}>
 				<div className={classes("-hero-graphic")}>
 					<div
