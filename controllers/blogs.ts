@@ -108,7 +108,7 @@ export const addBlog = async (req: ApiRequest, res: ApiResponse) => {
 		// if excerpt is not provided, set it to first 100 characters of content, content is in html format, remove all the tags
 		if (!excerpt) {
 			const regex = /(<([^>]+)>)/gi;
-			excerpt = content.replace(regex, "").substring(0, 100);
+			excerpt = content.replace(regex, "");
 		}
 		// if type is not provided or not an array, set it to story, else check if all the values are valid
 		if (!type || !Array.isArray(type)) type = [BLOG.TYPE.STORY];
